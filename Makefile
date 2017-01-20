@@ -43,12 +43,24 @@ CFLAGS = -O2 -W -Wall
 all: $(TAPEFILE)
 
 # Compile Tape File
-$(TAPEFILE): $(BINFILE) $(ZXTAP)
+$(TAPEFILE): $(BINFILE) $(ZXTAP) $(BINDIR) $(TAPEDIR)
 	$(ZXTAP) -o $@ $(ZXTOPTS) $(BINFILE)
 
 # Compile Bin File
-$(BINFILE): $(ASMFILE) $(Z80ASM)
+$(BINFILE): $(ASMFILE) $(Z80ASM) $(ASMDIR) $(BINDIR)
 	$(Z80ASM) -o $@ $(#INCASM) $(ASMFILE)
+
+# Create Tape Directory
+$(TAPEDIR):
+	mkdir -p $(TAPEDIR)
+
+# Create Bin Directory
+$(BINDIR):
+	mkdir -p $(BINDIR)
+
+# Create ASM Directory
+$(ASMDIR):
+	mkdir -p $(ASMDIR)
 
 # Compile ZXTAP
 $(ZXTAP):
