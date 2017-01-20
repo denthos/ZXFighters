@@ -1,0 +1,6 @@
+*.bin
+*.tap
+*.o
+*.exe
+*/z80asm
+*/zxtap
