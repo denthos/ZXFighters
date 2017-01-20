@@ -10,6 +10,8 @@ OBJS = basic.o parse_cmdline.o zxtap.o
 
 CFLAGS = -g -O0 -W -Wall
 
+CC = gcc
+
 all: $(PROGGY)
 
 $(PROGGY): $(OBJS)
