@@ -19,7 +19,7 @@
 calculate_pixel_byte_address:
 		ld a, c     ; a is now: y7 y6 y5 y4 y3 y2 y1 y0
 		or 0x40     ; a is now: y7 1  y6 y4 y3 y2 y1 y0
-		and 0x47		; a is now: 0  1  0  0  0  y2 y1 y0
+		and 0x47    ; a is now: 0  1  0  0  0  y2 y1 y0
 		ld h, a     ; h is now: 0  1  0  0  0  y2 y1 y0
 		ld a, c     ; a is now: y7 y6 y5 y4 y3 y2 y1 y0
 		srl a
