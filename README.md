@@ -22,3 +22,6 @@ Simply type `make` in the top level folder to compile the assembly in the `src` 
 **Notes for Windows**
 
  Using [MinGW](http://mingw.org/) with mingw32-make.exe and gcc.exe (mingw32-gcc.exe also works) installed, I was able to successfully pull, build, and then run the tape with the [Fuse emulator for Windows](https://sourceforge.net/projects/fuse-emulator/files/fuse/1.3.2/fuse-1.3.2-win32-setup.exe/download).
+ 
+ Bash on Ubuntu on Windows is another option for pulling, building and running the Fuse emulator. 
+ Instructions: (http://www.windowscentral.com/how-install-bash-shell-command-line-windows-10).
