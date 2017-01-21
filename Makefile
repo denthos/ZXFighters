@@ -48,7 +48,7 @@ $(TAPEFILE): $(BINFILE) $(ZXTAP) $(BINDIR) $(TAPEDIR)
 
 # Compile Bin File
 $(BINFILE): $(ASMFILE) $(Z80ASM) $(ASMDIR) $(BINDIR)
-	$(Z80ASM) -o $@ $(#INCASM) $(ASMFILE)
+	$(Z80ASM) -o $@ $(INCASM) $(ASMFILE)
 
 # Create Tape Directory
 $(TAPEDIR):
