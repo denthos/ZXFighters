@@ -15,17 +15,6 @@ ASMFILE = $(SRCDIR)/$(NAME).asm
 BINFILE = $(BINDIR)/$(NAME).bin
 TAPEFILE = $(TAPEDIR)/$(NAME).tap
 
-# Included ASM Files
-#
-# Uncomment the below line to automatically pull in asm files in the src directory as included asm files.
-# Be aware that this means that any malformed asm files in the src directory will cause all compilation
-# to fail even if they are not depended on by the main asm file.
-# INCASM = $(patsubst -i $(ASMFILE),,$(patsubst %,-i %,$(wildcard $(SRCDIR)/*.asm)))
-#
-# For this version, you must add `-i <filename>` for every new asm file introduced.
-# Example: INCASM = -i file1.asm -i file2.asm
-INCASM =
-
 # ZXTAP Options
 REMS =
 BORDERCOLOR = 0
@@ -48,7 +37,7 @@ $(TAPEFILE): $(BINFILE) $(ZXTAP) $(BINDIR) $(TAPEDIR)
 
 # Compile Bin File
 $(BINFILE): $(ASMFILE) $(Z80ASM) $(ASMDIR) $(BINDIR)
-	$(Z80ASM) -o $@ $(INCASM) $(ASMFILE)
+	$(Z80ASM) -o $@ $(ASMFILE)
 
 # Create Tape Directory
 $(TAPEDIR):
