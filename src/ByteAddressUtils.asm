@@ -86,17 +86,17 @@ calculate_attr_byte_address:
 ;		HL = address of the first pixel byte in the specified color cell
 ; ------------------------------------------------------------------------------
 calculate_color_cell_pixel_address:
-    ld a, c     ; a is now: 0  0  0  y7 y6 y5 y4 y3
-    and 0x58    ; a is now: 0  1  0  y7 y6 0  0  0
-    ld h, a     ; we are done with h now
-    ld a, c     ; a is now: 0  0  0  y7 y6 y5 y4 y3
-    and 0x7     ; strip y7 and y6
-    rrca
-    rrca
-    rrca        ; a is now: y5 y4 y3 0  0  0  0  0
-    add a, b    ; a is now: y5 y4 y3 x7 x6 x5 x4 x3
-    ld l, a     ; we are done with l now
-    ret
+		ld a, c     ; a is now: 0  0  0  y7 y6 y5 y4 y3
+		and 0x58    ; a is now: 0  1  0  y7 y6 0  0  0
+		ld h, a     ; we are done with h now
+		ld a, c     ; a is now: 0  0  0  y7 y6 y5 y4 y3
+		and 0x7     ; strip y7 and y6
+		rrca
+		rrca
+		rrca        ; a is now: y5 y4 y3 0  0  0  0  0
+		add a, b    ; a is now: y5 y4 y3 x7 x6 x5 x4 x3
+		ld l, a     ; we are done with l now
+		ret
 
 
 ; ------------------------------------------------------------------------------
