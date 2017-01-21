@@ -89,7 +89,7 @@ calculate_attr_byte_address:
 calculate_color_cell_pixel_address:
 		ld a, c     ; a is now: 0  0  0  y7 y6 y5 y4 y3
 		and 0x18    ; a is now: 0  0  0  y7 y6 0  0  0
-		or 0x40			; a is now: 0  1  0  y7 y6 0  0  0
+		or 0x40     ; a is now: 0  1  0  y7 y6 0  0  0
 		ld h, a     ; we are done with h now
 		ld a, c     ; a is now: 0  0  0  y7 y6 y5 y4 y3
 		and 0x7     ; strip y7 and y6
