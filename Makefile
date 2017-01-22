@@ -14,6 +14,7 @@ Z80ASMDIR = z80asm
 ASMFILE = $(SRCDIR)/$(NAME).asm
 BINFILE = $(BINDIR)/$(NAME).bin
 TAPEFILE = $(TAPEDIR)/$(NAME).tap
+ALLSRC = $(SRCDIR)/*.asm
 
 # ZXTAP Options
 REMS =
@@ -36,7 +37,7 @@ $(TAPEFILE): $(BINFILE) $(ZXTAP) $(BINDIR) $(TAPEDIR)
 	$(ZXTAP) -o $@ $(ZXTOPTS) $(BINFILE)
 
 # Compile Bin File
-$(BINFILE): $(ASMFILE) $(Z80ASM) $(ASMDIR) $(BINDIR)
+$(BINFILE): $(ASMFILE) $(Z80ASM) $(ASMDIR) $(BINDIR) $(ALLSRC)
 	$(Z80ASM) -o $@ $(ASMFILE)
 
 # Create Tape Directory
