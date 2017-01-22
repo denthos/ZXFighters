@@ -9,7 +9,7 @@
 ;
 ; ------------------------------------------------------------------------------
 copy_bytes:
-	ld a,(hl)							; get byte of data
+	ld a,(hl)             ; get byte of data
 	ld (de),a             ; write byte of data to target location
 	inc hl                ; point to next byte to read from
 	inc d                 ; point to next byte to write to
