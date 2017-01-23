@@ -1,0 +1,80 @@
+org 32768                  ; why this number?
+
+mloop:  ld bc,63486         ; keyboard row 1-5/joystick port 2.
+       in a,(c)            ; see what keys are pressed.
+       rra                 ; outermost bit = key 1.
+       push af             ; remember the value.
+       call nc, init_print_one         ; it's being pressed, move left.
+       halt
+       pop af              ; restore accumulator.
+       rra                 ; next bit along (value 2) = key 2.
+       push af             ; remember the value.
+       call nc, init_print_two        ; being pressed, so move right.
+       halt
+       pop af              ; restore accumulator.
+       rra                 ; next bit (value 4) = key 3.
+       push af             ; remember the value.
+       call nc, init_print_three         ; being pressed, so move down.
+       halt
+       pop af              ; restore accumulator.
+       rra                 ; next bit (value 8) reads key 4.
+       call nc, init_print_four         ; it's being pressed, move up.
+       halt
+
+
+; Jump back to beginning of main loop.
+       jp mloop
+init_print_one:   
+        ld b, 0
+        ld c, 0    
+        ld a, 2         ; channel 2 = "S" for screen
+        call $1601      ; Select print channel using ROM
+        ld hl, one      ; Get character to print
+        call printline
+        ret
+
+init_print_two:   
+        ld b, 0
+        ld c, 0      
+        ld a, 2         ; channel 2 = "S" for screen
+        call $1601      ; Select print channel using ROM
+        ld hl, two       ; Get character to print
+        call printline
+        ret
+
+init_print_three: 
+        ld b, 0
+        ld c, 0        
+        ld a, 2         ; channel 2 = "S" for screen (Paul: Why so we need to do this?)
+        call $1601      ; Select print channel using ROM
+        ld hl, three       ; Get character to print
+        call printline
+        ret
+
+init_print_four:  
+        ld b, 0
+        ld c, 0       
+        ld a, 2         ; channel 2 = "S" for screen
+        call $1601      ; Select print channel using ROM
+        ld hl, four       ; Get character to print
+        call printline
+        ret
+
+
+printline:              ; Routine to print out a line
+        ld a, (hl)
+        cp '$'          ; See if it '$' terminator
+        jp z,printend   ; We're done if it is
+        rst 16          ; Spectrum: Print the character in 'A'
+        inc hl          ; Move onto the next character
+        jp printline    ; Loop round 
+printend:
+        ret
+
+
+
+line:   defb 'Hello, world!',13,'$'
+one:   defb '1',13,'$'
+two:   defb '2',13,'$'
+three: defb '3',13,'$'
+four:  defb '4',13,'$'
