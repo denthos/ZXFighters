@@ -17,6 +17,19 @@ copy_bytes:
 	djnz copy_bytes       ; decrement B and jump to start if it is not 0
 	ret
 
+; HL = address of first byte
+; IX = address of memory to write to
+copy_encoded_bytes:
+	ld a,(hl)
+	inc hl
+	ld b,(hl)
+	inc hl
+_copy_encoded_bytes_loop_start:
+	ld (ix+0),a
+	inc ix
+	djnz _copy_encoded_bytes_loop_start
+	ret
+
 
 	; ------------------------------------------------------------------------------
 	; Subroutine for drawing a sprite onto the screen
@@ -74,4 +87,19 @@ _draw_sprite_write_byte_2:
 	                     ; jump back until all 16 row of pixels have been drawn
 	djnz _draw_sprite_loop_start
 	xor a                ; set zero flag to indicate no collision
+	ret
+
+	;;;
+
+
+draw_title_screen:
+	ld de,341
+	ld hl,title_screen_data
+	ld ix,0x4000
+_draw_title_screen_loop_start:
+	call copy_encoded_bytes
+	dec de
+	ld a,d
+	or e
+	jp nz,_draw_title_screen_loop_start
 	ret
