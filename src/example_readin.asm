@@ -39,6 +39,27 @@ mloop:  ld bc,63486        ; keyboard row 1-5/joystick port 2.
        halt
 
 
+       ld bc,64510        ; keyboard row 1-5/joystick port 2.
+       in a,(c)            ; see what keys are pressed.
+       rra                 ; outermost bit = key 1.
+       push af             ; remember the value.
+       call nc, init_print_q         ; it's being pressed, move left.
+       halt                ; delete
+       pop af              ; restore accumulator.
+       rra                 ; next bit along (value 2) = key 2.
+       push af             ; remember the value.
+       call nc, init_print_w        ; being pressed, so move right.
+       halt                ; delete
+       pop af              ; restore accumulator.
+       rra                 ; next bit (value 4) = key 3.
+       push af             ; remember the value.
+       call nc, init_print_e         ; being pressed, so move down.
+       halt                ; delete
+       pop af              ; restore accumulator.
+       rra                 ; next bit (value 8) reads key 4.
+       call nc, init_print_r         ; it's being pressed, move up.
+       halt
+
 ; Jump back to beginning of main loop.
        jp mloop
 init_print_one:   
@@ -69,6 +90,35 @@ init_print_four:
         call printline
         ret
 
+init_print_q:   
+        ld a, 2         ; channel 2 = "S" for screen
+        call $1601      ; Select print channel using ROM
+        ld hl, q      ; Get character to print
+        call printline
+        ret
+
+init_print_w:       
+        ld a, 2         ; channel 2 = "S" for screen
+        call $1601      ; Select print channel using ROM
+        ld hl, w       ; Get character to print
+        call printline
+        ret
+
+init_print_e:      
+        ld a, 2         ; channel 2 = "S" for screen (Paul: Why so we need to do this?)
+        call $1601      ; Select print channel using ROM
+        ld hl, _e       ; Get character to print
+        call printline
+        ret
+
+init_print_r:  
+        ld a, 2         ; channel 2 = "S" for screen
+        call $1601      ; Select print channel using ROM
+        ld hl, _r       ; Get character to print
+        call printline
+        ret
+
+
 
 printline:              ; Routine to print out a line
         ld a, (hl)
@@ -87,3 +137,7 @@ one:   defb '1',13,'$'
 two:   defb '2',13,'$'
 three: defb '3',13,'$'
 four:  defb '4',13,'$'
+q:     defb 'q',13,'$'
+w:     defb 'w',13,'$'
+_e:     defb 'e',13,'$'
+_r:     defb 'r',13,'$'
