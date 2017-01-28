@@ -28,7 +28,8 @@ freqs = {"a"  : (440),
      "f"  : (349.63), 
      "f#" : (369.99), 
      "g"  : (392), #196
-     "g#" : (415.30) #207.65
+     "g#" : (415.30), #207.65
+     "r"  : (1) #rest
      }
 
 new_file  = sys.argv[1] + '.asm'
@@ -58,6 +59,8 @@ with open(sys.argv[1],"r") as f:
 			if freq == None:
 				error = '\'' + letter + '\' is not a valid note'
 				raise ValueError(error)
+			#check for rest
+			
 			#do calculations for correct number 
 			#adjust octave based on arg 3
 			#if octave is negative then divide else multiply
