@@ -41,6 +41,8 @@ with open(sys.argv[1],"r") as f:
 		content = ["".join(x.split()) for x in content]
 		for note in content:
 			args = [x.strip() for x in note[1:-1].split(',')]
+			if len(args) == 1: #this means it's a comment
+				continue; #comment
 			if not len(args) == 3:
 				raise IndexError('Please make sure all notes are a comma delimited list of 3 arguments')
 			letter = args[0]
