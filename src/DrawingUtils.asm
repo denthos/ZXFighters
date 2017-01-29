@@ -17,89 +17,105 @@ copy_bytes:
 	djnz copy_bytes       ; decrement B and jump to start if it is not 0
 	ret
 
-; HL = address of first byte
-; IX = address of memory to write to
+; ------------------------------------------------------------------------------
+; Subroutine for decoding and copying encoded bytes.
+; Bytes should be encoded in pairs with the first value being the byte to copy
+; and the second byte being the number of times to copy it.
+;
+; Inputs:
+;		HL = Address of the encoded byte pair
+;   IX = Address of memory to write to
+; Outputs:
+;   HL = Address of next byte after encoded byte pair
+;   IX = Address of next byte after we finished writing bytes
+; ------------------------------------------------------------------------------
 copy_encoded_bytes:
-	ld a,(hl)
-	inc hl
-	ld b,(hl)
-	inc hl
+	ld a,(hl)              ; get byte to write
+	inc hl                 ; move to read next byte
+	ld b,(hl)              ; get number of times to write byte
+	inc hl                 ; point hl to next byte
 _copy_encoded_bytes_loop_start:
-	ld (ix+0),a
-	inc ix
+	ld (ix+0),a            ; write byte
+	inc ix                 ; point to next location to write to
+	; do this b times
 	djnz _copy_encoded_bytes_loop_start
 	ret
 
 
-	; ------------------------------------------------------------------------------
-	; Subroutine for drawing a sprite onto the screen
-	;
-	; Inputs:
-	;		HL = Address of memory to write to
-	;		C  = 0 if sprite should overwrite screen contents, 1 if it should blend
-	;   DE = Address of sprite to draw
-	; Outputs:
-	;
-	; ------------------------------------------------------------------------------
+; ------------------------------------------------------------------------------
+; Subroutine for drawing a sprite onto the screen
+;
+; Inputs:
+;		HL = Address of sprite data
+;   IX = Address of memory to write to
+; Outputs:
+;
+; ------------------------------------------------------------------------------
 draw_sprite:
-	ld b,16              ; 16 rows of pixels to draw
+	ld d,6          ; bytes per row
+	ld e,6         	; cells per row
+	dec ix
+	dec ix
 _draw_sprite_loop_start:
-	bit 0,c              ; set zero flag if we are in overwrite mode
-	ld a,(de)            ; load first byte of sprite
-                       ; if we are in overwrite mode, skip blend logic
-	jr z,_draw_sprite_write_byte
-	and (hl)             ; check for collisions between the screen data and the
-	ret nz               ;   sprite data, return if we find one
-	ld a,(de)            ; reload first byte of sprite
-	or (hl)              ; blend with background
-_draw_sprite_write_byte:
-	ld (hl),a            ; write new pixel byte to screen location
-	inc l                ; move to next cell on right
-	inc de               ; go to next byte of sprite data
-	bit 0,c              ; set zero flag if we are in overwrite mode
-	ld a,(de)            ; load byte of sprite data
-	                     ; jump if we are in overwrite mode
-	jr z,_draw_sprite_write_byte_2
-	and (hl)             ; check for collisions
-	ret nz               ; return if we find one
-	ld a,(de)            ; load sprite byte again
-	or (hl)              ; blend with background
-_draw_sprite_write_byte_2:
-	ld (hl),a            ; write to screen
-	dec l                ; move to next pixel row down in cell on left
-	inc h
-	inc de               ; move to next byte in sprite data
-	ld a,h               ;
-	and 7                ; check if bottom pixel row has been drawn yet
-	jr nz,_draw_sprite_loop_back
-	ld a,h               ; otherwise move pointer to top pixel row in next cell
-	sub 8                ;
-	ld h,a               ;
-	ld a,l               ;
-	add a,32             ;
-	ld l,a               ;
-	and 224              ; was last pair of cells at y-coord 7 or 15?
-	jr nz,_draw_sprite_loop_back
-	ld a,h               ; otherwise adjust pointer
-	add a,8              ; next one cell down
-	ld h,a
-	_draw_sprite_loop_back:
-	                     ; jump back until all 16 row of pixels have been drawn
-	djnz _draw_sprite_loop_start
-	xor a                ; set zero flag to indicate no collision
+	inc ix
+	inc ix
+	ld a,(ix+1)
+	or a
+	jp z,_draw_sprite_set_attributes
+	ld b,a
+	ld a,(ix+0)     ; get byte to write
+_draw_sprite_unpack_loop:
+	; TODO blend logic using C
+	ld (hl),a       ; write byte to memory
+	dec d           ; decrement column counter, if 0 go to increment row logic
+	jp z,_draw_sprite_row_increment
+	inc hl          ; increment address after the check to save a few cycles
+_draw_sprite_unpack_loop_2:
+	; check if we are done with this encoded byte pair
+	djnz _draw_sprite_unpack_loop
+	; load next encoded byte pair and loop again
+	jp _draw_sprite_loop_start
+_draw_sprite_row_increment:
+	ld a,e           ; save value of e
+	ld e,27          ; load 27 into e
+	add hl,de        ; add 27 to hl (d is known to be 0, 27 = 32-5 bytes drawn)
+	ld e,a           ; restore e value
+	ld a,(ix+0)      ; reload a
+	ld d,6           ; reset column counter and continue with current byte pair
+	; decrement row counter, if 0 start drawing attributes
+	dec e
+	jp z,_draw_sprite_row_reset
+	;jp z,_draw_sprite_set_attributes
+	jp _draw_sprite_unpack_loop_2
+_draw_sprite_row_reset:
+	ld a,d
+	ld d,0
+	ld e,64
+	add hl,de
+	ld d,a
+	ld a,(ix+0)
+	ld e,6
+	jp _draw_sprite_unpack_loop_2
+_draw_sprite_set_attributes:
+	; TODO
 	ret
 
-	;;;
-
-
+; ------------------------------------------------------------------------------
+; Subroutine for drawing the base of the title screen
+;
+; Inputs:
+;
+; Outputs:
+;
+; ------------------------------------------------------------------------------
 draw_title_screen:
-	ld de,341
-	ld hl,title_screen_data
-	ld ix,0x4000
+	ld de,341               ; title screen has 341 lines of encoded byte pairs
+	ld hl,title_screen_data ; get the location of the encoded data
+	ld ix,0x4000            ; start drawing at the beginning of the vram
 _draw_title_screen_loop_start:
-	call copy_encoded_bytes
-	dec de
-	ld a,d
-	or e
+	call copy_encoded_bytes ; unpack first encoded byte pair
+	dec de                  ; decrement our byte pair counter
+	ld a,d                  ; check if counter is 0, we do it this way because
+	or e                    ;   our counter needs to work for a value above 255
 	jp nz,_draw_title_screen_loop_start
 	ret
