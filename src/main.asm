@@ -53,5 +53,6 @@ printend:
 
 line:   defb 'Hello, world!',13,'$'
 
-        include "src/ByteAddressUtils.asm"
-        include "src/DrawLettersUtils.asm"
+        include "ByteAddressUtils.asm"
+        include "DrawLettersUtils.asm"
+
