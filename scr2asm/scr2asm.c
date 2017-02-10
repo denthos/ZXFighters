@@ -74,7 +74,11 @@ int main(int argc, char **argv) {
     while (i < BUFFERSIZE) {
       temp = buf[i];
       j = 1;
-      while(j < 255 && buf[++i] == temp) j++;
+      i++;
+      while(j < 255 && buf[i] == temp) {
+         j++;
+         i++;
+      }
       fprintf(assembly, "\tdefb %d,%d\n", temp, j);
     }
   }
