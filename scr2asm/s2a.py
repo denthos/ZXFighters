@@ -48,7 +48,7 @@ if sprite:
                 #while the two pointers are equal increment the counter to eventually print
                 while holder != "" and byteToInt(byte) == byteToInt(holder) and total_counter != 0:
                     if throw_out_counter >= s_size:
-                        if throw_out_counter >= (32): #32 - size i don't think is right 
+                        if throw_out_counter >= (31): #32 - size i don't think is right 
                             throw_out_counter = 0;
                             holder = f.read(1)
                         else:
@@ -99,7 +99,7 @@ if sprite:
                     #     continue;
                     # throw_out_counter += 1; #keep track of how many in a row we read, only read 12 for 6x6
                     repeat_count += 1;
-                    total_num_bytes_read += 1
+                    # total_num_bytes_read += 1
                     # total_attr_bytes -= 1 # Decrement the total number of bytes left to be read 
                     #check if throw_out_counter is now larger than the width of the size we need to read
                     if throw_out_counter >= s_size:

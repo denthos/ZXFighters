@@ -1,32 +1,66 @@
-	defb 0,11
-	defb 255,1
-	defb 0,1
+	defb 0,15
 	defb 255,2
 	defb 128,1
-	defb 255,2
 	defb 0,1
+	defb 127,1
+	defb 0,2
 	defb 1,1
 	defb 128,1
-	defb 255,4
 	defb 0,1
-	defb 255,4
+	defb 3,1
+	defb 255,3
+	defb 0,7
+	defb 255,12
+	defb 0,15
+	defb 255,2
+	defb 128,1
 	defb 0,1
-	defb 255,136
-	defb 0,1
-	defb 255,4
+	defb 255,1
 	defb 0,2
-	defb 255,13
-	defb 0,11
+	defb 31,1
+	defb 128,1
+	defb 0,12
+	defb 255,12
+	defb 0,14
+	defb 31,1
+	defb 255,2
+	defb 128,1
+	defb 0,1
+	defb 255,1
+	defb 0,2
+	defb 255,1
+	defb 128,1
+	defb 0,12
+	defb 255,12
+	defb 0,14
+	defb 255,3
+	defb 128,1
+	defb 0,1
+	defb 255,4
+	defb 128,1
+	defb 0,12
+	defb 255,12
+	defb 0,13
 	defb 3,1
 	defb 255,3
 	defb 128,1
-	defb 255,4
-	defb 128,1
-	defb 255,2
-	defb 0,3
+	defb 0,1
+	defb 127,1
 	defb 255,3
-	defb 0,2
-	defb 255,70
+	defb 128,1
+	defb 0,12
+	defb 255,12
+	defb 0,13
+	defb 15,1
+	defb 255,2
+	defb 0,1
+	defb 128,1
+	defb 0,1
+	defb 127,1
+	defb 255,3
+	defb 128,1
+	defb 0,12
+	defb 255,12
 
 
 attr_bytes:
