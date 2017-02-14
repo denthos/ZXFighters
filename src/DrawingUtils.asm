@@ -109,7 +109,7 @@ _draw_sprite_set_attributes:
 ;
 ; ------------------------------------------------------------------------------
 draw_title_screen:
-	ld de,341               ; title screen has 341 lines of encoded byte pairs
+	ld de, 48               ; title screen has 341 lines of encoded byte pairs
 	ld hl,title_screen_data ; get the location of the encoded data
 	ld ix,0x4000            ; start drawing at the beginning of the vram
 _draw_title_screen_loop_start:
