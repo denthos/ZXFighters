@@ -5,119 +5,170 @@ import struct
 #arg 2 should be the size of the sprite (assuming will always be square)
 #arg 3 flag for sprite (-s)
 
+
+#----------------------Constants----------------------#
+NUM_PIXELS = 6144
+NUM_PIXELS_ATTR = 6912
+NUM_COLS = 32
+NUM_PIXEL_ROWS = 192
+NUM_TOTAL_ROWS = 216 #includes attr bytes
+NUM_BYTES_IN_BLOCK = 8
+NUM_ATTR_BYTES = 768
+#-----------------------------------------------------#
+
+
 #--------------Pre-defined functions------------------#
+
+
+
 
 def byteToInt(byte):
     return int('{0:08b}'.format(ord(byte)), 2)
 
 #int('{0:08b}'.format(ord(byte)), 2)
 #int('{0:08b}'.format(ord(holder)), 2)
-#-----------------------------------------------------#
 
 
-
-
-#get input arguments
-scr_input = sys.argv[1] #file name of the scr file
-new_asm_file = scr_input.rsplit( ".", 1 )[ 0 ] + '.asm'
-
-#check input here
-
-
-#check if sprite or background
-sprite = False
-if len(sys.argv) > 2:
-    sprite = True
-
-if sprite:
-    s_size = int(sys.argv[2]) #expecting 1 - 8 (number of pixel blocks hieght and width)
+def checkSSize(s_size):
     if s_size <= 0:
         print 'error: size must be greater than 0... returning'
         raise ValueError()
-    counter = 0
-    repeat_count = 0
-    throw_out_counter = 0
-    total_counter = s_size * s_size * 8 #counts the y axis to stop after s_size rows
-    total_num_bytes_read = 0 #clever way to get rid of this
+
+#-----------------------------------------------------------------------------
+# Function that takes scr file and translates it into a 2D array to facilitate
+# huffman encoding later on. 
+#
+# Note: Does not check inputs
+# Inputs: 
+#   1. scr_input - the scr file to be converted to asm
+#   2. matrix - a 2D array of ints that should be 32 wide and 216 rows tall
+# Outputs: returns the modified matrix that will match the scr file
+#-----------------------------------------------------------------------------
+def fillMat(scr_input, matrix):
+    row = 0
+    col = 0
+    # count = 0
     with open(scr_input, "rb") as f:
-        with open(new_asm_file, 'w+') as nf:
-            byte = f.read(1) #byte to compare to
-            holder = byte #changes every read
-            total_num_bytes_read += 1
-            while byte != "" and total_counter != 0:
-                #while the two pointers are equal increment the counter to eventually print
-                while holder != "" and byteToInt(byte) == byteToInt(holder) and total_counter != 0:
-                    if throw_out_counter >= s_size:
-                        if throw_out_counter >= (31): #32 - size i don't think is right 
-                            throw_out_counter = 0;
-                            holder = f.read(1)
-                        else:
-                            throw_out_counter += 1
-                            f.read(1) #Keep track of this?
-                        total_num_bytes_read += 1
-                        continue;
-                        
-                        
-                    throw_out_counter += 1; #keep track of how many in a row we read, only read 12 for 6x6
-                    repeat_count += 1;
-                    total_num_bytes_read += 1
-                    total_counter -= 1 # Decrement the total number of bytes left to be read 
-                    #check if throw_out_counter is now larger than the width of the size we need to read
-                    if throw_out_counter >= s_size:
-                        f.read(1) #throw out byte cuz it's out of range
-                    else:
-                        holder = f.read(1) #otherwise keep it
-                    if repeat_count >= 255:
-                        repeat_count = 0
-                        nf.write('\tdefb ' + str(byteToInt(byte)) + ',255' + '\n')
-                    
-                #no longer equal 
-                # nf.write('\n\nbyte: ' + str(byteToInt(byte)) + ', holder: ' + str(byteToInt(holder)) + '\n')
-                if repeat_count != 0: #check for case when byte changes right after 255 repeats 
-                    nf.write('\tdefb ' + str(byteToInt(byte)) + ',' + str(repeat_count) + '\n')
-                byte = holder #set byte to holder
-                repeat_count = 0 #reset repeat count
-
-            #start reading the attribute bytes
-            nf.write('\n\nattr_bytes:\n')
-            f.read((6144 - total_num_bytes_read)) #next byte read after this will be first attr byte
+        byte = f.read(1)
+        while byte != "":
+            matrix[row][col] = byteToInt(byte)
             byte = f.read(1)
-            print byteToInt(byte)
-            holder = byte
-            total_attr_bytes = s_size * s_size
-            throw_out_counter = 0 #reset
-            repeat_count = 0 #reset
-            while byte != "" and total_attr_bytes != 0:
-                while holder != "" and byteToInt(byte) == byteToInt(holder) and total_attr_bytes != 0:
-                    # if throw_out_counter >= s_size:
-                    #     if throw_out_counter >= (32): #32 - size i don't think is right 
-                    #         throw_out_counter = 0;
-                    #         holder = f.read(1) #should I decrement attr_bytes after this?
-                    #     else:
-                    #         throw_out_counter += 1
-                    #         f.read(1) #Keep track of this?
-                    #     continue;
-                    # throw_out_counter += 1; #keep track of how many in a row we read, only read 12 for 6x6
-                    repeat_count += 1;
-                    # total_num_bytes_read += 1
-                    # total_attr_bytes -= 1 # Decrement the total number of bytes left to be read 
-                    #check if throw_out_counter is now larger than the width of the size we need to read
-                    if throw_out_counter >= s_size:
-                        f.read(1) #throw out byte cuz it's out of range
-                    else:
-                        holder = f.read(1) #otherwise keep it
+            col += 1
+            if col == NUM_COLS:
+                col = 0
+                row += 1
+                if row == NUM_TOTAL_ROWS: #used to be NUM_PIXEL_ROWS
+                    break
+    return matrix
+
+
+#-----------------------------------------------------------------------------
+# Function to take the matrix of the scr file and fill two matricies with the 
+# pixel and attribute bytes respectively. These will be pipelined into the 
+# huffman method to write to the new file. The output matricies will be formatted
+# such that it is possible to huffman encode simply by iterating through the 2D 
+# array without any special logic or "skip" cases. 
+#
+# Note: Does not check inputs
+# Inputs: 
+#   1. s_size - the width and height (assume square for now) of the sprite
+#   2. matrix - a 2D array of ints that should be 32 wide and 216 rows tall 
+#               that matches the scr file
+#   3. new_pixel_matrix - new matrix that should be s_size wide and s_size * 8 tall
+#   4. new_attr_matrix - new matrix that should be s_size wide and s_size tall
+# Outputs: returns a tuple of 2D arrays, the first being pixels and the second attr
+#-----------------------------------------------------------------------------
+def formatMat(s_size, matrix, new_pixel_matrix, new_attr_matrix):
+    count = 0
+    overlap = 0
+    for i in range(s_size * NUM_BYTES_IN_BLOCK): #loop through number of rows, 192
+        new_pixel_matrix[i] = matrix[count][0:s_size]
+
+        count += 1
+        overlap += 1
+        if (overlap) >= (s_size): #used to be len(matrix) but that's not right
+            count += 2
+            overlap = 0
+
+    for i in range(s_size):
+        new_attr_matrix[i] = matrix[NUM_PIXEL_ROWS][0:s_size]
+    return (new_pixel_matrix, new_attr_matrix)
+
+
+#-----------------------------------------------------------------------------
+# Function that takes a new file and the pixel and attribute matricies and 
+# huffman encodes both matricies directly into the new file. The pixel and 
+# attribute section are delineated by the line "attr_bytes:\n"
+#
+# Note: Does not check inputs
+# Inputs: 
+#   1. new_asm_file - the new file to write the asm to
+#   2. new_pixel_matrix - new matrix that should be s_size wide and s_size * 8 tall
+#      and correctly filled with the correlated bytes in the scr
+#   3. new_attr_matrix - new matrix that should be s_size wide and s_size tall
+#      and correctly filled with the correlated bytes in the scr
+# Outputs: None
+#-----------------------------------------------------------------------------
+def writeHuffToNewFile(new_asm_file, new_pixel_matrix, new_attr_matrix):
+    with open(new_asm_file, 'w+') as nf:
+        repeat_count = -1
+        num = new_pixel_matrix[0][0]
+        holder = num
+        for i in range(len(new_pixel_matrix)):
+            for j in range(len(new_pixel_matrix[0])):
+                if num == holder:
+                    repeat_count += 1
                     if repeat_count >= 255:
                         repeat_count = 0
-                        nf.write('\tdefb ' + str(byteToInt(byte)) + ',255' + '\n')
-                #no longer equal 
-                if repeat_count != 0: #check for case when byte changes right after 255 repeats 
-                    nf.write('\tdefb ' + str(byteToInt(byte)) + ',' + str(repeat_count) + '\n')
-                byte = holder #set byte to holder
-                repeat_count = 0 #reset repeat count
+                        nf.write('\tdefb ' + str(num) + ',255' + '\n')
+                else: 
+                    if repeat_count != 0: #check for case when byte changes right after 255 repeats 
+                        nf.write('\tdefb ' + str(num) + ',' + str(repeat_count) + '\n')
+                    num = holder #set byte to holder
+                    repeat_count = 1 #reset repeat count
+                holder = new_pixel_matrix[i][j]
+
+        if new_pixel_matrix[-1][-1] == holder:
+            nf.write('\tdefb ' + str(num) + ',' + str(repeat_count + 1) + '\n')
+        else:
+            nf.write('\tdefb ' + str(holder) + ',' + '1' + '\n')
+
+        #write attr bytes now, this is shitty code for now
+        nf.write('attr_bytes:\n')
+        num = new_attr_matrix[0][0]
+        holder = num
+        for i in range(len(new_attr_matrix)):
+            for j in range(len(new_attr_matrix[0])):
+                if num == holder:
+                    repeat_count += 1
+                    if repeat_count >= 255:
+                        repeat_count = 0
+                        nf.write('\tdefb ' + str(num) + ',255' + '\n')
+                else: 
+                    if repeat_count != 0: #check for case when byte changes right after 255 repeats 
+                        nf.write('\tdefb ' + str(num) + ',' + str(repeat_count) + '\n')
+                    num = holder #set byte to holder
+                    repeat_count = 1 #reset repeat count
+                holder = new_pixel_matrix[i][j]
+
+        if new_attr_matrix[-1][-1] == holder:
+            nf.write('\tdefb ' + str(num) + ',' + str(repeat_count + 1) + '\n')
+        else:
+            nf.write('\tdefb ' + str(holder) + ',' + '1' + '\n')
 
 
 
-else: #regular background
+#-----------------------------------------------------------------------------
+# Function that takes a raw scr file and huffman encodes onto new file while 
+# reading from the scr file. Encodes the whole file
+#
+# Note: Does not check inputs
+# Inputs: 
+#   1. scr_input - the scr file to huffman encode from
+#   2. new_asm_file - the new file to write the asm to
+# Outputs: None
+#-----------------------------------------------------------------------------
+def writeRegBackgroundHuff(scr_input, new_asm_file):
     counter = 0;
     repeat_count = 0;
     with open(scr_input, "rb") as f:
@@ -139,7 +190,45 @@ else: #regular background
                 repeat_count = 0 #reset repeat count
                 # repeat_count += 1 #add one for the first one found 
 
+#-----------------------------------------------------#
+
+
+
+#main
+
+#get input arguments
+scr_input = sys.argv[1] #file name of the scr file
+new_asm_file = scr_input.rsplit( ".", 1 )[ 0 ] + '.asm'
+
+#check if sprite or background
+sprite = False
+if len(sys.argv) > 2:
+    sprite = True
+
+
+if sprite: #do all the special stuff
+    s_size = int(sys.argv[2]) #expecting 1 - 8 (number of pixel blocks hieght and width)
+    checkSSize(s_size) # will raise value error to stop executing if wrong
+
+    #create matrix of the scr file
+    matrix = fillMat(scr_input, [[0 for x in range(NUM_COLS)] for y in range(NUM_TOTAL_ROWS)])
+    #format the matrix into two seperate matricies, ready for direct translation to huffman encode
+    matricies = formatMat(s_size, 
+        matrix, 
+        [[0 for x in range(s_size)] for y in range(s_size * NUM_BYTES_IN_BLOCK)], 
+        [[0 for x in range(s_size)] for y in range(s_size)]) 
+    new_pixel_matrix = matricies[0]
+    new_attr_matrix = matricies[1]
+    #officially write to the new file
+    writeHuffToNewFile(new_asm_file, new_pixel_matrix, new_attr_matrix)
+
+else: #regular background
+    writeRegBackgroundHuff(scr_input, new_asm_file)
+
 print 'Resulting asm written to ' + new_asm_file
 
 
+    
 
+
+            
