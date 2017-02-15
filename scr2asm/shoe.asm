@@ -9,9 +9,7 @@
 	defb 0,1
 	defb 3,1
 	defb 255,3
-	defb 0,7
-	defb 255,12
-	defb 0,15
+	defb 0,22
 	defb 255,2
 	defb 128,1
 	defb 0,1
@@ -19,9 +17,7 @@
 	defb 0,2
 	defb 31,1
 	defb 128,1
-	defb 0,12
-	defb 255,12
-	defb 0,14
+	defb 0,26
 	defb 31,1
 	defb 255,2
 	defb 128,1
@@ -30,17 +26,13 @@
 	defb 0,2
 	defb 255,1
 	defb 128,1
-	defb 0,12
-	defb 255,12
-	defb 0,14
+	defb 0,26
 	defb 255,3
 	defb 128,1
 	defb 0,1
 	defb 255,4
 	defb 128,1
-	defb 0,12
-	defb 255,12
-	defb 0,13
+	defb 0,25
 	defb 3,1
 	defb 255,3
 	defb 128,1
@@ -48,9 +40,7 @@
 	defb 127,1
 	defb 255,3
 	defb 128,1
-	defb 0,12
-	defb 255,12
-	defb 0,13
+	defb 0,25
 	defb 15,1
 	defb 255,2
 	defb 0,1
@@ -59,33 +49,38 @@
 	defb 127,1
 	defb 255,3
 	defb 128,1
+	defb 0,25
+	defb 31,1
+	defb 255,2
+	defb 0,1
+	defb 128,1
+	defb 0,1
+	defb 63,1
+	defb 255,3
+	defb 128,1
+	defb 0,21
+	defb 31,1
+	defb 0,3
+	defb 63,1
+	defb 255,2
+	defb 0,1
+	defb 128,1
+	defb 0,1
+	defb 31,1
+	defb 255,3
+	defb 128,1
 	defb 0,12
-	defb 255,12
-
-
 attr_bytes:
-	defb 71,6
-	defb 63,26
-	defb 71,3
-	defb 4,1
-	defb 71,1
-	defb 4,1
-	defb 63,26
-	defb 71,1
-	defb 4,3
-	defb 39,1
-	defb 4,1
-	defb 63,26
-	defb 71,1
-	defb 2,1
-	defb 34,3
-	defb 2,1
-	defb 63,26
-	defb 71,1
-	defb 2,4
-	defb 71,1
-	defb 63,26
-	defb 71,6
-	defb 63,255
-	defb 63,255
-	defb 63,92
+	defb 71,12
+	defb 0,15
+	defb 255,2
+	defb 128,1
+	defb 0,1
+	defb 127,1
+	defb 0,2
+	defb 1,1
+	defb 128,1
+	defb 0,1
+	defb 3,1
+	defb 255,3
+	defb 0,1

@@ -1,0 +1,24 @@
+    # with open(new_asm_file, 'w+') as nf:
+    #     for i in range(192):
+    #         for j in range(32):
+    #             nf.write(str(matrix[i][j]) + '\n')
+
+
+        # with open(new_asm_file, 'w+') as nf:
+    #     for i in range(192):
+    #         for j in range(32):
+    #             nf.write(str(new_matrix[i][j]) + '\n')
+
+
+
+            # print 'i: ' + str(i) + ' count plus stuff: ' + str((count * 8 + overlap))
+        # nf.write(str(count) + '\n')
+        # print matrix[count][0:6]
+
+
+        
+    # print new_matrix
+    # with open(new_asm_file, 'w+') as nf:
+    #     for i in range(s_size * 8):
+    #         for j in range(32):
+    #             nf.write(str(new_matrix[i][j]) + '\n') 
