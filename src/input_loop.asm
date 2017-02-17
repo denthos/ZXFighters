@@ -1,72 +1,67 @@
-        org 32768	; put code at first address in 3rd memory device (sorta)
-start:
-	;;; INITIALIZATION (TODO: set up interrupt handler and stuff)
+; ------------------------------------------------------------------------------
+;Example routine for reading in user input and reacting to input.
+;Code can be reused anywhere.
+; Ports
+; 32766 B, N, M, Symbol Shift, Space
+; 49150 H, J, K, L, Enter
+; 57342 Y, U, I, O, P
+; 61438 6, 7, 8, 9, 0
+; 63486 5, 4, 3, 2, 1 <--- Current
+; 64510 T, R, E, W, Q
+; 65022 G, F, D, S, A
+; 65278 V, C, X, Z, Caps Shift
+; ------------------------------------------------------------------------------
 
-	; disable interrupts
-	di
 
-; 	; set border color
-; 	ld a,0                    ; blue
-; 	out (0xfe),a              ; send to ula
 
-; 	; draw base title screen
-; ; 	call draw_title_screen
 
-; ; 	; start title screen loop
-;  	ld ix,shoe_name
-; 	call print_p1_name_title_screen
-; 	ld ix,lambtron_name
-; 	call print_p2_name_title_screen
-; 	ld hl,0x4800
-; 	ld ix,shoe_sprite_pixels
-; 	call draw_sprite
-
+org 32768                  ; why this number?
 
 mloop:  
 
-       di
+;        di
        ld bc,63486        ; keyboard row 1-5/joystick port 2.
        in a,(c)            ; see what keys are pressed.
        rra                 ; outermost bit = key 1.
        push af             ; remember the value.
        call nc, init_print_one         ; it's being pressed, move left.
-       halt                ; delete
+                       ; delete
        pop af              ; restore accumulator.
        rra                 ; next bit along (value 2) = key 2.
        push af             ; remember the value.
        call nc, init_print_two        ; being pressed, so move right.
-       halt                ; delete
+                       ; delete
        pop af              ; restore accumulator.
        rra                 ; next bit (value 4) = key 3.
        push af             ; remember the value.
        call nc, init_print_three         ; being pressed, so move down.
-       halt                ; delete
+                       ; delete
        pop af              ; restore accumulator.
        rra                 ; next bit (value 8) reads key 4.
        call nc, init_print_four         ; it's being pressed, move up.
-       halt
+       
 
 
-       ld bc,64510        ; keyboard row 1-5/joystick port 2.
-       in a,(c)            ; see what keys are pressed.
-       rra                 ; outermost bit = key 1.
-       push af             ; remember the value.
-       call nc, init_print_q         ; it's being pressed, move left.
-       halt                ; delete
-       pop af              ; restore accumulator.
-       rra                 ; next bit along (value 2) = key 2.
-       push af             ; remember the value.
-       call nc, init_print_w        ; being pressed, so move right.
-       halt                ; delete
-       pop af              ; restore accumulator.
-       rra                 ; next bit (value 4) = key 3.
-       push af             ; remember the value.
-       call nc, init_print_e         ; being pressed, so move down.
-       halt                ; delete
-       pop af              ; restore accumulator.
-       rra                 ; next bit (value 8) reads key 4.
-       call nc, init_print_r         ; it's being pressed, move up.
-       halt
+;        ld bc,64510        ; keyboard row 1-5/joystick port 2.
+;        in a,(c)            ; see what keys are pressed.
+;        rra                 ; outermost bit = key 1.
+;        push af             ; remember the value.
+;        call nc, init_print_q         ; it's being pressed, move left.
+;        halt                ; delete
+;        pop af              ; restore accumulator.
+;        rra                 ; next bit along (value 2) = key 2.
+;        push af             ; remember the value.
+;        call nc, init_print_w        ; being pressed, so move right.
+;        halt                ; delete
+;        pop af              ; restore accumulator.
+;        rra                 ; next bit (value 4) = key 3.
+;        push af             ; remember the value.
+;        call nc, init_print_e         ; being pressed, so move down.
+;        halt                ; delete
+;        pop af              ; restore accumulator.
+;        rra                 ; next bit (value 8) reads key 4.
+;        call nc, init_print_r         ; it's being pressed, move up.
+;        halt
 
 ; Jump back to beginning of main loop.
        jp mloop
@@ -75,11 +70,11 @@ init_print_one:
         call $1601      ; Select print channel using ROM
         ld hl, one      ; Get character to print
         call printline
-        ld ix,shoe_name
-        call print_p1_name_title_screen
-        ld hl,0x4800
-        ld ix,other_shoe_pixels
-        call draw_sprite
+;         ld ix,shoe_name
+;         call print_p1_name_title_screen
+;         ld hl,0x4800
+;         ld ix,other_shoe_pixels
+;         call draw_sprite
         ret
 
 
@@ -157,16 +152,9 @@ _e:     defb 'e',13,'$'
 _r:     defb 'r',13,'$'
 
 
-	;		HL = Address of memory to write to
-	;		C  = 0 if sprite should overwrite screen contents, 1 if it should blend
-	;   DE = Address of sprite to draw
 
-	; read keys in
-
-
-
-  include "src/ByteAddressUtils.asm"
-  include "src/DrawingUtils.asm"
-  include "src/PrintingUtils.asm"
-  include "src/GameData.asm"
-  include "src/input_loop.asm"
+;   include "src/ByteAddressUtils.asm"
+;   include "src/DrawingUtils.asm"
+;   include "src/PrintingUtils.asm"
+;   include "src/GameData.asm"
+;   include "src/input_loop.asm"
