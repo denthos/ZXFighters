@@ -18,7 +18,8 @@ start:
   ld ix,lambtron_name
   call print_p2_name_title_screen
 
-  ld hl,0x4d00
+  ld c,0
+  ld hl,0x4000
   ld ix,shoe_sprite_pixels
   call draw_sprite
 

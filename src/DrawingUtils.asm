@@ -42,63 +42,73 @@ _copy_encoded_bytes_loop_start:
 	ret
 
 
+
 ; ------------------------------------------------------------------------------
 ; Subroutine for drawing a sprite onto the screen
 ;
 ; Inputs:
-;		HL = Address of sprite data
-;   IX = Address of memory to write to
+;		HL = Address of vram to write to
+;   IX = Address of sprite pixel data
 ; Outputs:
 ;
 ; ------------------------------------------------------------------------------
 draw_sprite:
-	ld d,6          ; bytes per row
-	ld e,6         	; cells per row
+	ld d,6                 ; bytes per row
+	ld e,d
+	ld (draw_memory_store),hl
 	dec ix
 	dec ix
-_draw_sprite_loop_start:
+_draw_sprite_unpack:
 	inc ix
 	inc ix
 	ld a,(ix+1)
 	or a
-	jp z,_draw_sprite_set_attributes
+	jp z,_draw_sprite_unpack_attributes ; maybe need to store hl first
 	ld b,a
-	ld a,(ix+0)     ; get byte to write
-_draw_sprite_unpack_loop:
-	; TODO blend logic using C
-	ld (hl),a       ; write byte to memory
-	dec d           ; decrement column counter, if 0 go to increment row logic
-	jp z,_draw_sprite_row_increment
-	inc hl          ; increment address after the check to save a few cycles
-_draw_sprite_unpack_loop_2:
-	; check if we are done with this encoded byte pair
-	djnz _draw_sprite_unpack_loop
-	; load next encoded byte pair and loop again
-	jp _draw_sprite_loop_start
-_draw_sprite_row_increment:
-	ld a,e           ; save value of e
-	ld e,27          ; load 27 into e
-	add hl,de        ; add 27 to hl (d is known to be 0, 27 = 32-5 bytes drawn)
-	ld e,a           ; restore e value
-	ld a,(ix+0)      ; reload a
-	ld d,6           ; reset column counter and continue with current byte pair
-	; decrement row counter, if 0 start drawing attributes
-	dec e
-	jp z,_draw_sprite_row_reset
-	;jp z,_draw_sprite_set_attributes
-	jp _draw_sprite_unpack_loop_2
-_draw_sprite_row_reset:
+_draw_sprite_loop_start:
+	bit 0,c                ; set zero flag if we are in overwrite mode (c==0)
+	ld a,(ix+0)            ; load byte of sprite data
+	                       ; skip blend logic if we are in overwrite mode
+	jr z,_draw_sprite_write_byte
+	and (hl)               ; check for collisions between screen data and sprite
+	ret nz
+	ld a,(ix+0)            ; reload sprite data
+	or (hl)                ; blend with screen data
+_draw_sprite_write_byte:
+	ld (hl),a              ; write pixel byte to screen
+	inc l                  ; move to next cell on right
+	dec d
 	ld a,d
-	ld d,0
-	ld e,64
-	add hl,de
-	ld d,a
-	ld a,(ix+0)
-	ld e,6
-	jp _draw_sprite_unpack_loop_2
-_draw_sprite_set_attributes:
-	; TODO
+	or a
+	jp z,_draw_sprite_row_decrement
+_draw_sprite_row_decrement_return:
+	djnz _draw_sprite_loop_start
+	jp _draw_sprite_unpack
+
+_draw_sprite_unpack_attributes:
 	ret
+
+_draw_sprite_row_decrement:
+	ld d,e                 ; restore column counter
+	ld a,l                 ; move to next pixel row down in cell <e> to left
+	sub e
+	ld l,a
+	inc h
+	ld a,h                 ; check if we overflowed into y6
+	and 7
+	jr nz,_draw_sprite_row_decrement_return
+	ld a,h
+	sub 8                  ; decrement y6
+	ld h,a
+	ld a,l
+	add a,32               ; increment y3
+	ld l,a
+	and 224                ; check if we overflowed into y0
+	jr nz,_draw_sprite_row_decrement_return
+	ld a,h
+	add a,8                ; increment y6
+	ld h,a
+	jp _draw_sprite_row_decrement_return
 
 ; ------------------------------------------------------------------------------
 ; Subroutine for drawing the base of the title screen
