@@ -90,7 +90,7 @@ _draw_sprite_unpack:
 	inc ix
 	ld a,(ix+1)
 	or a
-	jp z,_draw_sprite_unpack_attributes ; maybe need to store hl first
+	jp z,_draw_sprite_attributes ; maybe need to store hl first
 	ld b,a
 _draw_sprite_loop_start:
 	bit 0,c                ; set zero flag if we are in overwrite mode (c==0)
@@ -112,7 +112,35 @@ _draw_sprite_row_decrement_return:
 	djnz _draw_sprite_loop_start
 	jp _draw_sprite_unpack
 
-_draw_sprite_unpack_attributes:
+_draw_sprite_attributes:
+	ld d,e
+	ld hl,(draw_memory_store)
+	ld a,h
+	srl a
+	srl a
+	srl a
+	or 88
+	ld h,a
+_draw_sprite_attributes_unpack:
+	inc ix
+	inc ix
+	ld a,(ix+1)
+	or a
+	jp z,_draw_sprite_done
+	ld b,a
+_draw_sprite_attributes_loop_start:
+	ld a,(ix+0)
+	ld (hl),a
+	inc hl
+	dec d
+	ld a,d
+	or a
+	jr z,_draw_sprite_attributes_row_decrement
+_draw_sprite_attributes_row_decrement_return:
+	djnz _draw_sprite_attributes_loop_start
+	jp _draw_sprite_attributes_unpack
+
+_draw_sprite_done:
 	ret
 
 _draw_sprite_row_decrement:
@@ -136,6 +164,18 @@ _draw_sprite_row_decrement:
 	add a,8                ; increment y6
 	ld h,a
 	jp _draw_sprite_row_decrement_return
+
+_draw_sprite_attributes_row_decrement:
+	ld d,e
+	ld a,32
+	sub e
+	ld c,a
+	ld a,b
+	ld b,0
+	add hl,bc
+	ld b,a
+	jp _draw_sprite_attributes_row_decrement_return
+
 
 ; ------------------------------------------------------------------------------
 ; Subroutine for drawing the base of the title screen

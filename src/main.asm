@@ -6,7 +6,7 @@ start:
 	di
 
 	; set border color
-	ld a,1                    ; blue
+	ld a,0                    ; blue
 	out (0xfe),a              ; send to ula
 
 	; fill screen with black
@@ -22,7 +22,7 @@ start:
 
   ld d,6
   ld c,0
-  ld ix,shoe_sprite_pixels
+  ld ix,shoe_sprite_data
   call draw_sprite
 
   ld b,0
@@ -40,7 +40,7 @@ start:
 
   ld d,4
   ld c,0
-  ld ix,sprite_sprite_pixels
+  ld ix,sprite_sprite_data
   call draw_sprite
 
   ld b,22

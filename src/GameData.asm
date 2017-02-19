@@ -355,7 +355,7 @@ shoe_data:
 shoe_name:
 	defb '   Shoe   '
 
-shoe_sprite_pixels:
+shoe_sprite_data:
 	defb 0,93
 	defb 31,1
 	defb 0,5
@@ -429,10 +429,23 @@ shoe_sprite_pixels:
 	defb 255,3
 	defb 0,91
 	defb 0,0
-
 shoe_sprite_attributes:
-	defb 71,91
-	defb 0,1
+	defb 71,9
+	defb 4,1
+	defb 71,1
+	defb 4,1
+	defb 71,1
+	defb 4,3
+	defb 39,1
+	defb 4,1
+	defb 71,1
+	defb 2,1
+	defb 34,3
+	defb 2,1
+	defb 71,1
+	defb 2,4
+	defb 71,7
+	defb 0,0
 
 lambtron_data:
 lambtron_name:
@@ -442,7 +455,7 @@ sprite_data:
 sprite_name:
 	defb '  Sprite  '
 
-sprite_sprite_pixels:
+sprite_sprite_data:
 	defb 0,17
 	defb 7,1
 	defb 224,1
@@ -537,8 +550,11 @@ sprite_sprite_pixels:
 	defb 192,1
 	defb 0,0
 sprite_sprite_attributes:
-	defb 42,2
-	defb 0,1
+	defb 42,4
+	defb 44,4
+	defb 40,4
+	defb 44,4
+	defb 0,0
 
 ; 2 bytes of memory reserved for storing screen addresses in draw routines
 draw_memory_store:
