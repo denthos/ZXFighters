@@ -41,19 +41,46 @@ _copy_encoded_bytes_loop_start:
 	djnz _copy_encoded_bytes_loop_start
 	ret
 
+; ------------------------------------------------------------------------------
+; Subroutine for copying bytes and writing them to a new location
+; Mostly useful for copying pixel data into the VRAM
+;
+; Inputs:
+;		HL = Address of memory to fill
+;		BC = Number of bytes to write
+;   D  = Byte to copy
+; Outputs:
+;
+; ------------------------------------------------------------------------------
+fill_byte:
+	ld (hl),d             ; 0b00000111  (paper = black, ink = white)
+	inc hl                ; move to next attribyte byte
+	dec bc
+	ld a,b
+	or c
+	jr nz,fill_byte
+	ret
+
+; fill_byte_fast is the same as fill_byte except it uses only b, not bc
+fill_byte_fast:
+	ld (hl),d
+	inc hl
+	djnz fill_byte_fast
+	ret
 
 
 ; ------------------------------------------------------------------------------
 ; Subroutine for drawing a sprite onto the screen
 ;
 ; Inputs:
+;   C  = 0 for overwrite mode, 1 for blending mode
+;   D  = Width of sprite in color cells
 ;		HL = Address of vram to write to
 ;   IX = Address of sprite pixel data
 ; Outputs:
 ;
 ; ------------------------------------------------------------------------------
 draw_sprite:
-	ld d,6                 ; bytes per row
 	ld e,d
 	ld (draw_memory_store),hl
 	dec ix
