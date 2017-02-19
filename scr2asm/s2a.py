@@ -183,7 +183,8 @@ def writeHuffToNewFile(new_asm_file, new_pixel_matrix, new_attr_matrix):
             nf.write('\tdefb ' + str(num) + ',' + str(repeat_count + 1) + '\n')
         else:
             nf.write('\tdefb ' + str(holder) + ',' + '1' + '\n')
-
+        nf.write('\tdefb 0,0\n')
+        dc += 1
 
 
 #-----------------------------------------------------------------------------
