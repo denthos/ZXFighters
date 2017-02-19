@@ -82,13 +82,19 @@ def formatMat(s_size, matrix, new_pixel_matrix, new_attr_matrix):
     count = 0
     overlap = 0
     for i in range(s_size * NUM_BYTES_IN_BLOCK): #loop through number of rows, 192
-        new_pixel_matrix[i] = matrix[count][0:s_size]
+        new_pixel_matrix[i] = matrix[(8 * count) + overlap][0:s_size]
 
         count += 1
-        overlap += 1
-        if (overlap) >= (s_size): #used to be len(matrix) but that's not right
-            count += 2
-            overlap = 0
+        if count == 8:
+            count = 0
+            overlap += 1
+
+        # new_pixel_matrix[i] = matrix[count][0:s_size]
+        # count += 1
+        # overlap += 1
+        # if (overlap) >= (s_size): #used to be len(matrix) but that's not right
+        #     count += 2
+        #     overlap = 0
 
     for i in range(s_size):
         new_attr_matrix[i] = matrix[NUM_PIXEL_ROWS][0:s_size]
