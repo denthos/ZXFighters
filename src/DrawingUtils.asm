@@ -186,13 +186,97 @@ _draw_sprite_attributes_row_decrement:
 ;
 ; ------------------------------------------------------------------------------
 draw_title_screen:
-	ld de,341               ; title screen has 341 lines of encoded byte pairs
-	ld hl,title_screen_data ; get the location of the encoded data
-	ld ix,0x4000            ; start drawing at the beginning of the vram
-_draw_title_screen_loop_start:
-	call copy_encoded_bytes ; unpack first encoded byte pair
-	dec de                  ; decrement our byte pair counter
-	ld a,d                  ; check if counter is 0, we do it this way because
-	or e                    ;   our counter needs to work for a value above 255
-	jp nz,_draw_title_screen_loop_start
+
+	; TODO: ADD TITLE GRAPHIC AT TOP
+
+	; DRAW ARROWS AROUND P1
+	ld de,0x48e1
+	ld a,(left_arrow)
+	call print_char
+
+	ld de,0x48e8
+	ld a,(right_arrow)
+	call print_char
+
+
+	; DRAW ARROWS AROUND P2
+	ld de,0x48f7
+	ld a,(left_arrow)
+	call print_char
+
+	ld de,0x48fe
+	ld a,(right_arrow)
+	call print_char
+
+
+	; INSTRUCTIONS
+	ld de,0x50a2
+	ld ix,character_select_instructions_1
+	ld c,29
+	call print_string
+
+	ld de,0x50e6
+	ld ix,character_select_instructions_2
+	ld c,20
+	call print_string
+
+	ret
+
+; ------------------------------------------------------------------------------
+; Subroutine for drawing the sprite and name of characters onto the character
+;   select screen.
+;
+; Inputs:
+;
+; Outputs:
+;
+; ------------------------------------------------------------------------------
+
+draw_title_character_p1:
+	ld a,(selected_character_p1)
+	call ld_character_data_address
+	ld c,10
+	ld de,0x5040
+	call print_string
+	ld d,6
+	ld c,0
+	ld hl,0x4882
+	jp draw_sprite
+
+draw_title_character_p2:
+  ld a,(selected_character_p2)
+  call ld_character_data_address
+  ld c,10
+  ld de,0x5056
+  call print_string
+  ld d,6
+  ld c,0
+  ld hl,0x4898
+	jp draw_sprite
+
+
+; ------------------------------------------------------------------------------
+; This routine is basically a switch statement for determining which character
+; is selected based on the character index passed in through A, and loading
+; the address of that character's data into IX. This can't be done by storing
+; pointers to the data in memory, because IX can only be loaded with constants
+;
+; Inputs:
+;   A  = Index of the character whose data address should be loaded
+; Outputs:
+;   IX = Address of the data of the character
+; ------------------------------------------------------------------------------
+ld_character_data_address:
+	inc a
+	sub 1
+	jp z,_ld_character_data_address_char_0
+	sub 1
+	jp z,_ld_character_data_address_char_1
+_ld_character_data_address_char_0:
+	ld ix,shoe_data
+	jp _ld_character_data_address_done
+_ld_character_data_address_char_1:
+	ld ix,sprite_data
+	jp _ld_character_data_address_done
+_ld_character_data_address_done:
 	ret

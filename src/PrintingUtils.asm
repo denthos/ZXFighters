@@ -42,25 +42,3 @@ print_char:
 	ld b,8           ; copy all 8 bytes in the character bitmap
 	call copy_bytes  ; copy bitmap to vram
 	ret
-
-
-; ------------------------------------------------------------------------------
-; Subroutines for printing character names to the title screen
-;
-; Inputs:
-;		IX = Address of the name to print
-; Outputs:
-;
-; ------------------------------------------------------------------------------
-print_p1_name_title_screen:
-	ld de,0x50c0
-	jp print_name_title_screen
-
-print_p2_name_title_screen:
-	ld de,0x50d6
-	jp print_name_title_screen
-
-print_name_title_screen:
-	ld c,10
-	call print_string
-	ret
