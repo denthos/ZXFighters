@@ -81,17 +81,30 @@ def fillMat(scr_input, matrix):
 def formatMat(s_size, matrix, new_pixel_matrix, new_attr_matrix):
     count = 0
     overlap = 0
+    tc = 0
     for i in range(s_size * NUM_BYTES_IN_BLOCK): #loop through number of rows, 192
-        new_pixel_matrix[i] = matrix[count][0:s_size]
+        new_pixel_matrix[i] = matrix[(8 * count) + overlap][0:s_size]
+        # print str(matrix[(8 * count) + overlap][0:s_size])
+        tc += 1
 
         count += 1
-        overlap += 1
-        if (overlap) >= (s_size): #used to be len(matrix) but that's not right
-            count += 2
-            overlap = 0
+        if count == 8:
+            count = 0
+            overlap += 1
 
+        # new_pixel_matrix[i] = matrix[count][0:s_size]
+        # count += 1
+        # overlap += 1
+        # if (overlap) >= (s_size): #used to be len(matrix) but that's not right
+        #     count += 2
+        #     overlap = 0
+
+    count = 0 #reset
     for i in range(s_size):
-        new_attr_matrix[i] = matrix[NUM_PIXEL_ROWS][0:s_size]
+        new_attr_matrix[i] = matrix[NUM_PIXEL_ROWS + count][0:s_size]
+        print matrix[NUM_PIXEL_ROWS + count][0:s_size]
+        count += 1
+    # print(tc)
     return (new_pixel_matrix, new_attr_matrix)
 
 
@@ -114,29 +127,44 @@ def writeHuffToNewFile(new_asm_file, new_pixel_matrix, new_attr_matrix):
         repeat_count = -1
         num = new_pixel_matrix[0][0]
         holder = num
+
+        dc = 0
+
+        dc2 = 0
+
         for i in range(len(new_pixel_matrix)):
             for j in range(len(new_pixel_matrix[0])):
+                dc2 += 1
                 if num == holder:
                     repeat_count += 1
                     if repeat_count >= 255:
                         repeat_count = 0
                         nf.write('\tdefb ' + str(num) + ',255' + '\n')
+                        dc += 255
                 else: 
                     if repeat_count != 0: #check for case when byte changes right after 255 repeats 
                         nf.write('\tdefb ' + str(num) + ',' + str(repeat_count) + '\n')
+                        dc += repeat_count
                     num = holder #set byte to holder
                     repeat_count = 1 #reset repeat count
+                    # print num
                 holder = new_pixel_matrix[i][j]
-
-        if new_pixel_matrix[-1][-1] == holder:
-            nf.write('\tdefb ' + str(num) + ',' + str(repeat_count + 1) + '\n')
-        else:
+        if num == holder: #the last two are the same
+            repeat_count += 1
+            nf.write('\tdefb ' + str(num) + ',' + str(repeat_count) + '\n')
+            dc += repeat_count
+        else: #the last two are not the same
+            nf.write('\tdefb ' + str(num) + ',' + str(repeat_count) + '\n')
             nf.write('\tdefb ' + str(holder) + ',' + '1' + '\n')
+            dc += (1 + repeat_count)
+        nf.write('\tdefb 0,0\n')
+        dc += 1
 
         #write attr bytes now, this is shitty code for now
         nf.write('attr_bytes:\n')
         num = new_attr_matrix[0][0]
         holder = num
+        repeat_count = -1
         for i in range(len(new_attr_matrix)):
             for j in range(len(new_attr_matrix[0])):
                 if num == holder:
@@ -149,7 +177,7 @@ def writeHuffToNewFile(new_asm_file, new_pixel_matrix, new_attr_matrix):
                         nf.write('\tdefb ' + str(num) + ',' + str(repeat_count) + '\n')
                     num = holder #set byte to holder
                     repeat_count = 1 #reset repeat count
-                holder = new_pixel_matrix[i][j]
+                holder = new_attr_matrix[i][j]
 
         if new_attr_matrix[-1][-1] == holder:
             nf.write('\tdefb ' + str(num) + ',' + str(repeat_count + 1) + '\n')
@@ -194,7 +222,7 @@ def writeRegBackgroundHuff(scr_input, new_asm_file):
 
 
 
-
+#main
 
 #get input arguments
 scr_input = sys.argv[1] #file name of the scr file
