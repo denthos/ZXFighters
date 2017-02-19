@@ -23,22 +23,22 @@ print_string:
 	ret
 
 
-	; ------------------------------------------------------------------------------
-	; Subroutine for printing a single character
-	;
-	; Inputs:
-	;		A  = ASCII code of the character to print
-	;   DE = Address of memory to write to
-	; Outputs:
-	;
-	; ------------------------------------------------------------------------------
-	print_char:
-		ld h,7
-		ld l,a
-		set 7,l
-		add hl,hl
-		add hl,hl
-		add hl,hl        ; calculate address of character bitmap in ROM
-		ld b,8           ; copy all 8 bytes in the character bitmap
-		call copy_bytes  ; copy bitmap to vram
-		ret
+; ------------------------------------------------------------------------------
+; Subroutine for printing a single character
+;
+; Inputs:
+;		A  = ASCII code of the character to print
+;   DE = Address of memory to write to
+; Outputs:
+;
+; ------------------------------------------------------------------------------
+print_char:
+	ld h,7
+	ld l,a
+	set 7,l
+	add hl,hl
+	add hl,hl
+	add hl,hl        ; calculate address of character bitmap in ROM
+	ld b,8           ; copy all 8 bytes in the character bitmap
+	call copy_bytes  ; copy bitmap to vram
+	ret
