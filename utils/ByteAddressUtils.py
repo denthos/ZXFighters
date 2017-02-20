@@ -1,6 +1,15 @@
 import sys
 
+# argv[0] - filename
+# argv[1] - name of function to execute
+# argv[2] - first function parameter
+# argv[3] - second function parameter
+
+# Example:  python ByteAddressUtils.py calculate_color_cell_pixel_address 0 0
+
+
 # pixel: 0  1  0  y7 y6 y2 y1 y0 y5 y4 y3 x7 x6 x5 x4 x3
+# attr:  0  1  0  1  1  0  y7 y6 y5 y4 y3 x7 x6 x5 x4 x3
 
 def calculate_color_cell_pixel_address(x,y):
     result = (y & (0b00011000)) << 8
