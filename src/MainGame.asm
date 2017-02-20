@@ -1,3 +1,4 @@
+; This is a temporary placeholder function
 start_main_game:
 	inc a
 	cp 16

@@ -3,8 +3,8 @@ character_select_loop:
   ; player 1
   ld bc,65022           ; read keys G,F,D,S,A
   in a,(c)
-  ld (character_select_input_store),a
-  and 0x1
+  ld (character_select_input_store),a ; store input for later
+  and 0x1               ; check key A
   jp nz,_character_select_loop_a_release
   ld a,1
   ld hl,a_down
@@ -13,7 +13,7 @@ character_select_loop:
 _character_select_loop_a_release:
   ld hl,a_down
   ld a,(hl)
-  or a                  ; if a_down was 1, select prev character
+  or a                  ; if a_down was 1 (key release), select prev character
   call nz,select_prev_character_p1
   ld hl,a_down
   ld a,0
@@ -21,7 +21,7 @@ _character_select_loop_a_release:
 _character_select_loop_a_done:
 
 	ld a,(character_select_input_store)
-  and 0x4
+  and 0x4               ; check key D
   jp nz,_character_select_loop_d_release
   ld a,1
   ld hl,d_down
@@ -30,7 +30,7 @@ _character_select_loop_a_done:
 _character_select_loop_d_release:
   ld hl,d_down
   ld a,(hl)
-  or a                  ; if d_down was 1, select next character
+  or a                  ; if d_down was 1 (key release), select next character
   call nz,select_next_character_p1
   ld hl,d_down
   ld a,0
@@ -40,8 +40,8 @@ _character_select_loop_d_done:
   ; player 2
   ld bc,49150           ; read keys H,J,K,L,Enter
   in a,(c)
-	ld (character_select_input_store),a
-  and 0x8
+	ld (character_select_input_store),a ; save input for later
+  and 0x8               ; check key J
   jp nz,_character_select_loop_j_release
   ld a,1
   ld hl,j_down
@@ -50,7 +50,7 @@ _character_select_loop_d_done:
 _character_select_loop_j_release:
   ld hl,j_down
   ld a,(hl)
-  or a                  ; if j_down was 1, select prev character
+  or a                  ; if j_down was 1 (key release), select prev character
   call nz,select_prev_character_p2
   ld hl,j_down
   ld a,0
@@ -58,7 +58,7 @@ _character_select_loop_j_release:
 _character_select_loop_j_done:
 
   ld a,(character_select_input_store)
-  and 0x2
+  and 0x2               ; check key L
   jp nz,_character_select_loop_l_release
   ld a,1
   ld hl,l_down
@@ -67,7 +67,7 @@ _character_select_loop_j_done:
 _character_select_loop_l_release:
   ld hl,l_down
   ld a,(hl)
-  or a                  ; if l_down was 1, select next character
+  or a                  ; if l_down was 1 (key release), select next character
   call nz,select_next_character_p2
   ld hl,l_down
   ld a,0
@@ -76,9 +76,12 @@ _character_select_loop_l_done:
 
   ; check for Enter
 	ld a,(character_select_input_store)
-  and 0x1
+  and 0x1               ; check key Enter
   jp nz,character_select_loop
 	ret
+
+
+
 
 select_next_character_p1:
 	ld hl,selected_character_p1

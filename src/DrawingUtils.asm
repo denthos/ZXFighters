@@ -119,8 +119,8 @@ _draw_sprite_attributes:
 	srl a
 	srl a
 	srl a
-	or 88
-	ld h,a
+	or 88                  ; convert address of first pixel byte to
+	ld h,a                 ;   address of first attribute byte
 _draw_sprite_attributes_unpack:
 	inc ix
 	inc ix
