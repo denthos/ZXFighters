@@ -306,3 +306,11 @@ selected_character_p2:
 	defb 1
 selected_character_max:
 	defb 1
+a_down:
+	defb 0
+d_down:
+	defb 0
+j_down:
+	defb 0
+l_down:
+	defb 0
