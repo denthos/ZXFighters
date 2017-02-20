@@ -3,7 +3,7 @@ start:
 	;;; INITIALIZATION (TODO: set up interrupt handler and stuff)
 
 	; disable interrupts
-	;di
+	di
 
   ;;; DRAW TITLE SCREEN AND START CHARACTER SELECT
 
@@ -103,7 +103,6 @@ _character_select_loop_l_done:
   and 0x1
   call z,start_game
 
-  halt
   jp character_select_loop
 
 start_game:
