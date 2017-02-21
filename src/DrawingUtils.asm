@@ -256,14 +256,14 @@ draw_title_character_p1:
 	jp draw_sprite
 
 draw_title_character_p2:
-  ld a,(selected_character_p2)
-  call ld_character_data_address
-  ld c,10               ; length of sprite name (always 10)
-  ld de,0x5056          ; color cell (22,18)
-  call print_string
-  ld d,6                ; width of sprite (always 6)
-  ld c,0                ; overwrite mode
-  ld hl,0x4898          ; color cell (24,12)
+	ld a,(selected_character_p2)
+	call ld_character_data_address
+	ld c,10               ; length of sprite name (always 10)
+	ld de,0x5056          ; color cell (22,18)
+	call print_string
+	ld d,6                ; width of sprite (always 6)
+	ld c,0                ; overwrite mode
+	ld hl,0x4898          ; color cell (24,12)
 	jp draw_sprite
 
 
