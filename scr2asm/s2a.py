@@ -1,4 +1,4 @@
-	import sys
+import sys
 import struct
 
 #arg 1 should be the name of the scr file to convert to asm
@@ -255,7 +255,3 @@ else: #regular background
     writeRegBackgroundHuff(scr_input, new_asm_file)
 
 print 'Resulting asm written to ' + new_asm_file
-
-
-    
-
