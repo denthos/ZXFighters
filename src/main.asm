@@ -18,9 +18,12 @@ start:
   call fill_byte
 
   ; draw title screen elements (arrows, instructions, options, characters, etc.)
+  call draw_title_background
   call draw_title_screen
   call draw_title_character_p1
   call draw_title_character_p2
+ call draw_title_screen
+
 
   ; start character select loop
   ;   this will return once the player(s) push Enter to start the game

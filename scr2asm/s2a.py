@@ -1,4 +1,4 @@
-	import sys
+import sys
 import struct
 
 #arg 1 should be the name of the scr file to convert to asm
