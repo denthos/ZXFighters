@@ -178,13 +178,13 @@ def writeHuffToNewFile(new_asm_file, new_pixel_matrix, new_attr_matrix):
                     num = holder #set byte to holder
                     repeat_count = 1 #reset repeat count
                 holder = new_attr_matrix[i][j]
-
-        if new_attr_matrix[-1][-1] == holder:
-            nf.write('\tdefb ' + str(num) + ',' + str(repeat_count + 1) + '\n')
-        else:
+        if num == holder: #the last two are the same
+            repeat_count += 1
+            nf.write('\tdefb ' + str(num) + ',' + str(repeat_count) + '\n')
+        else: #the last two are not the same
+            nf.write('\tdefb ' + str(num) + ',' + str(repeat_count) + '\n')
             nf.write('\tdefb ' + str(holder) + ',' + '1' + '\n')
         nf.write('\tdefb 0,0\n')
-        dc += 1
 
 
 #-----------------------------------------------------------------------------
