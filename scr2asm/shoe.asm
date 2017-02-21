@@ -87,3 +87,4 @@ attr_bytes:
 	defb 71,1
 	defb 2,4
 	defb 71,7
+	defb 0,0

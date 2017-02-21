@@ -92,5 +92,8 @@
 	defb 192,1
 	defb 0,0
 attr_bytes:
-	defb 42,2
-	defb 0,1
+	defb 42,4
+	defb 44,4
+	defb 40,4
+	defb 44,4
+	defb 0,0
