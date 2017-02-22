@@ -177,6 +177,35 @@ _draw_sprite_attributes_row_decrement:
 	jp _draw_sprite_attributes_row_decrement_return
 
 
+	; ------------------------------------------------------------------------------
+	; Subroutine for drawing a sprite onto the screen
+	;
+	; Inputs:
+	;  C  = 0 for overwrite mode, 1 for blending mode
+	;  D  = Width of sprite in color cells
+	;	HL = Address of vram to write to
+	;  IX = Address of sprite pixel data
+	; Outputs:
+	;
+	; ------------------------------------------------------------------------------
+move_sprite_left:
+	ld a,sprite_one_x_location
+	cp 0
+	jr nz, _move_sprite_left
+	ret
+_move_sprite_left:
+	dec a
+	ld b,a
+	ld c,sprite_one_y_location
+	call calculate_pixel_byte_address
+	ld ix,shoe_sprite_data
+	ld d,6
+	ld c,0
+	call draw_sprite
+
+
+
+
 ; ------------------------------------------------------------------------------
 ; Subroutine for drawing the base of the title screen
 ;

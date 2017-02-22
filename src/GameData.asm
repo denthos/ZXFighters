@@ -426,6 +426,11 @@ sprite_sprite_attributes:
 	defb 120,36
 	defb 0,0
 
+sprite_one_x_location:
+	defb 0
+sprite_one_y_location:
+	defb 0
+
 ; 2 bytes of memory reserved for storing screen addresses in draw routines
 draw_memory_store:
 	defb 0,0
