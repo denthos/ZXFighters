@@ -185,13 +185,13 @@ _draw_sprite_attributes_row_decrement:
 	;
 	; ------------------------------------------------------------------------------
 move_sprite_left:
-	ld a,sprite_one_x_location
+	ld a,(sprite_one_x_location)
 	cp 0											; is sprite at left edge?
 	jp z, _move_sprite_left_done
 	dec a
 	ld (sprite_one_x_location),a
 	ld b,a
-	ld c,sprite_one_y_location
+	ld c,(sprite_one_y_location)
 	call calculate_color_cell_pixel_address
 	ld ix,shoe_sprite_data					; sprite data shold already be in ix
 	ld c,0
@@ -201,12 +201,12 @@ move_sprite_left:
 	ret
 
 move_sprite_down:
-	ld a,sprite_one_y_location
+	ld a,(sprite_one_y_location)
 	cp 23
 	jp z,_move_sprite_down_done
 	inc a
 	ld (sprite_one_y_location),a
-	ld b,sprite_one_x_location
+	ld b,(sprite_one_x_location)
 	ld c,a
 	call calculate_color_cell_pixel_address
 	ld ix,shoe_sprite_data
@@ -217,13 +217,13 @@ _move_sprite_down_done:
 	ret
 
 move_sprite_right:
-	ld a,sprite_one_x_location
+	ld a,(sprite_one_x_location)
 	cp 31
 	jp z,_move_sprite_right_done
 	inc a
 	ld (sprite_one_x_location),a
 	ld b,a
-	ld c,sprite_one_y_location
+	ld c,(sprite_one_y_location)
 	call calculate_color_cell_pixel_address
 	ld ix,shoe_sprite_data
 	ld c,0
@@ -233,12 +233,12 @@ _move_sprite_right_done:
 	ret
 
 move_sprite_up:
-	ld a,sprite_one_y_location
+	ld a,(sprite_one_y_location)
 	cp 0
 	jp z,_move_sprite_up_done
 	dec a
 	ld (sprite_one_y_location),a
-	ld b,sprite_one_x_location
+	ld b,(sprite_one_x_location)
 	ld c,a
 	call calculate_color_cell_pixel_address
 	ld ix,shoe_sprite_data
