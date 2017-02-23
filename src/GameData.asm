@@ -7,7 +7,36 @@ left_arrow:
 right_arrow:
 	defb '>'
 
-
+black_background:
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,24
+	defb 7,255
+	defb 7,255
+	defb 7,255
+	defb 7,3
 
 title_screen_data:
 	defb 255,255

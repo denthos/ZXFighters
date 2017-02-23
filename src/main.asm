@@ -8,7 +8,7 @@ start:
   ;;; DRAW TITLE SCREEN AND START CHARACTER SELECT
 
 	; set border color
-	ld a,0                    ; black
+	ld a,1                    ; black
 	out (0xfe),a              ; send to ula
 
 	; fill screen with black

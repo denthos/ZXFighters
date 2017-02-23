@@ -73,10 +73,10 @@ fill_byte_fast:
 ; Subroutine for drawing a sprite onto the screen
 ;
 ; Inputs:
-;   C  = 0 for overwrite mode, 1 for blending mode
-;   D  = Width of sprite in color cells
+;   	C  = 0 for overwrite mode, 1 for blending mode
+;   	D  = Width of sprite in color cells
 ;		HL = Address of vram to write to
-;   IX = Address of sprite pixel data
+;   	IX = Address of sprite pixel data
 ; Outputs:
 ;
 ; ------------------------------------------------------------------------------
@@ -181,29 +181,72 @@ _draw_sprite_attributes_row_decrement:
 	; Subroutine for drawing a sprite onto the screen
 	;
 	; Inputs:
-	;  C  = 0 for overwrite mode, 1 for blending mode
-	;  D  = Width of sprite in color cells
-	;	HL = Address of vram to write to
-	;  IX = Address of sprite pixel data
 	; Outputs:
 	;
 	; ------------------------------------------------------------------------------
 move_sprite_left:
 	ld a,sprite_one_x_location
-	cp 0
-	jr nz, _move_sprite_left
-	ret
-_move_sprite_left:
+	cp 0											; is sprite at left edge?
+	jp z, _move_sprite_left_done
 	dec a
+	ld (sprite_one_x_location),a
 	ld b,a
 	ld c,sprite_one_y_location
-	call calculate_pixel_byte_address
-	ld ix,shoe_sprite_data
-	ld d,6
+	call calculate_color_cell_pixel_address
+	ld ix,shoe_sprite_data					; sprite data shold already be in ix
 	ld c,0
+	ld d,6
 	call draw_sprite
+	_move_sprite_left_done:
+	ret
 
+move_sprite_down:
+	ld a,sprite_one_y_location
+	cp 23
+	jp z,_move_sprite_down_done
+	inc a
+	ld (sprite_one_y_location),a
+	ld b,sprite_one_x_location
+	ld c,a
+	call calculate_color_cell_pixel_address
+	ld ix,shoe_sprite_data
+	ld c,0
+	ld d,6
+	call draw_sprite
+_move_sprite_down_done:
+	ret
 
+move_sprite_right:
+	ld a,sprite_one_x_location
+	cp 31
+	jp z,_move_sprite_right_done
+	inc a
+	ld (sprite_one_x_location),a
+	ld b,a
+	ld c,sprite_one_y_location
+	call calculate_color_cell_pixel_address
+	ld ix,shoe_sprite_data
+	ld c,0
+	ld d,6
+	call draw_sprite
+_move_sprite_right_done:
+	ret
+
+move_sprite_up:
+	ld a,sprite_one_y_location
+	cp 0
+	jp z,_move_sprite_up_done
+	dec a
+	ld (sprite_one_y_location),a
+	ld b,sprite_one_x_location
+	ld c,a
+	call calculate_color_cell_pixel_address
+	ld ix,shoe_sprite_data
+	ld c,0
+	ld d,6
+	call draw_sprite
+_move_sprite_up_done:
+	ret
 
 
 ; ------------------------------------------------------------------------------
@@ -261,6 +304,18 @@ _draw_title_screen_loop_start:
 	ld a,d                  ; check if counter is 0, we do it this way because
 	or e                    ;   our counter needs to work for a value above 255
 	jp nz,_draw_title_screen_loop_start
+	ret
+
+draw_background:
+	ld de,29
+	ld hl,black_background
+	ld ix,0x4000
+_draw_background_loop_start:
+	call copy_encoded_bytes
+	dec de
+	ld a,d
+	or e
+	jp nz,_draw_background_loop_start
 	ret
 
 ; ------------------------------------------------------------------------------
