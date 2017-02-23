@@ -191,7 +191,8 @@ move_sprite_left:
 	dec a
 	ld (sprite_one_x_location),a
 	ld b,a
-	ld c,(sprite_one_y_location)
+	ld a,(sprite_one_y_location)
+	ld c,a
 	call calculate_color_cell_pixel_address
 	ld ix,shoe_sprite_data					; sprite data shold already be in ix
 	ld c,0
@@ -206,8 +207,9 @@ move_sprite_down:
 	jp z,_move_sprite_down_done
 	inc a
 	ld (sprite_one_y_location),a
-	ld b,(sprite_one_x_location)
 	ld c,a
+	ld a,(sprite_one_x_location)
+	ld b,a
 	call calculate_color_cell_pixel_address
 	ld ix,shoe_sprite_data
 	ld c,0
@@ -223,7 +225,8 @@ move_sprite_right:
 	inc a
 	ld (sprite_one_x_location),a
 	ld b,a
-	ld c,(sprite_one_y_location)
+	ld a,(sprite_one_y_location)
+	ld c,a
 	call calculate_color_cell_pixel_address
 	ld ix,shoe_sprite_data
 	ld c,0
@@ -238,8 +241,9 @@ move_sprite_up:
 	jp z,_move_sprite_up_done
 	dec a
 	ld (sprite_one_y_location),a
-	ld b,(sprite_one_x_location)
 	ld c,a
+	ld a,(sprite_one_x_location)
+	ld b,a
 	call calculate_color_cell_pixel_address
 	ld ix,shoe_sprite_data
 	ld c,0
