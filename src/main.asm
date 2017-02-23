@@ -39,3 +39,4 @@ start:
   include "src/GameData.asm"
   include "src/MainGame.asm"
   include "src/PrintingUtils.asm"
+  include "src/CharacterMove.asm"

@@ -482,3 +482,7 @@ j_down:
 	defb 0
 l_down:
 	defb 0
+w_down:
+	defb 0 
+s_down: 
+	defb 0 

@@ -19,9 +19,10 @@ start_main_game:
 	ld d,6
 	ld ix,shoe_sprite_data
 	call draw_sprite
-move_in_square:
-	call move_sprite_left
-	call move_sprite_down
-	call move_sprite_right
-	call move_sprite_up
-	jp move_in_square
+	call play_loop
+; move_in_square:
+; 	call move_sprite_right
+; 	call move_sprite_right
+; 	call move_sprite_right
+; 	call move_sprite_right
+; 	jp move_in_square	

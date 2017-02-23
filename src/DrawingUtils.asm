@@ -75,7 +75,7 @@ fill_byte_fast:
 ; Inputs:
 ;   	C  = 0 for overwrite mode, 1 for blending mode
 ;   	D  = Width of sprite in color cells
-;		HL = Address of vram to write to
+;	HL = Address of vram to write to
 ;   	IX = Address of sprite pixel data
 ; Outputs:
 ;
@@ -202,13 +202,14 @@ move_sprite_left:
 	ret
 
 move_sprite_down:
-	ld a,(sprite_one_y_location)
+	ld a, (sprite_one_y_location)
 	cp 23
 	jp z,_move_sprite_down_done
 	inc a
-	ld (sprite_one_y_location),a
+	inc a
+	ld (sprite_one_y_location), a
 	ld c,a
-	ld a,(sprite_one_x_location)
+	ld a, (sprite_one_x_location)
 	ld b,a
 	call calculate_color_cell_pixel_address
 	ld ix,shoe_sprite_data
@@ -236,10 +237,12 @@ _move_sprite_right_done:
 	ret
 
 move_sprite_up:
-	ld a,(sprite_one_y_location)
+	ld a, (sprite_one_y_location)
 	cp 0
 	jp z,_move_sprite_up_done
 	dec a
+; 	dec a
+; 	dec a
 	ld (sprite_one_y_location),a
 	ld c,a
 	ld a,(sprite_one_x_location)
