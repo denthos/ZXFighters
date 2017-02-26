@@ -222,6 +222,18 @@ draw_title_screen:
 
 	ret
 
+draw_background:
+	ld de,29
+	ld hl,black_background
+	ld ix,0x4000
+_draw_background_loop_start:
+	call copy_encoded_bytes
+	dec de
+	ld a,d
+	or e
+	jp nz,_draw_background_loop_start
+	ret
+
 ; ------------------------------------------------------------------------------
 ; Subroutine for drawing the sprite and name of characters onto the character
 ;   select screen.
@@ -277,3 +289,27 @@ _ld_character_data_address_char_0:
 _ld_character_data_address_char_1:
 	ld ix,sprite_data
 	ret
+
+draw_status_bar_init:
+	ld hl,status_bar_attrib_bytes
+	ld de,23136				; address in vram of start of status bar attribs
+	ld bc,160				; number of color block attribs to set
+	ldir
+	call draw_health_bar_init
+	ret
+
+draw_health_bar_init:
+	ld a,255
+	ld b,10
+	ld de,20609
+_draw_health_bar_init_loop:
+	ld (de),a
+	inc d
+	djnz _draw_health_bar_init_loop
+	ret
+
+update_status_bar:
+	ld a,(player_one_health)
+	srl a
+	srl a
+	srl a

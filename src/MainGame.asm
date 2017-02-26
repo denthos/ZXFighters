@@ -6,6 +6,7 @@ start_main_game:
 	ld a,0
 _start_main_game_continue:
 	out (0xfe),a
+	call update_status_bar
 	halt
 	jp start_main_game
 	ret

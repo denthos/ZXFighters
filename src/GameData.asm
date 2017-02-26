@@ -7,6 +7,37 @@ left_arrow:
 right_arrow:
 	defb '>'
 
+black_background:
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,24
+	defb 7,255
+	defb 7,255
+	defb 7,255
+	defb 7,3
+
 ; Character data looks like:
 ; struct character {
 ;   <name>_name - 10 bytes
@@ -318,3 +349,44 @@ j_down:
 	defb 0
 l_down:
 	defb 0
+
+
+; stores the attribute bytes for the layout of the status bar, may need to
+; "encode" if need to save space
+status_bar_attrib_bytes:
+    defb 72,72,72,72,72,72,72,72
+    defb 72,72,72,72,72,72,72,72
+    defb 72,72,72,72,72,72,72,72
+    defb 72,72,72,72,72,72,72,72
+    defb 77,84,84,84,84,84,84,84
+    defb 84,84,84,77,77,77,79,79
+    defb 79,79,77,77,77,84,84,84
+    defb 84,84,84,84,84,84,84,77
+    defb 77,78,78,78,78,78,78,78
+    defb 78,78,78,77,77,77,79,79
+    defb 79,79,77,77,77,78,78,78
+    defb 78,78,78,78,78,78,78,77
+    defb 77,77,77,77,77,77,77,77
+    defb 77,77,77,77,77,77,79,79
+    defb 79,79,77,77,77,77,77,77
+    defb 77,77,77,77,77,77,77,77
+    defb 77,77,77,77,77,77,77,77
+    defb 77,77,77,77,77,77,77,77
+    defb 77,77,77,77,77,77,77,77
+    defb 77,77,77,77,77,77,77,77
+
+;stores the pixel bytes for the status bar
+status_bar_pixels:
+    defb 77,0,0,0,0,0,0,0,0
+    defb 72,255,255,255,0,0,0,0,0
+    defb 78,0,0,255,255,255,0,0,0
+    defb 84,255,255,255,255,255,255,255,255
+    defb 79,0,0,0,0,0,0,0,0
+
+status_bar_screen_buffer:
+    defs 2048
+
+player_one_health:
+	defb 100
+player_two_health:
+	defb 79
