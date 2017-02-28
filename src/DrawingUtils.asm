@@ -182,7 +182,7 @@ _draw_sprite_attributes_row_decrement:
 ;
 ; Inputs: 
 ; 	IX - the input sprite 
-; 	A  - the sprite number ( 1 = sprite #1, 2 = sprite #2)
+; 	A  - the sprite number ( 0 = sprite #1, 1 = sprite #2)
 ; Outputs:
 ;
 ; ------------------------------------------------------------------------------
@@ -223,7 +223,9 @@ move_sprite_down:
 	ld a,2              ; 2 is the code for red.
         out (254),a         ; write to port 254.
 	ld a, (sprite_one_y_location)
-	cp 23
+	cp 18
+	jp z,_move_sprite_down_done
+	cp 19
 	jp z,_move_sprite_down_done
 	inc a
 	inc a
@@ -235,7 +237,9 @@ move_sprite_down:
 move_sprite_down_2:
 	
 	ld a, (sprite_two_y_location)
-	cp 23
+	cp 18				; Sometimes it moves too fast to catch so two cases are necessary
+	jp z,_move_sprite_down_done
+	cp 19
 	jp z,_move_sprite_down_done
 	inc a
 	inc a
@@ -256,7 +260,7 @@ move_sprite_right:
 	cp 0
 	jp nz, move_sprite_right_2
 	ld a,(sprite_one_x_location)
-	cp 31
+	cp 26
 	jp z,_move_sprite_right_done
 	inc a
 	ld (sprite_one_x_location),a
@@ -266,7 +270,7 @@ move_sprite_right:
 	jp finish_move_sprite_right
 move_sprite_right_2:
 	ld a,(sprite_two_x_location)
-	cp 31
+	cp 26
 	jp z,_move_sprite_right_done
 	inc a
 	ld (sprite_two_x_location),a
