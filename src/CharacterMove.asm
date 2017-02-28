@@ -2,7 +2,17 @@
 ; ------------------------------------------------------------------------------
 ; Currently characters move at 25 fps. We can make them move slower by keeping a 
 ; pointer to what movements are waiting to be processed and decrement those pointers
-; until they reach 0. I don't know how this would play out or if it would be good though. 
+; until they reach 0. I don't know how this would play out or if it would be good though.
+;
+; Ports
+; 32766 B, N, M, Symbol Shift, Space
+; 49150 H, J, K, L, Enter
+; 57342 Y, U, I, O, P
+; 61438 6, 7, 8, 9, 0
+; 63486 5, 4, 3, 2, 1 <--- Current
+; 64510 T, R, E, W, Q
+; 65022 G, F, D, S, A
+; 65278 V, C, X, Z, Caps Shift 
 ; ------------------------------------------------------------------------------
 
 play_loop: 
@@ -11,14 +21,17 @@ play_loop:
       ld (character_select_input_store),a ; store input for later
       and 0x1               ; check key A
       jp nz,__character_select_loop_a_done
-      call halt_2             ; make sure movement is constant and ensure to flickering
+      ld ix, shoe_sprite_data
+      call halt_2             ; make sure movement is constant and ensure no flickering
+      ld a, 0
       call move_sprite_left
-;       halt
 __character_select_loop_a_done:
       ld a,(character_select_input_store)
       and 0x4               ; check key D
       jp nz,__character_select_loop_d_done
-      call halt_2             ; make sure movement is constant and ensure to flickering
+      ld ix, shoe_sprite_data
+      call halt_2             ; make sure movement is constant and ensure no flickering
+      ld a,0
       call move_sprite_right
 
 __character_select_loop_d_done:
@@ -27,7 +40,9 @@ __character_select_loop_d_done:
       ld a,(character_select_input_store)
       and 0x2               ; check key S
       jp nz,__character_select_loop_s_done
-      call halt_2             ; make sure movement is constant and ensure to flickering
+      ld ix, shoe_sprite_data
+      call halt_2             ; make sure movement is constant and ensure no flickering
+      ld a, 0
       call move_sprite_down
 
 __character_select_loop_s_done:
@@ -37,11 +52,53 @@ __character_select_loop_s_done:
       ld a,(character_select_input_store)
       and 0x2               ; check key W?????
       jp nz,__character_select_loop_w_done
-      call halt_2             ; make sure movement is constant and ensure to flickering
+      ld ix, shoe_sprite_data
+      call halt_2             ; make sure movement is constant and ensure no flickering
+      ld a, 0
       call move_sprite_up
 __character_select_loop_w_done:
-      jp play_loop
 
+
+
+; player 2 movement
+      ld bc,49150           ; H, J, K, L, Enter
+      in a,(c)
+      ld (character_select_input_store),a ; store input for later
+      and 0x8               ; check key J
+      jp nz,__character_select_loop_j_done
+      ld ix, sprite_sprite_data
+      call halt_2             ; make sure movement is constant and ensure to flickering
+      ld a, 1
+      call move_sprite_left
+__character_select_loop_j_done:
+      ld a,(character_select_input_store)
+      and 0x2               ; check key L
+      jp nz,__character_select_loop_l_done
+      ld ix, sprite_sprite_data
+      call halt_2             ; make sure movement is constant and ensure to flickering
+      ld a, 1
+      call move_sprite_right
+__character_select_loop_l_done:
+      ld a,(character_select_input_store)
+      and 0x4               ; check key K
+      jp nz,__character_select_loop_k_done
+      ld ix, sprite_sprite_data
+      call halt_2             ; make sure movement is constant and ensure to flickering
+      ld a, 1
+      call move_sprite_down
+__character_select_loop_k_done:
+      ld bc,57342           ; read keys Y, U, I, O, P
+      in a,(c)
+      ld (character_select_input_store),a ; save input for later
+      ld a,(character_select_input_store)
+      and 0x4               ; check key I
+      jp nz,__character_select_loop_i_done
+      ld ix, sprite_sprite_data
+      call halt_2             ; make sure movement is constant and ensure to flickering
+      ld a, 1
+      call move_sprite_up
+__character_select_loop_i_done:
+      jp play_loop
 
 
 ; ------------------------------------------------------------------------------

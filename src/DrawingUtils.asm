@@ -177,14 +177,18 @@ _draw_sprite_attributes_row_decrement:
 	jp _draw_sprite_attributes_row_decrement_return
 
 
-	; ------------------------------------------------------------------------------
-	; Subroutine for drawing a sprite onto the screen
-	;
-	; Inputs:
-	; Outputs:
-	;
-	; ------------------------------------------------------------------------------
+; ------------------------------------------------------------------------------
+; Subroutine for drawing a sprite onto the screen
+;
+; Inputs: 
+; 	IX - the input sprite 
+; 	A  - the sprite number ( 1 = sprite #1, 2 = sprite #2)
+; Outputs:
+;
+; ------------------------------------------------------------------------------
 move_sprite_left:
+	cp 0
+	jp nz, move_sprite_left_2
 	ld a,(sprite_one_x_location)
 	cp 0											; is sprite at left edge?
 	jp z, _move_sprite_left_done
@@ -193,8 +197,20 @@ move_sprite_left:
 	ld b,a
 	ld a,(sprite_one_y_location)
 	ld c,a
-	call calculate_color_cell_pixel_address
-	ld ix,shoe_sprite_data					; sprite data shold already be in ix
+	call finish_move_sprite_left
+
+move_sprite_left_2: 
+	ld a,(sprite_two_x_location)
+	cp 0											; is sprite at left edge?
+	jp z, _move_sprite_left_done
+	dec a
+	ld (sprite_two_x_location),a
+	ld b,a
+	ld a,(sprite_two_y_location)
+	ld c,a
+
+finish_move_sprite_left:
+	call calculate_color_cell_pixel_address					; sprite data shold already be in ix
 	ld c,0
 	ld d,6
 	call draw_sprite
@@ -202,6 +218,10 @@ move_sprite_left:
 	ret
 
 move_sprite_down:
+	cp 0
+	jp nz,move_sprite_down_2
+	ld a,2              ; 2 is the code for red.
+        out (254),a         ; write to port 254.
 	ld a, (sprite_one_y_location)
 	cp 23
 	jp z,_move_sprite_down_done
@@ -211,8 +231,21 @@ move_sprite_down:
 	ld c,a
 	ld a, (sprite_one_x_location)
 	ld b,a
+	jr finish_move_sprite_down
+move_sprite_down_2:
+	
+	ld a, (sprite_two_y_location)
+	cp 23
+	jp z,_move_sprite_down_done
+	inc a
+	inc a
+	ld (sprite_two_y_location), a
+	ld c,a
+	ld a, (sprite_two_x_location)
+	ld b,a
+
+finish_move_sprite_down: 
 	call calculate_color_cell_pixel_address
-	ld ix,shoe_sprite_data
 	ld c,0
 	ld d,6
 	call draw_sprite
@@ -220,6 +253,8 @@ _move_sprite_down_done:
 	ret
 
 move_sprite_right:
+	cp 0
+	jp nz, move_sprite_right_2
 	ld a,(sprite_one_x_location)
 	cp 31
 	jp z,_move_sprite_right_done
@@ -228,8 +263,18 @@ move_sprite_right:
 	ld b,a
 	ld a,(sprite_one_y_location)
 	ld c,a
+	jp finish_move_sprite_right
+move_sprite_right_2:
+	ld a,(sprite_two_x_location)
+	cp 31
+	jp z,_move_sprite_right_done
+	inc a
+	ld (sprite_two_x_location),a
+	ld b,a
+	ld a,(sprite_two_y_location)
+	ld c,a
+finish_move_sprite_right:
 	call calculate_color_cell_pixel_address
-	ld ix,shoe_sprite_data
 	ld c,0
 	ld d,6
 	call draw_sprite
@@ -237,21 +282,32 @@ _move_sprite_right_done:
 	ret
 
 move_sprite_up:
+	cp 0
+	jp nz, move_sprite_up_2
 	ld a, (sprite_one_y_location)
 	cp 0
 	jp z,_move_sprite_up_done
 	dec a
-; 	dec a
-; 	dec a
 	ld (sprite_one_y_location),a
 	ld c,a
 	ld a,(sprite_one_x_location)
 	ld b,a
+	jp finish_move_sprite_up
+move_sprite_up_2:
+	ld a, (sprite_two_y_location)
+	cp 0
+	jp z,_move_sprite_up_done
+	dec a
+	ld (sprite_two_y_location),a
+	ld c,a
+	ld a,(sprite_two_x_location)
+	ld b,a
+
+finish_move_sprite_up:
 	call calculate_color_cell_pixel_address
-	ld ix,shoe_sprite_data
 	ld c,0
 	ld d,6
-	call draw_sprite
+	call draw_sprite		; ix has sprite data
 _move_sprite_up_done:
 	ret
 

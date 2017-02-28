@@ -9,8 +9,6 @@ start_main_game:
 ; 	halt
 ; 	jp start_main_game
 ; 	ret
-
-
 	call draw_background
 	ld b,0
 	ld c,0
@@ -19,6 +17,15 @@ start_main_game:
 	ld d,6
 	ld ix,shoe_sprite_data
 	call draw_sprite
+
+	ld b,25
+	ld c,0
+	call calculate_color_cell_pixel_address
+	ld c,0
+	ld d,6
+	ld ix,sprite_sprite_data
+	call draw_sprite
+
 	call play_loop
 ; move_in_square:
 ; 	call move_sprite_right
