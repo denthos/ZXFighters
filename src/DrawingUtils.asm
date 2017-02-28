@@ -220,8 +220,7 @@ finish_move_sprite_left:
 move_sprite_down:
 	cp 0
 	jp nz,move_sprite_down_2
-	ld a,2              ; 2 is the code for red.
-        out (254),a         ; write to port 254.
+
 	ld a, (sprite_one_y_location)
 	cp 18
 	jp z,_move_sprite_down_done
@@ -267,6 +266,10 @@ move_sprite_right:
 	ld b,a
 	ld a,(sprite_one_y_location)
 	ld c,a
+
+	call check_sprite_overlap
+	cp 0
+	jp nz, _move_sprite_right_done
 	jp finish_move_sprite_right
 move_sprite_right_2:
 	ld a,(sprite_two_x_location)
@@ -277,6 +280,10 @@ move_sprite_right_2:
 	ld b,a
 	ld a,(sprite_two_y_location)
 	ld c,a
+	call check_sprite_overlap
+	cp 0
+	jp nz, _move_sprite_right_done
+
 finish_move_sprite_right:
 	call calculate_color_cell_pixel_address
 	ld c,0
@@ -314,6 +321,59 @@ finish_move_sprite_up:
 	call draw_sprite		; ix has sprite data
 _move_sprite_up_done:
 	ret
+
+
+
+; ------------------------------------------------------------------------------
+; Subroutine (crude) for checking if the two sprites are now overlapping
+; Outputs:
+;	A - 1 for overlapping 0 for not overlapping
+; ------------------------------------------------------------------------------
+check_sprite_overlap:
+	; check if the x values are within 5 of each other 	
+        ld a,2              ; 2 is the code for red.
+        out (254),a         ; write to port 254.
+	ld a, (sprite_one_x_location)
+	ld d, (sprite_two_x_location)
+
+	sub d					; b - a -> b
+	ld a, d					; load b into a to use for the abs sub routine
+	call absA
+	cp 6 
+	jp nc, return_sprite_overlap_false 	;if it is equal to 6 or greater then return false
+	;check if the y value are within 5 of each other
+	ld a, (sprite_one_y_location)
+	ld d, (sprite_two_y_location)
+	sub d					; b - a -> b
+	ld a, d					; load b into a to use for the abs sub routine
+	call absA
+	cp 6 
+	jp nc, return_sprite_overlap_false 	;if it is equal to 6 or greater then return false
+	jp return_sprite_overlap_true
+
+return_sprite_overlap_false:
+	ld a, 0
+	jp check_sprite_overlap_done
+
+return_sprite_overlap_true:
+	ld a, 1
+
+check_sprite_overlap_done:
+	ret
+
+
+
+; ------------------------------------------------------------------------------
+; Subroutine for getting the absolute value if the accumulator register
+; Found on http://z80-heaven.wikidot.com/math
+; ------------------------------------------------------------------------------
+absA:
+     or a
+     ret p
+     neg         ;or you can use      cpl \ inc a
+     ret
+
+
 
 
 ; ------------------------------------------------------------------------------
