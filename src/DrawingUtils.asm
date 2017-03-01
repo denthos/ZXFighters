@@ -113,32 +113,32 @@ _draw_sprite_row_decrement_return:
 	jp _draw_sprite_unpack
 
 _draw_sprite_attributes:
-	ld d,e
-	ld hl,(draw_memory_store)
-	ld a,h
-	srl a
-	srl a
-	srl a
-	or 88                  ; convert address of first pixel byte to
-	ld h,a                 ;   address of first attribute byte
-_draw_sprite_attributes_unpack:
-	inc ix
-	inc ix
-	ld a,(ix+1)
-	or a
-	jp z,_draw_sprite_done
-	ld b,a
-_draw_sprite_attributes_loop_start:
-	ld a,(ix+0)
-	ld (hl),a
-	inc hl
-	dec d
-	ld a,d
-	or a
-	jr z,_draw_sprite_attributes_row_decrement
-_draw_sprite_attributes_row_decrement_return:
-	djnz _draw_sprite_attributes_loop_start
-	jp _draw_sprite_attributes_unpack
+; 	ld d,e
+; 	ld hl,(draw_memory_store)
+; 	ld a,h
+; 	srl a
+; 	srl a
+; 	srl a
+; 	or 88                  ; convert address of first pixel byte to
+; 	ld h,a                 ;   address of first attribute byte
+; _draw_sprite_attributes_unpack:
+; 	inc ix
+; 	inc ix
+; 	ld a,(ix+1)
+; 	or a
+; 	jp z,_draw_sprite_done
+; 	ld b,a
+; _draw_sprite_attributes_loop_start:
+; 	ld a,(ix+0)
+; 	ld (hl),a
+; 	inc hl
+; 	dec d
+; 	ld a,d
+; 	or a
+; 	jr z,_draw_sprite_attributes_row_decrement
+; _draw_sprite_attributes_row_decrement_return:
+; 	djnz _draw_sprite_attributes_loop_start
+; 	jp _draw_sprite_attributes_unpack
 
 _draw_sprite_done:
 	ret
@@ -165,16 +165,16 @@ _draw_sprite_row_decrement:
 	ld h,a
 	jp _draw_sprite_row_decrement_return
 
-_draw_sprite_attributes_row_decrement:
-	ld d,e
-	ld a,32
-	sub e
-	ld c,a
-	ld a,b
-	ld b,0
-	add hl,bc
-	ld b,a
-	jp _draw_sprite_attributes_row_decrement_return
+; _draw_sprite_attributes_row_decrement:
+; 	ld d,e
+; 	ld a,32
+; 	sub e
+; 	ld c,a
+; 	ld a,b
+; 	ld b,0
+; 	add hl,bc
+; 	ld b,a
+; 	jp _draw_sprite_attributes_row_decrement_return
 
 
 ; ------------------------------------------------------------------------------
@@ -189,6 +189,8 @@ _draw_sprite_attributes_row_decrement:
 move_sprite_left:
 	cp 0
 	jp nz, move_sprite_left_2
+; 	ld a, 2
+; 	out (254),a
 	ld a,(sprite_one_x_location)
 	cp 0											; is sprite at left edge?
 	jp z, _move_sprite_left_done
@@ -197,7 +199,7 @@ move_sprite_left:
 	ld b,a
 	ld a,(sprite_one_y_location)
 	ld c,a
-	call finish_move_sprite_left
+	jp finish_move_sprite_left
 
 move_sprite_left_2: 
 	ld a,(sprite_two_x_location)
@@ -220,7 +222,7 @@ finish_move_sprite_left:
 move_sprite_down:
 	cp 0
 	jp nz,move_sprite_down_2
-
+	out (254), a
 	ld a, (sprite_one_y_location)
 	cp 18
 	jp z,_move_sprite_down_done
@@ -232,7 +234,7 @@ move_sprite_down:
 	ld c,a
 	ld a, (sprite_one_x_location)
 	ld b,a
-	jr finish_move_sprite_down
+	jp finish_move_sprite_down
 move_sprite_down_2:
 	
 	ld a, (sprite_two_y_location)
@@ -268,9 +270,9 @@ move_sprite_right:
 	ld c,a
 
 	call check_sprite_overlap
-	cp 0
-	jp nz, _move_sprite_right_done
-	jp finish_move_sprite_right
+	cp 1			; Will set the Z flag if A == 1
+	jp z, _revert_move_right ; a = 1 means overlapping now
+	jp _finish_move_sprite_right
 move_sprite_right_2:
 	ld a,(sprite_two_x_location)
 	cp 26
@@ -280,15 +282,30 @@ move_sprite_right_2:
 	ld b,a
 	ld a,(sprite_two_y_location)
 	ld c,a
-	call check_sprite_overlap
-	cp 0
-	jp nz, _move_sprite_right_done
+; 	call check_sprite_overlap
+; 	cp 0
+; 	jp nz, _revert_move_right_2
 
-finish_move_sprite_right:
+
+_finish_move_sprite_right:
 	call calculate_color_cell_pixel_address
 	ld c,0
 	ld d,6
 	call draw_sprite
+	jp _move_sprite_right_done
+
+_revert_move_right:
+	ld a, (sprite_one_x_location)
+	dec a
+	ld (sprite_one_x_location), a
+	jp _move_sprite_right_done
+
+_revert_move_right_2:
+	ld a, (sprite_two_x_location)
+	dec a
+	ld (sprite_two_x_location), a
+	jp _move_sprite_right_done
+
 _move_sprite_right_done:
 	ret
 
@@ -330,32 +347,89 @@ _move_sprite_up_done:
 ;	A - 1 for overlapping 0 for not overlapping
 ; ------------------------------------------------------------------------------
 check_sprite_overlap:
-	; check if the x values are within 5 of each other 	
-        ld a,2              ; 2 is the code for red.
-        out (254),a         ; write to port 254.
-	ld a, (sprite_one_x_location)
-	ld d, (sprite_two_x_location)
 
-	sub d					; b - a -> b
-	ld a, d					; load b into a to use for the abs sub routine
-	call absA
-	cp 6 
-	jp nc, return_sprite_overlap_false 	;if it is equal to 6 or greater then return false
+
+	; check if the x values are within 5 of each other 	
+; 	ld a, (sprite_two_x_location)
+; ; 	add a, 48
+; ; 	ld de, 0x4000
+; ; 	call print_char
+; ; 	halt
+; ; 	halt
+; ; 	halt
+; ; 	halt
+; ; 	halt
+; ; 	halt
+; ; 	halt
+; ; 	halt
+; ; 	halt
+; ; 	halt
+; ; 	halt
+; ; 	halt
+; ; 	halt
+; ; 	halt
+; ; 	halt
+; ; 	halt
+; ; 	halt
+; ; 	halt
+; ; 	halt
+; ; 	halt
+; ; 	halt
+; ; 	halt
+; ; 	halt
+; ; 	halt
+; ; 	halt
+; ; 	halt
+; ; 	halt
+; ; 	halt
+	
+
+
+; 	ld d, (sprite_one_x_location)
+
+
+
+
+; ; 	sub d					; a = x2, d = x1 --- x2 = x2 - x1
+; ; 	add a, d
+; 	add a, d
+; 	call absA
+; ; 	add a, 48
+; 	ld de, 0x4000
+; 	call print_char
+; ; 	add a, 48
+
+; 	ld a, d
+	ld a, 5
+	cp 6
+	
+	jp nc, return_sprite_overlap_false 	; If difference is greater than or equal to 6 then return false
+                      ; 2 is the code for red.
+;        	ld a, 48
+; 	ld de, 0x4000
+; 	call print_char
 	;check if the y value are within 5 of each other
-	ld a, (sprite_one_y_location)
-	ld d, (sprite_two_y_location)
-	sub d					; b - a -> b
-	ld a, d					; load b into a to use for the abs sub routine
-	call absA
-	cp 6 
+; 	ld a, (sprite_one_y_location)
+; 	ld d, (sprite_two_y_location)
+; 	sub d					; b - a -> b
+; 	ld a, d
+; 	call absA
+	ld a, 5
+	cp 6
 	jp nc, return_sprite_overlap_false 	;if it is equal to 6 or greater then return false
 	jp return_sprite_overlap_true
 
 return_sprite_overlap_false:
+
 	ld a, 0
 	jp check_sprite_overlap_done
 
 return_sprite_overlap_true:
+; 	ld a, 48
+; 	ld de, 0x4000
+; 	call print_char
+; 	ld a , 2
+; 	out (254), a
 	ld a, 1
 
 check_sprite_overlap_done:
@@ -368,10 +442,15 @@ check_sprite_overlap_done:
 ; Found on http://z80-heaven.wikidot.com/math
 ; ------------------------------------------------------------------------------
 absA:
-     or a
-     ret p
-     neg         ;or you can use      cpl \ inc a
-     ret
+	cp $80                         ; comparing the unsigned A to 128
+ 	jr c,A_Is_Positive             ; if it is less, then jump to the label given
+	neg                            ; multiplying A by -1
+A_Is_Positive:
+	ret
+;      or a
+;      ret p
+;      neg         ;or you can use      cpl \ inc a
+;      ret
 
 
 
