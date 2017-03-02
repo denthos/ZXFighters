@@ -188,156 +188,161 @@ _draw_sprite_row_decrement:
 ; ------------------------------------------------------------------------------
 move_sprite_left:
 	cp 0
-	jp nz, move_sprite_left_2
+	jp nz, move_sprite_left_2     		; Check if the first or second sprite
 ; 	ld a, 2
 ; 	out (254),a
-	ld a,(sprite_one_x_location)
-	cp 0											; is sprite at left edge?
-	jp z, _move_sprite_left_done
-	dec a
-	ld (sprite_one_x_location),a
-	ld b,a
-	ld a,(sprite_one_y_location)
-	ld c,a
-	jp finish_move_sprite_left
+	ld a,(sprite_one_x_location)  		; Load first sprite x location
+	cp 0			      		; Is sprite at left edge?
+	jp z, _move_sprite_left_done  		; If it is, then skip to the end 
+	dec a                         		; Decrement the x value (move left)
+	ld (sprite_one_x_location),a  		; Save this value to memory
+	ld b,a			      		; Load new x into b (for calculate_color_cell_pixel_address)
+	ld a,(sprite_one_y_location) 		; Load sprite one y location into a, in order to load c
+	ld c,a			      		; Load c with the y location of sprite 1 from a 
+	jp finish_move_sprite_left    		; Absolute jump to actual drawing of new sprite
 
 move_sprite_left_2: 
-	ld a,(sprite_two_x_location)
-	cp 0											; is sprite at left edge?
-	jp z, _move_sprite_left_done
-	dec a
-	ld (sprite_two_x_location),a
-	ld b,a
-	ld a,(sprite_two_y_location)
-	ld c,a
+	ld a,(sprite_two_x_location)  		; Load second sprite x location 
+	cp 0                          		; Is sprite at left edge?
+	jp z, _move_sprite_left_done  		; If so, then skip to end and return 
+	dec a                         		; Decrement the old x value 
+	ld (sprite_two_x_location),a  		; Save the new x value to memory
+	ld b,a                        		; Load into b for calculate_color_cell_pixel_address
+	ld a,(sprite_two_y_location)  		; Load sprite 2 y location into a to load into c 
+	ld c,a			      		; Load into c
 
 finish_move_sprite_left:
-	call calculate_color_cell_pixel_address					; sprite data shold already be in ix
-	ld c,0
-	ld d,6
-	call draw_sprite
-	_move_sprite_left_done:
-	ret
+	call calculate_color_cell_pixel_address ; sprite data shold already be in ix, this will set HL with address
+	ld c,0					; 0 for no overwrite
+	ld d,6					; 6 for the width of the sprite 
+	call draw_sprite			; Draw sprite to updated location of screen
+	_move_sprite_left_done:			; Finish
+	ret					; Return 
 
 move_sprite_down:
-	cp 0
-	jp nz,move_sprite_down_2
-	out (254), a
-	ld a, (sprite_one_y_location)
-	cp 18
-	jp z,_move_sprite_down_done
-	cp 19
-	jp z,_move_sprite_down_done
-	inc a
-	inc a
-	ld (sprite_one_y_location), a
-	ld c,a
-	ld a, (sprite_one_x_location)
-	ld b,a
-	jp finish_move_sprite_down
+	cp 0					; Check if the first or second sprite
+	jp nz,move_sprite_down_2		; Load first sprite x location
+	out (254), a		
+	ld a, (sprite_one_y_location)		; Load the old y value of sprite 1 into a
+	cp 18					; Check if it is at the bottom 
+	jp z,_move_sprite_down_done		; If so skip to the end and return 
+	cp 19					; Check again (technically one off the screen already, but as insurance)
+	jp z,_move_sprite_down_done		; If so skip to the end 
+	inc a					; Increment a to move down 
+	inc a					; Increment a again for some reason idk
+	ld (sprite_one_y_location), a		; Save the new y location into memory
+	ld c,a					; Load new y location into c for calculate_color_cell_pixel_address
+	ld a, (sprite_one_x_location)		; Load sprite 1 x location into a in order to load into c
+	ld b,a					; Load sprite 1 x location into b for calculate_color_cell_pixel_address
+	jp finish_move_sprite_down		; Absolute jump to actually draw sprite to the new location 
 move_sprite_down_2:
 	
-	ld a, (sprite_two_y_location)
-	cp 18				; Sometimes it moves too fast to catch so two cases are necessary
-	jp z,_move_sprite_down_done
-	cp 19
-	jp z,_move_sprite_down_done
-	inc a
-	inc a
-	ld (sprite_two_y_location), a
-	ld c,a
-	ld a, (sprite_two_x_location)
-	ld b,a
+	ld a, (sprite_two_y_location)		; Load the old y value of sprite 2 into a
+	cp 18					; Sometimes it moves too fast to catch so two cases are necessary
+	jp z,_move_sprite_down_done		; If at the bottom then skip to end and return 
+	cp 19					; Else if 19
+	jp z,_move_sprite_down_done		; Skip to the bottom and return 
+	inc a					; Increment a to move down 
+	inc a					; Increment a again for some reason idk seems to work 
+	ld (sprite_two_y_location), a		; Save the new y location into memory
+	ld c,a					; Load sprite 2 x location into a in order to load into c
+	ld a, (sprite_two_x_location)		; Load sprite 2 x location into b for calculate_color_cell_pixel_address
+	ld b,a					; Absolute jump to actually draw sprite to the new location 
 
 finish_move_sprite_down: 
-	call calculate_color_cell_pixel_address
-	ld c,0
-	ld d,6
-	call draw_sprite
+	call calculate_color_cell_pixel_address ; This will load hl with the correct pixel address for draw sprite 
+	ld c,0					; 0 for no overwrite
+	ld d,6					; 6 for the width 
+	call draw_sprite			; Actually draw the sprite to the new location 
+
+erase_old_sprite:
+
+
+
 _move_sprite_down_done:
 	ret
 
 move_sprite_right:
-	cp 0
-	jp nz, move_sprite_right_2
-	ld a,(sprite_one_x_location)
-	cp 26
-	jp z,_move_sprite_right_done
-	inc a
-	ld (sprite_one_x_location),a
-	ld b,a
-	ld a,(sprite_one_y_location)
-	ld c,a
+	cp 0					; Check if sprite 1 or 2 move
+	jp nz, move_sprite_right_2		; If 1 then absolute jump to sprite 2 movement right code
+	ld a,(sprite_one_x_location)		; Else load sprite 1 x position into a register
+	cp 26					; Check if the sprite is already as far right as possible 
+	jp z,_move_sprite_right_done		; If so then skip to the end and return 
+	inc a					; Else increment a to move to the right of the screen 
+	ld (sprite_one_x_location),a		; Save the updated x position in memory
+	ld b,a					; Load the updated x position into b register for calculate_color_cell_pixel_address
+	ld a,(sprite_one_y_location)		; Load the sprite 1 y location into the a register to be loaded into the c register
+	ld c,a					; Load the y position into the c register for calculate_color_cell_pixel_address
 
-	call check_sprite_overlap
-	cp 1			; Will set the Z flag if A == 1
-	jp z, _revert_move_right ; a = 1 means overlapping now
-	jp _finish_move_sprite_right
+; 	call check_sprite_overlap
+; 	cp 1			; Will set the Z flag if A == 1
+; 	jp z, _revert_move_right ; a = 1 means overlapping now
+	jp _finish_move_sprite_right		; Absoulte jump to actually draw the sprite in the new position 
 move_sprite_right_2:
-	ld a,(sprite_two_x_location)
-	cp 26
-	jp z,_move_sprite_right_done
-	inc a
-	ld (sprite_two_x_location),a
-	ld b,a
-	ld a,(sprite_two_y_location)
-	ld c,a
+	ld a,(sprite_two_x_location)		; Load the old x position of sprite 2
+	cp 26					; Check if already to the farthest right of the screen 
+	jp z,_move_sprite_right_done		; If so then skip to the end and return 
+	inc a					; Increment the old x position to move to the right 
+	ld (sprite_two_x_location),a		; Save the new x position in memory
+	ld b,a					; Load new x position in b register for calculate_color_cell_pixel_address
+	ld a,(sprite_two_y_location)		; Load the y position of sprite 2 into the a register to be moved into the c register
+	ld c,a					; Load the y position into the c register for calculate_color_cell_pixel_address
 ; 	call check_sprite_overlap
 ; 	cp 0
 ; 	jp nz, _revert_move_right_2
 
 
 _finish_move_sprite_right:
-	call calculate_color_cell_pixel_address
-	ld c,0
-	ld d,6
-	call draw_sprite
-	jp _move_sprite_right_done
+	call calculate_color_cell_pixel_address	; Will set up HL 
+	ld c,0					; Set to not overwrite
+	ld d,6					; Set the width of the sprite to be 6
+	call draw_sprite			; Actually draw the sprite in the new location 
+	jp _move_sprite_right_done		; Finish 
 
 _revert_move_right:
-	ld a, (sprite_one_x_location)
-	dec a
-	ld (sprite_one_x_location), a
-	jp _move_sprite_right_done
+	ld a, (sprite_one_x_location)		; Load the new faulty x position into the register a 
+	dec a					; Revert the change by decrementing the x position 
+	ld (sprite_one_x_location), a		; Save the position in memory
+	jp _move_sprite_right_done		; Finish 
 
 _revert_move_right_2:
-	ld a, (sprite_two_x_location)
-	dec a
-	ld (sprite_two_x_location), a
-	jp _move_sprite_right_done
+	ld a, (sprite_two_x_location)		; Load the new faulty x position into the regsiter a 
+	dec a                                   ; Revert the change by decrementing the x position 
+	ld (sprite_two_x_location), a		; Save the position to memory
+	jp _move_sprite_right_done		; Finish 
 
 _move_sprite_right_done:
 	ret
 
-move_sprite_up:
-	cp 0
-	jp nz, move_sprite_up_2
-	ld a, (sprite_one_y_location)
-	cp 0
-	jp z,_move_sprite_up_done
-	dec a
-	ld (sprite_one_y_location),a
-	ld c,a
-	ld a,(sprite_one_x_location)
-	ld b,a
-	jp finish_move_sprite_up
+move_sprite_up:	
+	cp 0					; Check if the sprite 1 or 2 moved
+	jp nz, move_sprite_up_2			; If so then move to the sprite 2 code
+	ld a, (sprite_one_y_location)		; Load the old y location of sprite 1 into the a register
+	cp 0					; Check if the sprite is at the top of screen 
+	jp z,_move_sprite_up_done		; If so then skip to the end and return 
+	dec a					; Else decrement a in order to move up 
+	ld (sprite_one_y_location),a		; Save the new y position of sprite 1 in memory
+	ld c,a					; Load the updated y position of sprite 1 into the c register for calculate_color_cell_pixel_address
+	ld a,(sprite_one_x_location)		; Load the x position in a in order to load into b
+	ld b,a					; Load the a register into b
+	jp finish_move_sprite_up		; Actually draw the sprite in the new location 
 move_sprite_up_2:
-	ld a, (sprite_two_y_location)
-	cp 0
-	jp z,_move_sprite_up_done
-	dec a
-	ld (sprite_two_y_location),a
-	ld c,a
-	ld a,(sprite_two_x_location)
-	ld b,a
+	ld a, (sprite_two_y_location)		; Load the old y postiion of sprite 2 into the a regsiter
+	cp 0					; Check if at the top of the screen 
+	jp z,_move_sprite_up_done		; If so then skip to the end and return 
+	dec a					; Decrement a inorder to move up the screen 
+	ld (sprite_two_y_location),a		; Save the new y position of sprite 2 into memory 
+	ld c,a					; Load a into c in order to load the y position into b for calculate_color_cell_pixel_address
+	ld a,(sprite_two_x_location)		; Load the x position of sprite 2 into a in order to move into b for calculate_color_cell_pixel_address
+	ld b,a					; Load the x position into b
 
 finish_move_sprite_up:
-	call calculate_color_cell_pixel_address
-	ld c,0
-	ld d,6
-	call draw_sprite		; ix has sprite data
+	call calculate_color_cell_pixel_address	; Will load the address of the first pixel to draw to into HL 
+	ld c,0					; Overwrite to false
+	ld d,6					; Width of sprite to 6
+	call draw_sprite			; ix has sprite data
 _move_sprite_up_done:
-	ret
+	ret					; Finish 
 
 
 
