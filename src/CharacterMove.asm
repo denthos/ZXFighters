@@ -120,7 +120,7 @@ halt_2:
       jp halt_2
 continue: 
       ld a, (23672)
-      ld (hl), a    ;Set the last upate time 
+      ld (hl), a             ; Set the last upate time 
       ret
 
 
