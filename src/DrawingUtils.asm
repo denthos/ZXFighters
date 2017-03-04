@@ -520,7 +520,7 @@ _move_sprite_up_2:
 	ld c,a					; Load a into c in order to load the y position into b for calculate_color_cell_pixel_address
 	ld a,(sprite_two_x_location)		; Load the x position of sprite 2 into a in order to move into b for calculate_color_cell_pixel_address
 	ld b,a					; Load the x position into b
-	call _finish_move_sprite_up
+	call _finish_move_sprite_up		; Check overlap 
 	call check_sprite_overlap		; Check to make sure no sprite overlap 
 	cp 1					; Will set the Z flag if A == 1
 	jp z, _revert_move_up_2 		; a = 1 means overlapping now
