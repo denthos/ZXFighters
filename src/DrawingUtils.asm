@@ -178,13 +178,14 @@ _draw_sprite_row_decrement:
 
 
 ; ------------------------------------------------------------------------------
-; Subroutine for drawing a sprite onto the screen
+; Subroutine for drawing a sprite onto the screen one pixel* to the 
+; right of it's current location 
 ;
 ; Inputs: 
-; 	IX - the input sprite 
+; 	IX - the input sprite data, to be passed into draw_sprite routine 
 ; 	A  - the sprite number ( 0 = sprite #1, 1 = sprite #2)
-; Outputs:
-;
+; Outputs: 
+; 	N/A
 ; ------------------------------------------------------------------------------
 move_sprite_left:
 	cp 0
@@ -199,6 +200,9 @@ move_sprite_left:
 	ld a,(sprite_one_y_location) 		; Load sprite one y location into a, in order to load c
 	ld c,a			      		; Load c with the y location of sprite 1 from a 
 	call _finish_move_sprite_left    	; Call to actual drawing of new sprite
+	call check_sprite_overlap		; Check to make sure no sprite overlap 
+	cp 1					; Will set the Z flag if A == 1
+	jp z, _revert_move_left 		; a = 1 means overlapping now
 
 _erase_old_sprite_left:
 	ld a, (sprite_one_y_location)		; Ensure that a has the y value of sprite 1
@@ -221,6 +225,9 @@ _move_sprite_left_2:
 	ld a,(sprite_two_y_location)  		; Load sprite 2 y location into a to load into c 
 	ld c,a			      		; Load into c
 	call _finish_move_sprite_left		; Actually draw the sprite to the udpated location 
+	call check_sprite_overlap
+	cp 1					; Will set the Z flag if A == 1
+	jp z, _revert_move_left_2 		; a = 1 means overlapping now
 
 _erase_old_sprite_left_2:
 	ld a, (sprite_two_y_location)		; Ensure that a has the y value of sprite 1
@@ -240,6 +247,18 @@ _finish_move_sprite_left:
 	call draw_sprite			; Draw sprite to updated location of screen
 	ret
 
+_revert_move_left:
+	ld a, (sprite_one_x_location)		; Load the new faulty x position into the register a 
+	inc a					; Revert the change by decrementing the x position 
+	ld (sprite_one_x_location), a		; Save the position in memory
+	jp _move_sprite_left_done		; Finish 
+
+_revert_move_left_2:
+	ld a, (sprite_two_x_location)		; Load the new faulty x position into the regsiter a 
+	inc a                                   ; Revert the change by decrementing the x position 
+	ld (sprite_two_x_location), a		; Save the position to memory
+	jp _move_sprite_left_done		; Finish 
+
 _erase_old_sprite_left_finish: 
 	call calculate_color_cell_pixel_address ; This will put the pixel address to draw to in the HL register
 	ld c, 0
@@ -256,10 +275,11 @@ _move_sprite_left_done:				; Finish
 
 
 ; ------------------------------------------------------------------------------
-; Subroutine for drawing a sprite onto the screen
+; Subroutine for drawing a sprite onto the screen 1 pixel below it's current
+; location 
 ;
 ; Inputs: 
-; 	IX - the input sprite 
+; 	IX - the input sprite to be input to the draw_sprite routine 
 ; 	A  - the sprite number ( 0 = sprite #1, 1 = sprite #2)
 ; Outputs:
 ;
@@ -278,6 +298,9 @@ move_sprite_down:
 	ld a, (sprite_one_x_location)		; Load sprite 1 x location into a in order to load into c
 	ld b,a					; Load sprite 1 x location into b for calculate_color_cell_pixel_address
 	call _finish_move_sprite_down		; Absolute jump to actually draw sprite to the new location 
+	call check_sprite_overlap		; Check to make sure no sprite overlap 
+	cp 1					; Will set the Z flag if A == 1
+	jp z, _revert_move_down  		; a = 1 means overlapping now
 
 _erase_old_sprite_down:
 	ld a, (sprite_one_x_location)		; Ensure that a has the x value of sprite 1
@@ -287,7 +310,7 @@ _erase_old_sprite_down:
 	jp c, _move_sprite_down_done		; If it is then just don't do anything 
 	sub a, 6	
 	ld c, a 				; Load the original y into the c register for calculate_color_cell_pixel_address
-	call _erase_old_sprite_down_finish 			; Absolute jump to actually draw over old spot  
+	call _erase_old_sprite_down_finish 	; Absolute jump to actually draw over old spot  
 	jp _move_sprite_down_done		; Finish and return 
 
 _move_sprite_down_2:
@@ -302,6 +325,9 @@ _move_sprite_down_2:
 	ld a, (sprite_two_x_location)		; Load sprite 2 x location into b for calculate_color_cell_pixel_address
 	ld b,a					; Absolute jump to actually draw sprite to the new location 
 	call _finish_move_sprite_down
+	call check_sprite_overlap		; Check to make sure no sprite overlap 
+	cp 1					; Will set the Z flag if A == 1
+	jp z, _revert_move_down_2  		; a = 1 means overlapping now
 
 ; could improve by storing this information in registers that wouldn't be used?
 _erase_old_sprite_down_2:
@@ -331,18 +357,33 @@ _erase_old_sprite_down_finish:
 	call draw_sprite
 	ret
 
+_revert_move_down:
+	ld a, (sprite_one_y_location)		; Load the new faulty x position into the register a 
+	dec a					; Revert the change by decrementing the x position 
+	dec a					; Revert the change by decrementing the x position 
+	ld (sprite_one_y_location), a		; Save the position in memory
+	jp _move_sprite_down_done		; Finish 
+
+_revert_move_down_2:
+	ld a, (sprite_two_y_location)		; Load the new faulty x position into the regsiter a 
+	dec a                                   ; Revert the change by decrementing the x position 
+	dec a					; Revert the change by decrementing the x position 
+	ld (sprite_two_x_location), a		; Save the position to memory
+	jp _move_sprite_down_done		; Finish 
+
 _move_sprite_down_done:
 	ret
 
 
 ; ------------------------------------------------------------------------------
-; Subroutine for drawing a sprite onto the screen
+; Subroutine for drawing a sprite onto the screen 1 pixel to the right 
+; of it's current location 
 ;
 ; Inputs: 
-; 	IX - the input sprite 
+; 	IX - the input sprite to be input to draw_sprite routine 
 ; 	A  - the sprite number ( 0 = sprite #1, 1 = sprite #2)
 ; Outputs:
-;
+; 	N/A 
 ; ------------------------------------------------------------------------------
 move_sprite_right:
 	cp 0					; Check if sprite 1 or 2 move
@@ -356,10 +397,9 @@ move_sprite_right:
 	ld a,(sprite_one_y_location)		; Load the sprite 1 y location into the a register to be loaded into the c register
 	ld c,a					; Load the y position into the c register for calculate_color_cell_pixel_address
 	call _finish_move_sprite_right		; Absoulte jump to actually draw the sprite in the new position 
-
-; 	call check_sprite_overlap
-; 	cp 1					; Will set the Z flag if A == 1
-; 	jp z, _revert_move_right 		; a = 1 means overlapping now
+	call check_sprite_overlap
+	cp 1					; Will set the Z flag if A == 1
+	jp z, _revert_move_right 		; a = 1 means overlapping now
 
 _erase_old_sprite_right:
 	ld a, (sprite_one_y_location)		; Ensure that a has the y value of sprite 1
@@ -383,6 +423,9 @@ move_sprite_right_2:
 	ld a,(sprite_two_y_location)		; Load the y position of sprite 2 into the a register to be moved into the c register
 	ld c,a					; Load the y position into the c register for calculate_color_cell_pixel_address
 	call _finish_move_sprite_right 		; Call to actually draw the sprite in the updated part of the screen 
+	call check_sprite_overlap
+	cp 1					; Will set the Z flag if A == 1, means overlapping 
+	jp z, _revert_move_right_2 		; a = 1 means overlapping now
 
 _erase_old_sprite_right_2:
 	ld a, (sprite_two_y_location)		; Ensure that a has the y value of sprite 1
@@ -395,9 +438,7 @@ _erase_old_sprite_right_2:
 	call _erase_old_sprite_right_finish 	; Call to actually draw over old spot  
 	jp _move_sprite_right_done		; Finish and return 
 
-; 	call check_sprite_overlap
-; 	cp 0
-; 	jp nz, _revert_move_right_2
+
 
 
 _finish_move_sprite_right:
@@ -433,10 +474,11 @@ _move_sprite_right_done:
 
 
 ; ------------------------------------------------------------------------------
-; Subroutine for drawing a sprite onto the screen
+; Subroutine for drawing a sprite onto the screen 1 pixel above it's current 
+; location
 ;
 ; Inputs: 
-; 	IX - the input sprite 
+; 	IX - the input sprite tp be input to the draw_sprite routine 
 ; 	A  - the sprite number ( 0 = sprite #1, 1 = sprite #2)
 ; Outputs:
 ;
@@ -453,13 +495,16 @@ move_sprite_up:
 	ld a,(sprite_one_x_location)		; Load the x position in a in order to load into b
 	ld b,a					; Load the a register into b
 	call _finish_move_sprite_up		; Actually draw the sprite in the new location 
+	call check_sprite_overlap		; Check to make sure no sprite overlap 
+	cp 1					; Will set the Z flag if A == 1
+	jp z, _revert_move_up 	 		; a = 1 means overlapping now
 
 
 _erase_old_sprite_up:
 	ld a, (sprite_one_x_location)		; Ensure that a has the x value of sprite 1
 	ld b, a 				; Reload the old x value into b for calculate_color_cell_pixel_address
 	ld a, (sprite_one_y_location)		; Load the new y location into the a register to sub 6 from 
-	cp 10					; Check if the sprite is starting within the top 6 pixel blocks of the screen 
+	cp 12					; Check if the sprite is starting within the top 6 pixel blocks of the screen 
 	jp nc, _move_sprite_up_done		; If it is then just don't do anything 
 	add a, 6	
 	ld c, a 				; Load the original y into the c register for calculate_color_cell_pixel_address
@@ -476,12 +521,15 @@ _move_sprite_up_2:
 	ld a,(sprite_two_x_location)		; Load the x position of sprite 2 into a in order to move into b for calculate_color_cell_pixel_address
 	ld b,a					; Load the x position into b
 	call _finish_move_sprite_up
+	call check_sprite_overlap		; Check to make sure no sprite overlap 
+	cp 1					; Will set the Z flag if A == 1
+	jp z, _revert_move_up_2 		; a = 1 means overlapping now
 
 _erase_old_sprite_up_2:
 	ld a, (sprite_two_x_location)		; Ensure that a has the x value of sprite 1
 	ld b, a 				; Reload the old x value into b for calculate_color_cell_pixel_address
 	ld a, (sprite_two_y_location)		; Load the new y location into the a register to sub 6 from 
-	cp 10					; Check if the sprite is starting within the top 6 pixel blocks of the screen 
+	cp 12					; Check if the sprite is starting within the top 6 pixel blocks of the screen 
 	jp nc, _move_sprite_up_done		; If it is then just don't do anything 
 	add a, 6	
 	ld c, a 				; Load the original y into the c register for calculate_color_cell_pixel_address
@@ -503,6 +551,18 @@ _erase_old_sprite_up_finish:
 	call draw_sprite
 	ret
 
+_revert_move_up:
+	ld a, (sprite_one_y_location)		; Load the new faulty x position into the register a 
+	inc a					; Revert the change by decrementing the x position 
+	ld (sprite_one_y_location), a		; Save the position in memory
+	jp _move_sprite_up_done		; Finish 
+
+_revert_move_up_2:
+	ld a, (sprite_two_y_location)		; Load the new faulty x position into the regsiter a 
+	inc a                                   ; Revert the change by decrementing the x position 
+	ld (sprite_two_y_location), a		; Save the position to memory
+	jp _move_sprite_up_done		; Finish 
+
 _move_sprite_up_done:
 	ret					; Finish 
 
@@ -514,89 +574,41 @@ _move_sprite_up_done:
 ;	A - 1 for overlapping 0 for not overlapping
 ; ------------------------------------------------------------------------------
 check_sprite_overlap:
+	ld a, (sprite_one_x_location)
+	call absA
+	ld d, a
 
+	ld a, (sprite_two_x_location)
+	call absA
 
-	; check if the x values are within 5 of each other 	
-; 	ld a, (sprite_two_x_location)
-; ; 	add a, 48
-; ; 	ld de, 0x4000
-; ; 	call print_char
-; ; 	halt
-; ; 	halt
-; ; 	halt
-; ; 	halt
-; ; 	halt
-; ; 	halt
-; ; 	halt
-; ; 	halt
-; ; 	halt
-; ; 	halt
-; ; 	halt
-; ; 	halt
-; ; 	halt
-; ; 	halt
-; ; 	halt
-; ; 	halt
-; ; 	halt
-; ; 	halt
-; ; 	halt
-; ; 	halt
-; ; 	halt
-; ; 	halt
-; ; 	halt
-; ; 	halt
-; ; 	halt
-; ; 	halt
-; ; 	halt
-; ; 	halt
-	
+	sub d 
 
-
-; 	ld d, (sprite_one_x_location)
-
-
-
-
-; ; 	sub d					; a = x2, d = x1 --- x2 = x2 - x1
-; ; 	add a, d
-; 	add a, d
-; 	call absA
-; ; 	add a, 48
+	call absA
+; 	add a, 48
 ; 	ld de, 0x4000
 ; 	call print_char
-; ; 	add a, 48
 
-; 	ld a, d
-	ld a, 5
 	cp 6
-	
 	jp nc, return_sprite_overlap_false 	; If difference is greater than or equal to 6 then return false
-                      ; 2 is the code for red.
-;        	ld a, 48
-; 	ld de, 0x4000
-; 	call print_char
-	;check if the y value are within 5 of each other
-; 	ld a, (sprite_one_y_location)
-; 	ld d, (sprite_two_y_location)
-; 	sub d					; b - a -> b
-; 	ld a, d
-; 	call absA
-	ld a, 5
+
+	ld a, (sprite_one_y_location)
+	call absA
+	ld d, a
+
+	ld a, (sprite_two_y_location)
+	call absA
+
+	sub d 
+	call absA
 	cp 6
 	jp nc, return_sprite_overlap_false 	;if it is equal to 6 or greater then return false
 	jp return_sprite_overlap_true
 
 return_sprite_overlap_false:
-
 	ld a, 0
 	jp check_sprite_overlap_done
 
 return_sprite_overlap_true:
-; 	ld a, 48
-; 	ld de, 0x4000
-; 	call print_char
-; 	ld a , 2
-; 	out (254), a
 	ld a, 1
 
 check_sprite_overlap_done:
