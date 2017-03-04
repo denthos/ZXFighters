@@ -39,8 +39,8 @@ black_background:
 	defb 7,3
 
 black_sprite:
-	defb 255,255
-	defb 255,33
+	defb 0,255
+	defb 0,33
 	defb 0,0
 black_sprite_attr_bytes:
 	defb 0,36
