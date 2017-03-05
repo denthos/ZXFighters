@@ -46,6 +46,14 @@ black_sprite_attr_bytes:
 	defb 0,36
 	defb 0,0
 
+black_character_cell:
+	defb 0,8
+	defb 0,0
+black_character_cell_attr_bytes:
+	defb 0,1
+	defb 0,0
+
+
 title_screen_data:
 	defb 255,255
 	defb 255,255
@@ -472,6 +480,13 @@ sprite_two_x_location:
 	defb 6
 sprite_two_y_location:
 	defb 6
+
+current_sprite_x_location:
+	defb 0 		; Will be set by appropriate methods 
+current_sprite_y_location: 
+	defb 0 		; Will be set by appropriate methods 
+clear_loop_counter: 
+	defb 0 		; Will be set by appropriate methods 
 
 ; 2 bytes of memory reserved for storing screen addresses in draw routines
 draw_memory_store:
