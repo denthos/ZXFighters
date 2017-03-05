@@ -26,7 +26,7 @@ start:
   ;   this will return once the player(s) push Enter to start the game
   call start_character_select
   call draw_background
-  call draw_status_bar_init
+  call init_status_bar
   ;call start_stage_select   ; if we intend to have standalone stage selection, will go here
   call start_main_game
 
@@ -38,3 +38,4 @@ start:
   include "src/GameData.asm"
   include "src/MainGame.asm"
   include "src/PrintingUtils.asm"
+  include "src/MathUtils.asm"

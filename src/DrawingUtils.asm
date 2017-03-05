@@ -290,26 +290,112 @@ _ld_character_data_address_char_1:
 	ld ix,sprite_data
 	ret
 
-draw_status_bar_init:
+init_status_bar:
 	ld hl,status_bar_attrib_bytes
 	ld de,23136				; address in vram of start of status bar attribs
 	ld bc,160				; number of color block attribs to set
 	ldir
-	call draw_health_bar_init
-	ret
 
-draw_health_bar_init:
-	ld a,255
 	ld b,10
+	ld h,8
 	ld de,20609
-_draw_health_bar_init_loop:
-	ld (de),a
-	inc d
-	djnz _draw_health_bar_init_loop
+	call draw_bar_init
+	ld b,10
+	ld h,8
+	ld de,20629
+	call draw_bar_init
+	call update_health
 	ret
 
-update_status_bar:
-	ld a,(player_one_health)
-	srl a
-	srl a
-	srl a
+; ------------------------------------------------------------------------------
+; Subroutine for drawing a solid bar on screen, only takes care of pixels, not
+; attributes. Only tested when drawing withing a single row of color cells.
+;
+; Inputs:
+;		B = length of bar in color cells
+;		H = height of bar
+;		DE = address of top-left pixel byte of bar
+;
+; Outputs: N/A
+;
+; Uses: A, B, C, DE, H
+; ------------------------------------------------------------------------------
+draw_bar_init:
+	ld a,255
+	ld c,e
+_draw_bar_loop_init:
+	ld (de),a
+	inc e
+	djnz _draw_bar_loop_init
+	dec h
+	jp z,_draw_bar_done_init
+	ld b,10
+	inc d
+	ld e,c
+	jp _draw_bar_loop_init
+_draw_bar_done_init:
+	ret
+
+update_health:
+	ld a,(player_two_health)			; ld health into a
+	ld b,a									; move health into b
+	ld a,80
+	sub b										; subtract health from 80 to find damage
+	ld c,a									; ld into c for division routine
+	ld d,8									; dividing by 8 to find # of color cells
+	call cdivd								; a holds remainder, c holds result of C/D
+	or a
+	ld d,0
+	jp z,_no_remainder
+
+	dec a										; lookup table (LT) starts at 0
+	ld e,a									; ld remainder into e
+	xor a										; clear a
+	ld d,a									; ld 0's into d, DE = remainder
+	ld hl,_remainder_stuff				; ld address of remainder lookup table
+	add hl,de								; add offset (remainder) into LT address
+	ld d,(hl)								; ld remainder value into d
+
+_no_remainder:
+	ld b,c									; ld bar length into b
+	ld hl,20629								; address of start of bar
+	xor a										; clear a
+	ld c,8									; height of bar in pixel lines
+	call draw_bar
+	ret
+
+
+draw_bar:
+	ld e,l						; store lower byte of address to draw to
+	; ld a,b						; can only load to address from A
+	ld ixh,b			; store length of bar
+_draw_bar_loop:
+	or b							; check that there is full bytes to write, req a=0
+	jp z,_draw_remainder		; otherwise jump to draw remainder
+	xor a							; clear a just in case (TODO: idk if this is necessary)
+	ld (hl),a					; write byte to screen
+	inc l							; move on to next pixel line to the right
+	djnz _draw_bar_loop		; keep going until b=0
+_draw_remainder:
+	or d							; check if there is a remainder to draw
+	jp z,_draw_reset			; jump if not
+	xor a							; clear a (TODO: idk if this is necessary)
+	ld (hl),d					; otherwise draw remainder
+_draw_reset:
+	; ld a,l
+	; call write_in_reset
+	; ret
+	; xor a
+	; ret
+	dec c							; c counts number of lines
+	xor a							; clear a (TODO: idk if this is necessary)
+	or c							; check c vs a (a should be 0), TODO: might not be nec
+	jp z,_draw_bar_done		; if no more lines, done
+	ld b,ixh
+	; ld b,a						; otherwise reset b
+	inc h							; move on to next pixel line
+	ld l,e						; reset lower byte of address
+	xor a
+	jp _draw_bar_loop
+_draw_bar_done:
+	ret

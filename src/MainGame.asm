@@ -5,8 +5,7 @@ start_main_game:
 	jp nz,_start_main_game_continue
 	ld a,0
 _start_main_game_continue:
-	out (0xfe),a
-	call update_status_bar
+	; out (0xfe),a
 	halt
 	jp start_main_game
 	ret
