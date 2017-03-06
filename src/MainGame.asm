@@ -27,9 +27,19 @@ start_main_game:
 	call draw_sprite
 
 	call play_loop
-; move_in_square:
-; 	call move_sprite_right
-; 	call move_sprite_right
-; 	call move_sprite_right
-; 	call move_sprite_right
-; 	jp move_in_square	
+	
+
+; 	ld d,0x47
+; 	call clear_screen
+
+; 	ld a,0
+; _start_main_game_loop:
+; 	inc a
+; 	cp 16
+; 	jp nz,_start_main_game_continue
+; 	ld a,0
+; _start_main_game_continue:
+; 	out (0xfe),a
+; 	jp _start_main_game_loop
+; 	ret
+

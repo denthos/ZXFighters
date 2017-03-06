@@ -27,4 +27,5 @@ possibles.update(locals())
 func = possibles.get(func_name)
 if not func:
     raise NotImplementedError("Function not implemented")
+
 func(x,y)

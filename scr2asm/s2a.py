@@ -255,7 +255,3 @@ else: #regular background
     writeRegBackgroundHuff(scr_input, new_asm_file)
 
 print 'Resulting asm written to ' + new_asm_file
-
-
-    
-
