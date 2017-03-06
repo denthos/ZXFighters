@@ -53,8 +53,8 @@ _copy_encoded_bytes_loop_start:
 ;
 ; ------------------------------------------------------------------------------
 fill_byte:
-	ld (hl),d             ; 0b00000111  (paper = black, ink = white)
-	inc hl                ; move to next attribyte byte
+	ld (hl),d
+	inc hl
 	dec bc
 	ld a,b
 	or c
@@ -254,6 +254,7 @@ draw_title_character_p1:
 	ld c,0                 ; overwrite mode
 	ld hl,0x4882           ; color cell (2,12)
 	jp draw_sprite
+	ret
 
 draw_title_character_p2:
   ld a,(selected_character_p2)
@@ -265,6 +266,7 @@ draw_title_character_p2:
   ld c,0                ; overwrite mode
   ld hl,0x4898          ; color cell (24,12)
 	jp draw_sprite
+	ret
 
 
 ; ------------------------------------------------------------------------------
@@ -421,3 +423,23 @@ _draw_reset:
 _draw_bar_done:
         pop bc
         ret
+
+
+; ------------------------------------------------------------------------------
+; This sets all pixel bytes to 0x0, and all attribute bytes to the desired
+;   value. It is very inefficient and shouldn't be used outside of situations
+;   where the entire screen will be different.
+;
+; Inputs:
+;   D  = Value to set attribute bytes to
+; Outputs:
+;
+; ------------------------------------------------------------------------------
+clear_screen:
+	ld hl,0x5800          ; address of first attribute byte
+	ld bc,768             ; number of attribute bytes
+	call fill_byte
+	ld hl,0x4000
+	ld bc,6144
+	ld d,0x0
+	jp fill_byte
