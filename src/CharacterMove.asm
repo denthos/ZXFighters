@@ -35,15 +35,13 @@ __character_select_loop_a_done:
       call move_sprite_right
 
 __character_select_loop_d_done:
-
-
-      ld a,(character_select_input_store)
-      and 0x2               ; check key S
-      jp nz,__character_select_loop_s_done
-      ld ix, shoe_sprite_data
-      call halt_2             ; make sure movement is constant and ensure no flickering
-      ld a, 0
-      call move_sprite_down
+;       ld a,(character_select_input_store)
+;       and 0x2               ; check key S
+;       jp nz,__character_select_loop_s_done
+;       ld ix, shoe_sprite_data
+;       call halt_2             ; make sure movement is constant and ensure no flickering
+;       ld a, 0
+;       call move_sprite_down
 
 __character_select_loop_s_done:
       ld bc,64510           ; read keys T, R, E, W, Q
@@ -55,10 +53,8 @@ __character_select_loop_s_done:
       ld ix, shoe_sprite_data
       call halt_2             ; make sure movement is constant and ensure no flickering
       ld a, 0
-      call move_sprite_up
+      call move_sprite_jump
 __character_select_loop_w_done:
-
-
 
 ; player 2 movement
       ld bc,49150           ; H, J, K, L, Enter
@@ -79,13 +75,13 @@ __character_select_loop_j_done:
       ld a, 1
       call move_sprite_right
 __character_select_loop_l_done:
-      ld a,(character_select_input_store)
-      and 0x4               ; check key K
-      jp nz,__character_select_loop_k_done
-      ld ix, sprite_sprite_data
-      call halt_2             ; make sure movement is constant and ensure to flickering
-      ld a, 1
-      call move_sprite_down
+;       ld a,(character_select_input_store)
+;       and 0x4               ; check key K
+;       jp nz,__character_select_loop_k_done
+;       ld ix, sprite_sprite_data
+;       call halt_2             ; make sure movement is constant and ensure to flickering
+;       ld a, 1
+;       call move_sprite_down
 __character_select_loop_k_done:
       ld bc,57342           ; read keys Y, U, I, O, P
       in a,(c)
@@ -96,10 +92,12 @@ __character_select_loop_k_done:
       ld ix, sprite_sprite_data
       call halt_2             ; make sure movement is constant and ensure to flickering
       ld a, 1
-      call move_sprite_up
+      call move_sprite_jump
 __character_select_loop_i_done:
+;       call halt_2
+;       call halt_2
+;       halt
       jp play_loop
-
 
 ; ------------------------------------------------------------------------------
 ; Routine that will check the last time an interrupt was handled by the ROM. 

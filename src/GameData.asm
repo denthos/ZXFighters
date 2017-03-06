@@ -472,14 +472,14 @@ sprite_sprite_attributes:
 	defb 0,0
 
 sprite_one_x_location:
-	defb 0
+	defb 4
 sprite_one_y_location:
-	defb 6
+	defb 10
 
 sprite_two_x_location:
-	defb 6
+	defb 21
 sprite_two_y_location:
-	defb 6
+	defb 10
 
 current_sprite_x_location:
 	defb 0 		; Will be set by appropriate methods 
@@ -487,6 +487,13 @@ current_sprite_y_location:
 	defb 0 		; Will be set by appropriate methods 
 clear_loop_counter: 
 	defb 0 		; Will be set by appropriate methods 
+
+jump_sprite_number: 
+	defb 0
+
+
+jump_sprite_counter: 
+	defb 0 
 
 ; 2 bytes of memory reserved for storing screen addresses in draw routines
 draw_memory_store:

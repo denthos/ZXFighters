@@ -113,32 +113,32 @@ _draw_sprite_row_decrement_return:
 	jp _draw_sprite_unpack
 
 _draw_sprite_attributes:
-; 	ld d,e
-; 	ld hl,(draw_memory_store)
-; 	ld a,h
-; 	srl a
-; 	srl a
-; 	srl a
-; 	or 88                  ; convert address of first pixel byte to
-; 	ld h,a                 ;   address of first attribute byte
-; _draw_sprite_attributes_unpack:
-; 	inc ix
-; 	inc ix
-; 	ld a,(ix+1)
-; 	or a
-; 	jp z,_draw_sprite_done
-; 	ld b,a
-; _draw_sprite_attributes_loop_start:
-; 	ld a,(ix+0)
-; 	ld (hl),a
-; 	inc hl
-; 	dec d
-; 	ld a,d
-; 	or a
-; 	jr z,_draw_sprite_attributes_row_decrement
-; _draw_sprite_attributes_row_decrement_return:
-; 	djnz _draw_sprite_attributes_loop_start
-; 	jp _draw_sprite_attributes_unpack
+	ld d,e
+	ld hl,(draw_memory_store)
+	ld a,h
+	srl a
+	srl a
+	srl a
+	or 88                  ; convert address of first pixel byte to
+	ld h,a                 ;   address of first attribute byte
+_draw_sprite_attributes_unpack:
+	inc ix
+	inc ix
+	ld a,(ix+1)
+	or a
+	jp z,_draw_sprite_done
+	ld b,a
+_draw_sprite_attributes_loop_start:
+	ld a,(ix+0)
+	ld (hl),a
+	inc hl
+	dec d
+	ld a,d
+	or a
+	jr z,_draw_sprite_attributes_row_decrement
+_draw_sprite_attributes_row_decrement_return:
+	djnz _draw_sprite_attributes_loop_start
+	jp _draw_sprite_attributes_unpack
 
 _draw_sprite_done:
 	ret
@@ -165,16 +165,16 @@ _draw_sprite_row_decrement:
 	ld h,a
 	jp _draw_sprite_row_decrement_return
 
-; _draw_sprite_attributes_row_decrement:
-; 	ld d,e
-; 	ld a,32
-; 	sub e
-; 	ld c,a
-; 	ld a,b
-; 	ld b,0
-; 	add hl,bc
-; 	ld b,a
-; 	jp _draw_sprite_attributes_row_decrement_return
+_draw_sprite_attributes_row_decrement:
+	ld d,e
+	ld a,32
+	sub e
+	ld c,a
+	ld a,b
+	ld b,0
+	add hl,bc
+	ld b,a
+	jp _draw_sprite_attributes_row_decrement_return
 
 ; ------------------------------------------------------------------------------
 ; Routine for drawing 1 character cell in 6 consecutive rows in the same column 
@@ -202,7 +202,7 @@ _clear_old_sprite_loop_horizontal:
 	cp 0
 	jp z, _finish_clear_old_sprite_horizontal
 
-	out (254), a 
+; 	out (254), a 
 ; 	halt
 ; 	halt
 ; 	halt
@@ -251,7 +251,7 @@ _clear_old_sprite_loop_vertical:
 	cp 0
 	jp z, _finish_clear_old_sprite_vertical
 
-	out (254), a 
+; 	out (254), a 
 ; 	halt
 ; 	halt
 ; 	halt
@@ -288,10 +288,6 @@ draw_black_character_cell:
 	ld ix, black_character_cell
 	call draw_sprite
 	ret
-
-
-
-
 
 ; ------------------------------------------------------------------------------
 ; Subroutine for drawing a sprite onto the screen one pixel* to the 
@@ -732,10 +728,55 @@ check_sprite_overlap_done:
 	ret
 
 
+; ------------------------------------------------------------------------------
+; Routine to make the sprite jump on screen
+; 
+; Inputs: 
+;	A - the number of the sprite (0 -> sprite 1) (1 -> sprite 2)
+; Outputs:
+;	A - 1 for overlapping 0 for not overlapping
+; ------------------------------------------------------------------------------
+move_sprite_jump:
+	ld (jump_sprite_number), a	; Save the sprite number to memory
+	xor a				; Clear the a register 
+	add a,3				; Set it to 3 
+	ld b, a				; Load the counter number into b
+	push ix				; Push the pointer to the sprite data 
 
+_save_jump_sprite_counter_up:
+	ld a, b 			; Load decremented b to a
+	ld (jump_sprite_counter), a 	; Save counter to memory
+	ld a, (jump_sprite_number)	; Set up a for call to M_S_U
+	pop ix 				; Pop to get the correct pointer to sprite data 
+	push ix 			; Push to save a copy of the pointer 
+_move_jump_sprite_up: 		
+	call move_sprite_up		; Move the sprite up 
+	ld a, (jump_sprite_counter)	; Load counter back into a
+	ld b, a 			; Move a to b 
+	call halt_8 
+	djnz _save_jump_sprite_counter_up; Decrement b 
+	ld a, b 
+	add a, 3 
+	ld b, a
+
+_save_jump_sprite_counter_down:
+	ld a, b
+	ld (jump_sprite_counter), a 	; Save counter to memory
+	ld a, (jump_sprite_number)	; Set up a for call to M_S_U
+	pop ix 				; Pop to get the correct pointer to sprite data 
+	push ix 			; Push to save a copy of the pointer 
+_move_jump_sprite_down:	
+	call move_sprite_down		; Move the sprite up 
+	ld a, (jump_sprite_counter)	; Load counter back into a
+	ld b, a 			; Move a to b 
+	call halt_8 			
+	djnz _save_jump_sprite_counter_down; Decrement b 
+_move_sprite_jump_2:
+
+_move_sprite_jump_done:
+	ret
 ; ------------------------------------------------------------------------------
 ; Subroutine for getting the absolute value if the accumulator register
-; Found on http://z80-heaven.wikidot.com/math
 ; ------------------------------------------------------------------------------
 absA:
 	cp $80                         ; comparing the unsigned A to 128
@@ -749,8 +790,19 @@ A_Is_Positive:
 ;      ret
 
 
-
-
+; ------------------------------------------------------------------------------
+; Routine for halting eight times lol 
+; ------------------------------------------------------------------------------
+halt_8: 
+	halt
+	halt
+	halt
+	halt
+	halt
+	halt
+	halt
+	halt 
+	ret 
 ; ------------------------------------------------------------------------------
 ; Subroutine for drawing the base of the title screen
 ;
