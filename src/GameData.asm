@@ -383,18 +383,21 @@ status_bar_attrib_bytes:
     ;defb 84,255,255,255,255,255,255,255,255
     ;defb 79,0,0,0,0,0,0,0,0
 
-status_bar_screen_buffer:
-    defs 2048
+; status_bar_screen_buffer:
+;     defs 2048
 
-player_one_health:
-	defb 79
-player_two_health:
-	defb 79
-; length_bar:
-; 	defb 0
+player_one_last_update_address:
+	defb 10010101B
+player_one_damage_taken:
+	defb 0
 
-_remainder_stuff:
-	; defb 00000000B
+player_two_last_update_address:
+	defb 10001011B
+player_two_damage_taken:
+	defb 80
+
+
+player_two_remainder_stuff:
 	defb 01111111B
 	defb 00111111B
 	defb 00011111B
@@ -402,3 +405,4 @@ _remainder_stuff:
 	defb 00000111B
 	defb 00000011B
 	defb 00000001B
+player_one_remainder_stuff:
