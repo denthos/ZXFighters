@@ -3,10 +3,12 @@ start:
 	;;; INITIALIZATION (TODO: set up interrupt handler and stuff)
 
 	; disable interrupts
-	di
+  ;di
+
+  ;;; DRAW TITLE SCREEN AND START CHARACTER SELECT
 
 	; set border color
-	ld a,1                    ; blue
+	ld a,0                    ; black
 	out (0xfe),a              ; send to ula
 
 	; fill screen with black
@@ -15,11 +17,22 @@ start:
   ld d,0x47             ; 0b00000111  (paper = black, ink = white)
   call fill_byte
 
+  ; draw title screen elements (arrows, instructions, options, characters, etc.)
   call draw_title_screen
   call draw_title_character_p1
   call draw_title_character_p2
 
+  ; start character select loop
+  ;   this will return once the player(s) push Enter to start the game
+  call start_character_select
+  ;call start_stage_select   ; if we intend to have standalone stage selection, will go here
+  call start_main_game
+
+
+
   include "src/ByteAddressUtils.asm"
+  include "src/CharacterSelect.asm"
   include "src/DrawingUtils.asm"
-  include "src/PrintingUtils.asm"
   include "src/GameData.asm"
+  include "src/MainGame.asm"
+  include "src/PrintingUtils.asm"

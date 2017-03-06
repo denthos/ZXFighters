@@ -119,8 +119,8 @@ _draw_sprite_attributes:
 	srl a
 	srl a
 	srl a
-	or 88
-	ld h,a
+	or 88                  ; convert address of first pixel byte to
+	ld h,a                 ;   address of first attribute byte
 _draw_sprite_attributes_unpack:
 	inc ix
 	inc ix
@@ -235,23 +235,23 @@ draw_title_screen:
 draw_title_character_p1:
 	ld a,(selected_character_p1)
 	call ld_character_data_address
-	ld c,10
-	ld de,0x5040
+	ld c,10                ; length of sprite name (always 10)
+	ld de,0x5040           ; color cell (0,18)
 	call print_string
-	ld d,6
-	ld c,0
-	ld hl,0x4882
+	ld d,6                 ; width of sprite (always 6)
+	ld c,0                 ; overwrite mode
+	ld hl,0x4882           ; color cell (2,12)
 	jp draw_sprite
 
 draw_title_character_p2:
   ld a,(selected_character_p2)
   call ld_character_data_address
-  ld c,10
-  ld de,0x5056
+  ld c,10               ; length of sprite name (always 10)
+  ld de,0x5056          ; color cell (22,18)
   call print_string
-  ld d,6
-  ld c,0
-  ld hl,0x4898
+  ld d,6                ; width of sprite (always 6)
+  ld c,0                ; overwrite mode
+  ld hl,0x4898          ; color cell (24,12)
 	jp draw_sprite
 
 
@@ -267,16 +267,13 @@ draw_title_character_p2:
 ;   IX = Address of the data of the character
 ; ------------------------------------------------------------------------------
 ld_character_data_address:
-	inc a
-	sub 1
+	cp 0
 	jp z,_ld_character_data_address_char_0
-	sub 1
+	cp 1
 	jp z,_ld_character_data_address_char_1
 _ld_character_data_address_char_0:
 	ld ix,shoe_data
-	jp _ld_character_data_address_done
+	ret
 _ld_character_data_address_char_1:
 	ld ix,sprite_data
-	jp _ld_character_data_address_done
-_ld_character_data_address_done:
 	ret
