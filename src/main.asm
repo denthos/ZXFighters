@@ -38,7 +38,7 @@ start:
   call draw_title_screen
   call draw_title_character_p1
   call draw_title_character_p2
- call draw_title_screen
+  call draw_title_screen
 
 
   ; start character select loop

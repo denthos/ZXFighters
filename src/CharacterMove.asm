@@ -15,89 +15,274 @@
 ; 65278 V, C, X, Z, Caps Shift 
 ; ------------------------------------------------------------------------------
 
-play_loop: 
-      ld bc,65022           ; read keys G,F,D,S,A
-      in a,(c)
-      ld (character_select_input_store),a ; store input for later
-      and 0x1               ; check key A
-      jp nz,__character_select_loop_a_done
-      ld ix, shoe_sprite_data
-      call halt_2             ; make sure movement is constant and ensure no flickering
-      ld a, 0
-      call move_sprite_left
-__character_select_loop_a_done:
-      ld a,(character_select_input_store)
-      and 0x4               ; check key D
-      jp nz,__character_select_loop_d_done
-      ld ix, shoe_sprite_data
-      call halt_2             ; make sure movement is constant and ensure no flickering
-      ld a,0
-      call move_sprite_right
-
-__character_select_loop_d_done:
+; play_loop: 
+;       ld bc,65022                         ; read keys G,F,D,S,A
+;       in a,(c)
+;       ld (character_select_input_store),a ; store input for later
+;       and 0x1                             ; check key A
+;       jp nz,__character_select_loop_a_done
+;       ld ix, shoe_sprite_data
+;       call halt_2                         ; make sure movement is constant and ensure no flickering
+;       ld a, 0
+;       call move_sprite_left
+;       cp 0                                ; Check if movement is allowed 
+;       jp z, __character_select_loop_a_done
+;       call _finish_move_sprite_left       ; Actually draw the sprite to the udpated location
+;       call _erase_old_sprite_left
+; __character_select_loop_a_done:
 ;       ld a,(character_select_input_store)
-;       and 0x2               ; check key S
-;       jp nz,__character_select_loop_s_done
+;       and 0x4                             ; check key D
+;       jp nz,__character_select_loop_d_done
+;       ld ix, shoe_sprite_data
+;       call halt_2                         ; make sure movement is constant and ensure no flickering
+;       ld a,0
+;       call move_sprite_right
+;       cp 0                                ; Check if movement is allowed 
+;       jp z, __character_select_loop_d_done
+;       call _finish_move_sprite_right
+;       call _erase_old_sprite_right
+
+; __character_select_loop_d_done:
+; ;       ld a,(character_select_input_store)
+; ;       and 0x2               ; check key S
+; ;       jp nz,__character_select_loop_s_done
+; ;       ld ix, shoe_sprite_data
+; ;       call halt_2             ; make sure movement is constant and ensure no flickering
+; ;       ld a, 0
+; ;       call move_sprite_down
+
+; __character_select_loop_s_done:
+;       ld bc,64510           ; read keys T, R, E, W, Q
+;       in a,(c)
+;       ld (character_select_input_store),a ; save input for later
+;       ld a,(character_select_input_store)
+;       and 0x2               ; check key W?????
+;       jp nz,__character_select_loop_w_done
 ;       ld ix, shoe_sprite_data
 ;       call halt_2             ; make sure movement is constant and ensure no flickering
 ;       ld a, 0
-;       call move_sprite_down
+;       call move_sprite_jump
+; __character_select_loop_w_done:
 
-__character_select_loop_s_done:
-      ld bc,64510           ; read keys T, R, E, W, Q
-      in a,(c)
-      ld (character_select_input_store),a ; save input for later
-      ld a,(character_select_input_store)
-      and 0x2               ; check key W?????
-      jp nz,__character_select_loop_w_done
-      ld ix, shoe_sprite_data
-      call halt_2             ; make sure movement is constant and ensure no flickering
-      ld a, 0
-      call move_sprite_jump
-__character_select_loop_w_done:
-
-; player 2 movement
-      ld bc,49150           ; H, J, K, L, Enter
-      in a,(c)
-      ld (character_select_input_store),a ; store input for later
-      and 0x8               ; check key J
-      jp nz,__character_select_loop_j_done
-      ld ix, sprite_sprite_data
-      call halt_2             ; make sure movement is constant and ensure to flickering
-      ld a, 1
-      call move_sprite_left
-__character_select_loop_j_done:
-      ld a,(character_select_input_store)
-      and 0x2               ; check key L
-      jp nz,__character_select_loop_l_done
-      ld ix, sprite_sprite_data
-      call halt_2             ; make sure movement is constant and ensure to flickering
-      ld a, 1
-      call move_sprite_right
-__character_select_loop_l_done:
+; ; player 2 movement
+;       ld bc,49150           ; H, J, K, L, Enter
+;       in a,(c)
+;       ld (character_select_input_store),a ; store input for later
+;       and 0x8               ; check key J
+;       jp nz,__character_select_loop_j_done
+;       ld ix, sprite_sprite_data
+;       call halt_2                         ; make sure movement is constant and ensure to flickering
+;       ld a, 1                             ; Let method know that sprite is sprite 2 
+;       call move_sprite_left               ; 
+;       cp 0                                ; Check if movement is allowed 
+;       jp z, __character_select_loop_j_done
+;       call _finish_move_sprite_left       ; Actually draw the sprite to the updated location
+;       call _erase_old_sprite_left_2       ; 
+; __character_select_loop_j_done:
 ;       ld a,(character_select_input_store)
-;       and 0x4               ; check key K
-;       jp nz,__character_select_loop_k_done
+;       and 0x2               ; check key L
+;       jp nz,__character_select_loop_l_done
 ;       ld ix, sprite_sprite_data
 ;       call halt_2             ; make sure movement is constant and ensure to flickering
 ;       ld a, 1
-;       call move_sprite_down
-__character_select_loop_k_done:
-      ld bc,57342           ; read keys Y, U, I, O, P
-      in a,(c)
-      ld (character_select_input_store),a ; save input for later
-      ld a,(character_select_input_store)
-      and 0x4               ; check key I
-      jp nz,__character_select_loop_i_done
-      ld ix, sprite_sprite_data
-      call halt_2             ; make sure movement is constant and ensure to flickering
-      ld a, 1
+;       call move_sprite_right
+;       cp 0                                ; Check if movement is allowed 
+;       jp z, __character_select_loop_l_done
+;       call _finish_move_sprite_right
+;       call _erase_old_sprite_right_2
+; __character_select_loop_l_done:
+; ;       ld a,(character_select_input_store)
+; ;       and 0x4               ; check key K
+; ;       jp nz,__character_select_loop_k_done
+; ;       ld ix, sprite_sprite_data
+; ;       call halt_2             ; make sure movement is constant and ensure to flickering
+; ;       ld a, 1
+; ;       call move_sprite_down
+; __character_select_loop_k_done:
+;       ld bc,57342           ; read keys Y, U, I, O, P
+;       in a,(c)
+;       ld (character_select_input_store),a ; save input for later
+;       ld a,(character_select_input_store)
+;       and 0x4               ; check key I
+;       jp nz,__character_select_loop_i_done
+;       ld ix, sprite_sprite_data
+;       call halt_2             ; make sure movement is constant and ensure to flickering
+;       ld a, 1
+;       call move_sprite_jump
+; __character_select_loop_i_done:
+; ;       call halt_2
+; ;       call halt_2
+; ;       halt
+;       jp play_loop
+
+
+
+
+play_loop:
+
+      ld ix, shoe_sprite_data 
+      call halt_2 
+      ld a, 0 
+      call move_sprite_up
+      cp 0                                ; Check if movement is allowed 
+      jp z, end 
+;       call _finish_move_sprite_up
+      call _erase_old_sprite_up
+
+      ld a, 0 
+      ld ix, shoe_sprite_data 
+      call move_sprite_right
+      cp 0 
+      jp z, end 
+      call _finish_move_sprite_right
+      call _erase_old_sprite_right
+
+      call halt_8
+
+      ld ix, shoe_sprite_data 
+      call halt_2 
+      ld a, 0 
+      call move_sprite_up
+      cp 0                                ; Check if movement is allowed 
+      jp z, end 
+;       call _finish_move_sprite_up
+      call _erase_old_sprite_up
+
+      ld a, 0 
+      ld ix, shoe_sprite_data 
+      call move_sprite_right
+      cp 0 
+      jp z, end 
+      call _finish_move_sprite_right
+      call _erase_old_sprite_right
+
+      call halt_8
+
+      ld ix, shoe_sprite_data 
+      call halt_2 
+      ld a, 0 
+      call move_sprite_up
+      cp 0                                ; Check if movement is allowed 
+      jp z, end 
+;       call _finish_move_sprite_up
+      call _erase_old_sprite_up
+
+      ld a, 0 
+      ld ix, shoe_sprite_data 
+      call move_sprite_right
+      cp 0 
+      jp z, end 
+      call _finish_move_sprite_right
+      call _erase_old_sprite_right
+
+
+
+      call halt_8
+
+
+      ld ix, shoe_sprite_data 
+      call halt_2 
+      ld a, 0 
+      call move_sprite_down
+      cp 0                                ; Check if movement is allowed 
+      jp z, end 
+;       call _finish_move_sprite_up
+      call _erase_old_sprite_down
+
+      ld a, 0 
+      ld ix, shoe_sprite_data 
+      call move_sprite_right
+      cp 0 
+      jp z, end 
+      call _finish_move_sprite_right
+      call _erase_old_sprite_right
+
+
+      call halt_8
+
+
+      ld ix, shoe_sprite_data 
+      call halt_2 
+      ld a, 0 
+      call move_sprite_down
+      cp 0                                ; Check if movement is allowed 
+      jp z, end 
+;       call _finish_move_sprite_up
+      call _erase_old_sprite_down
+
+      ld a, 0 
+      ld ix, shoe_sprite_data 
+      call move_sprite_right
+      cp 0 
+      jp z, end 
+      call _finish_move_sprite_right
+      call _erase_old_sprite_right
+
+
+      call halt_8
+
+
+      ld ix, shoe_sprite_data 
+      call halt_2 
+      ld a, 0 
+      call move_sprite_down
+      cp 0                                ; Check if movement is allowed 
+      jp z, end 
+;       call _finish_move_sprite_up
+      call _erase_old_sprite_down
+
+      ld a, 0 
+      ld ix, shoe_sprite_data 
+      call move_sprite_right
+      cp 0 
+      jp z, end 
+      call _finish_move_sprite_right
+      call _erase_old_sprite_right
+
+      ld a, 0 
+      ld ix, shoe_sprite_data 
       call move_sprite_jump
-__character_select_loop_i_done:
-;       call halt_2
-;       call halt_2
-;       halt
-      jp play_loop
+
+
+
+
+;       ld ix, shoe_sprite_data 
+;       call halt_2 
+;       ld a, 0 
+;       call move_sprite_down
+;       cp 0                                ; Check if movement is allowed 
+;       jp z, play_loop
+; ;       call _finish_move_sprite_up
+;       call _erase_old_sprite_down
+
+;       ld a, 0 
+;       ld ix, shoe_sprite_data 
+;       call move_sprite_right
+;       cp 0 
+;       jp z, play_loop
+;       call _finish_move_sprite_right
+;       call _erase_old_sprite_right
+
+;       ld ix, shoe_sprite_data 
+;       call halt_2 
+;       ld a, 0 
+;       call move_sprite_down
+;       cp 0                                ; Check if movement is allowed 
+;       jp z, play_loop
+; ;       call _finish_move_sprite_up
+;       call _erase_old_sprite_down
+
+;       ld a, 0 
+;       ld ix, shoe_sprite_data 
+;       call move_sprite_right
+;       cp 0 
+;       jp z, play_loop
+;       call _finish_move_sprite_right
+;       call _erase_old_sprite_right
+
+
+end: 
+      ret 
 
 ; ------------------------------------------------------------------------------
 ; Routine that will check the last time an interrupt was handled by the ROM. 
