@@ -9,20 +9,20 @@
 	jp z,_move_sprite_right_done_edge	; If so then skip to the end and return 
 
 
-	;for smoother movement 
-; 	ld a, (sprite_one_x_bit_offset)		; Load the bit offsett to check to see where we are in the character cell 
-; 	cp 7					; Check if the bit offset is = 7
-; 	jp nz,move_right_bit_offset_normal		; If equal to 7 then increment sprite_one_x_location 
-; 	xor a 					; Clear the a register 
-; 	ld (sprite_one_x_bit_offset), a 	; Save 0 as the bit offset 
-; 	ld a,(sprite_one_x_location)		; Else load sprite 1 x position into a register
-; 	inc a					; Else increment a to move to the right of the screen 
-; 	ld (sprite_one_x_location),a		; Save the updated x position in memory
-; 	jp resume_move_sprite_right		; Absolute jump to skip normal case 
-; move_right_bit_offset_normal:
-; 	inc a					; Increment the bit offset by normal (REPEATED CODE HERE)
-; 	ld (sprite_one_x_bit_offset), a 	; Save the new bit offset into memory 
-; resume_move_sprite_right:
+	for smoother movement 
+	ld a, (sprite_one_x_bit_offset)		; Load the bit offsett to check to see where we are in the character cell 
+	cp 7					; Check if the bit offset is = 7
+	jp nz,move_right_bit_offset_normal		; If equal to 7 then increment sprite_one_x_location 
+	xor a 					; Clear the a register 
+	ld (sprite_one_x_bit_offset), a 	; Save 0 as the bit offset 
+	ld a,(sprite_one_x_location)		; Else load sprite 1 x position into a register
+	inc a					; Else increment a to move to the right of the screen 
+	ld (sprite_one_x_location),a		; Save the updated x position in memory
+	jp resume_move_sprite_right		; Absolute jump to skip normal case 
+move_right_bit_offset_normal:
+	inc a					; Increment the bit offset by normal (REPEATED CODE HERE)
+	ld (sprite_one_x_bit_offset), a 	; Save the new bit offset into memory 
+resume_move_sprite_right:
 	
 
 	inc a 

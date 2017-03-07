@@ -39,6 +39,12 @@ __character_select_loop_a_done:
       call move_sprite_right
       cp 0                                ; Check if movement is allowed 
       jp z, __character_select_loop_d_done
+      cp 1
+      jp z, _draw_first_walking_sprite_right
+      ld ix, shoe_sprite_data;_2          ; Load second walking one 
+      call _finish_move_sprite_right
+      jp __character_select_loop_d_done
+_draw_first_walking_sprite_right:
       call _finish_move_sprite_right
       call _erase_old_sprite_right
 
@@ -62,6 +68,7 @@ __character_select_loop_s_done:
       call halt_2             ; make sure movement is constant and ensure no flickering
       ld a, 0
       call move_sprite_jump
+       
 __character_select_loop_w_done:
 
 ; player 2 movement
