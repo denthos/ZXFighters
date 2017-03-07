@@ -387,16 +387,23 @@ status_bar_attrib_bytes:
 ;     defs 2048
 
 player_one_last_update_address:
-	defb 10010101B
+	defb 10001011B
 player_one_damage_taken:
-	defb 0
+	defb 40
 
 player_two_last_update_address:
-	defb 10001011B
+	defb 10010101B
 player_two_damage_taken:
-	defb 80
+	defb 40
 
-
+player_one_remainder_stuff:
+	defb 11111110B
+	defb 11111100B
+	defb 11111000B
+	defb 11110000B
+	defb 11100000B
+	defb 11000000B
+	defb 10000000B
 player_two_remainder_stuff:
 	defb 01111111B
 	defb 00111111B
@@ -405,4 +412,3 @@ player_two_remainder_stuff:
 	defb 00000111B
 	defb 00000011B
 	defb 00000001B
-player_one_remainder_stuff:
