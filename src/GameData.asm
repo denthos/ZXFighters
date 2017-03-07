@@ -471,15 +471,37 @@ sprite_sprite_attributes:
 	defb 120,36
 	defb 0,0
 
+; Character cell coordinates with bit offset for sprite 1
 sprite_one_x_location:
 	defb 4
 sprite_one_y_location:
 	defb 10
+sprite_one_x_bit_offset:
+	defb 0
+sprite_one_y_bit_offset:
+	defb 0
 
+
+; Character cell coordinates with bit offset for sprite 2
 sprite_two_x_location:
 	defb 21
 sprite_two_y_location:
 	defb 10
+sprite_two_x_bit_offset:
+	defb 0
+sprite_two_y_bit_offset:
+	defb 0
+
+; Pixel coordinates 
+sprite_one_x_pixel_location:
+	defb 32 			; Character cell 4
+sprite_one_y_pixel_location:	
+	defb 80				; Character cell 10 
+
+sprite_two_x_pixel_location:
+	defb 168			; Character cell 21 
+sprite_two_y_pixel_location:
+	defb 80				; Character cell 10 
 
 current_sprite_x_location:
 	defb 0 		; Will be set by appropriate methods 

@@ -574,7 +574,8 @@ _erase_old_sprite_right_2:
 
 
 _finish_move_sprite_right:
-	call calculate_color_cell_pixel_address	; Will set up HL 
+	call calculate_color_cell_pixel_address	; Will set up HL 	
+; 	call calculate_pixel_byte_address		; To now support pixel movement 
 	ld c,0					; Set to not overwrite
 	ld d,6					; Set the width of the sprite to be 6
 	call draw_sprite			; Actually draw the sprite in the new location 
@@ -584,10 +585,10 @@ _revert_move_right:
 	ld a, (sprite_one_x_location)		; Load the new faulty x position into the register a 
 	dec a					; Revert the change by decrementing the x position 
 	ld (sprite_one_x_location), a		; Save the position in memory
-; 	ld b, a
-; 	ld a, (sprite_one_y_location)
-; 	ld c, a
-; 	call _finish_move_sprite_right
+	ld b, a
+	ld a, (sprite_one_y_location)
+	ld c, a
+	call _finish_move_sprite_right
 	ld a, 0
 	jp _move_sprite_right_done		; Finish 
 
@@ -595,19 +596,20 @@ _revert_move_right_2:
 	ld a, (sprite_two_x_location)		; Load the new faulty x position into the regsiter a 
 	dec a                                   ; Revert the change by decrementing the x position 
 	ld (sprite_two_x_location), a		; Save the position to memory
-; 	ld b, a 
-; 	ld a, (sprite_two_y_location)
-; 	ld c, a
-; 	call _finish_move_sprite_right
+	ld b, a 
+	ld a, (sprite_two_y_location)
+	ld c, a
+	call _finish_move_sprite_right
 	ld a, 0
 	jp _move_sprite_right_done		; Finish 
 
 _erase_old_sprite_right_finish: 
-	call calculate_color_cell_pixel_address ; This will put the pixel address to draw to in the HL register
-	ld c, 0
-	ld d, 1
-	ld ix, black_character_cell
-	call draw_sprite
+; 	call calculate_color_cell_pixel_address ; This will put the pixel address to draw to in the HL register
+; 	call calculate_pixel_byte_address		; To now support pixel movement 
+; 	ld c, 0
+; 	ld d, 1
+; 	ld ix, black_character_cell
+; 	call draw_sprite
 	ret
 _move_sprite_right_done_edge:
 	ld a, 0					; Output that no drawing is necessary
@@ -846,7 +848,7 @@ check_sprite_overlap:
 	sub d 
 	call absA
 	cp 6
-	jp nc, return_sprite_overlap_false 	;if it is equal to 6 or greater then return false
+	jp nc, return_sprite_overlap_false 	; If it is equal to 6 or greater then return false
 	jp return_sprite_overlap_true
 
 return_sprite_overlap_false:
@@ -884,6 +886,7 @@ _save_jump_sprite_counter_up:
 _move_jump_sprite_up: 		
 	call move_sprite_up		; Move the sprite up 
 	call _finish_move_sprite_up
+	ld a, (jump_sprite_number)
 	cp 1 
 	jp z, _move_jump_sprite_up_erase_2
 	call _erase_old_sprite_up
@@ -896,7 +899,7 @@ _resume_move_jump_sprite_up:
 	ld b, a 			; Move a to b 
 	call halt_8 
 	djnz _save_jump_sprite_counter_up; Decrement b 
-	ld a, b 
+	ld a, b 			; end of the loop 
 	add a, 3 
 	ld b, a
 
@@ -909,6 +912,7 @@ _save_jump_sprite_counter_down:
 _move_jump_sprite_down:	
 	call move_sprite_down		; Move the sprite up 
 	call _finish_move_sprite_down
+	ld a, (jump_sprite_number)		; Restore the a to check which sprite needs to be erased
 	cp 1
 	jp z, _move_jump_sprite_down_erase_2
 	call _erase_old_sprite_down

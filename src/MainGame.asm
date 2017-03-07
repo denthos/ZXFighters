@@ -10,9 +10,12 @@ start_main_game:
 ; 	jp start_main_game
 ; 	ret
 	call draw_background
-	ld b,4
-	ld c,10
-	call calculate_color_cell_pixel_address
+; 	ld b,4
+; 	ld c,10
+; 	call calculate_color_cell_pixel_address
+	ld b, 32
+	ld c, 80 
+	call calculate_pixel_byte_address
 	ld c,0
 	ld d,6
 	ld ix,shoe_sprite_data
@@ -27,6 +30,7 @@ start_main_game:
 	call draw_sprite
 
 	call play_loop
+; 	call test_draw_sprite
 	
 
 ; 	ld d,0x47

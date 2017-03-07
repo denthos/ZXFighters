@@ -26,7 +26,7 @@ start:
   ;;; DRAW TITLE SCREEN AND START CHARACTER SELECT
 
 	; set border color
-	ld a,1                    ; black
+	ld a,0                    ; black
 	out (0xfe),a              ; send to ula
 
 	; clear the screen
@@ -57,4 +57,7 @@ start:
   include "src/PrintingUtils.asm"
   include "src/CharacterMove.asm"
   include "src/InterruptHandler.asm"
+
+  ;-- debug
+  include "src/TestDrawSprite.asm"
 
