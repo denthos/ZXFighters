@@ -58,16 +58,16 @@ __character_select_loop_d_done:
 ;       call move_sprite_down
 
 __character_select_loop_s_done:
-      ld bc,64510           ; read keys T, R, E, W, Q
-      in a,(c)
-      ld (character_select_input_store),a ; save input for later
-      ld a,(character_select_input_store)
-      and 0x2               ; check key W?????
-      jp nz,__character_select_loop_w_done
-      ld ix, shoe_sprite_data
-      call halt_2             ; make sure movement is constant and ensure no flickering
-      ld a, 0
-      call move_sprite_jump
+;       ld bc,64510           ; read keys T, R, E, W, Q
+;       in a,(c)
+;       ld (character_select_input_store),a ; save input for later
+;       ld a,(character_select_input_store)
+;       and 0x2               ; check key W?????
+;       jp nz,__character_select_loop_w_done
+;       ld ix, shoe_sprite_data
+;       call halt_2             ; make sure movement is constant and ensure no flickering
+;       ld a, 0
+;       call move_sprite_jump
        
 __character_select_loop_w_done:
 
@@ -106,16 +106,16 @@ __character_select_loop_l_done:
 ;       ld a, 1
 ;       call move_sprite_down
 __character_select_loop_k_done:
-      ld bc,57342           ; read keys Y, U, I, O, P
-      in a,(c)
-      ld (character_select_input_store),a ; save input for later
-      ld a,(character_select_input_store)
-      and 0x4               ; check key I
-      jp nz,__character_select_loop_i_done
-      ld ix, sprite_sprite_data
-      call halt_2             ; make sure movement is constant and ensure to flickering
-      ld a, 1
-      call move_sprite_jump
+;       ld bc,57342           ; read keys Y, U, I, O, P
+;       in a,(c)
+;       ld (character_select_input_store),a ; save input for later
+;       ld a,(character_select_input_store)
+;       and 0x4               ; check key I
+;       jp nz,__character_select_loop_i_done
+;       ld ix, sprite_sprite_data
+;       call halt_2             ; make sure movement is constant and ensure to flickering
+;       ld a, 1
+;       call move_sprite_jump
 __character_select_loop_i_done:
 ;       call halt_2
 ;       call halt_2

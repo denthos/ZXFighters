@@ -529,26 +529,26 @@ move_sprite_right:
 
 
 	;for smoother movement 
-	ld a, (sprite_one_x_bit_offset)		; Load the bit offsett to check to see where we are in the character cell 
-	cp 4					; Check if the bit offset is = 4 (after 4 moves to next character cell)
-	jp nz,move_right_bit_offset_normal	; If equal to 7 then increment sprite_one_x_location 
-	xor a 					; Clear the a register 
-	ld (sprite_one_x_bit_offset), a 	; Save 0 as the bit offset 
-	ld a,(sprite_one_x_location)		; Else load sprite 1 x position into a register
-	inc a					; Else increment a to move to the right of the screen
-	ld (sprite_one_x_location),a		; Save the updated x position in memory
-	jp resume_move_sprite_right		; Absolute jump to skip normal case 
-move_right_bit_offset_normal:
-; 	inc a					; Increment the bit offset by normal (REPEATED CODE HERE)
-	add a, 4 
-	ld (sprite_one_x_bit_offset), a 	; Save the new bit offset into memory 
-resume_move_sprite_right:
-; 	inc a					; Else increment a to move to the right of the screen 
+; 	ld a, (sprite_one_x_bit_offset)		; Load the bit offsett to check to see where we are in the character cell 
+; 	cp 4					; Check if the bit offset is = 4 (after 4 moves to next character cell)
+; 	jp nz,move_right_bit_offset_normal	; If equal to 7 then increment sprite_one_x_location 
+; 	xor a 					; Clear the a register 
+; 	ld (sprite_one_x_bit_offset), a 	; Save 0 as the bit offset 
+; 	ld a,(sprite_one_x_location)		; Else load sprite 1 x position into a register
+; 	inc a					; Else increment a to move to the right of the screen
 ; 	ld (sprite_one_x_location),a		; Save the updated x position in memory
-; 	ld b,a					; Load the updated x position into b register for calculate_color_cell_pixel_address
+; 	jp resume_move_sprite_right		; Absolute jump to skip normal case 
+; move_right_bit_offset_normal:
+; 	add a, 4 
+; 	ld (sprite_one_x_bit_offset), a 	; Save the new bit offset into memory 
+; resume_move_sprite_right:
+; 	ld a, (sprite_one_x_location)
+; 	ld b, a 
+	inc a					; Else increment a to move to the right of the screen 
+	ld (sprite_one_x_location),a		; Save the updated x position in memory
+	ld b,a					; Load the updated x position into b register for calculate_color_cell_pixel_address
 
-	ld a, (sprite_one_x_location)
-	ld b, a 
+
 	ld a,(sprite_one_y_location)		; Load the sprite 1 y location into the a register to be loaded into the c register
 	ld c,a					; Load the y position into the c register for calculate_color_cell_pixel_address
 	call check_sprite_overlap
