@@ -16,7 +16,7 @@ start:
   ld bc,0x100           ; 256
   ld h,a                ; a = 0xfe
   ld l,c                ; c = 0
-  ld (hl),0xfdfd
+  ld (hl),0xfd; fd cuz you want stuff 
   ld d,a                ; a = 0xfe
   ld e,b                ; b = 1
   ldir                  ; do the 256 byte copy
