@@ -300,9 +300,21 @@ sprite_sprite_attributes:
 draw_memory_store:
 	defb 0,0
 
+; label needs to go after data for stacks
+character_select_input_store:
+	defb 0
+
 selected_character_p1:
 	defb 0
 selected_character_p2:
 	defb 1
 selected_character_max:
 	defb 1
+a_down:
+	defb 0
+d_down:
+	defb 0
+j_down:
+	defb 0
+l_down:
+	defb 0

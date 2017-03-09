@@ -1,17 +1,5 @@
 start_main_game:
-; 	inc a
-; 	cp 16
-; 	jp nz,_start_main_game_continue
-; 	ld a,0
-; _start_main_game_continue:
-; 	out (0xfe),a
-; 	halt
-; 	jp start_main_game
-; 	ret
 	call draw_background
-; 	ld b,4
-; 	ld c,10
-; 	call calculate_color_cell_pixel_address
 	ld b, 32
 	ld c, 80 
 	call calculate_pixel_byte_address
@@ -29,3 +17,19 @@ start_main_game:
 	call draw_sprite
 
 	call play_loop
+
+; ; This is a temporary placeholder function
+; start_main_game:
+; 	ld d,0x47
+; 	call clear_screen
+
+; 	ld a,0
+; _start_main_game_loop:
+; 	inc a
+; 	cp 16
+; 	jp nz,_start_main_game_continue
+; 	ld a,0
+; _start_main_game_continue:
+; 	out (0xfe),a
+; 	jp _start_main_game_loop
+; 	ret
