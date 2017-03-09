@@ -19,6 +19,19 @@ start:
   call draw_title_character_p1
   call draw_title_character_p2
 
+  call start_main_game
+
+
+
+  include "src/ByteAddressUtils.asm"
+  include "src/CharacterSelect.asm"
+  include "src/DrawingUtils.asm"
+  include "src/GameData.asm"
+  include "src/MainGame.asm"
+  include "src/PrintingUtils.asm"
+  include "src/CharacterMove.asm"
+  include "src/InterruptHandler.asm"
+
   include "src/ByteAddressUtils.asm"
   include "src/DrawingUtils.asm"
   include "src/PrintingUtils.asm"
