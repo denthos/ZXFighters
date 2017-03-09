@@ -7,6 +7,183 @@ left_arrow:
 right_arrow:
 	defb '>'
 
+
+; For drawing over old sprites and stuff 
+black_sprite:
+	defb 0,255
+	defb 0,33
+	defb 0,0
+black_sprite_attr_bytes:
+	defb 0,36
+	defb 0,0
+
+black_character_cell:
+	defb 0,8
+	defb 0,0
+black_character_cell_attr_bytes:
+	defb 0,1
+	defb 0,0
+
+black_background:
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,24
+	defb 7,255
+	defb 7,255
+	defb 7,255
+	defb 7,3
+
+
+
+title_screen_data:
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,240
+	defb 63,1
+	defb 255,255
+	defb 63,1
+	defb 255,255
+	defb 63,1
+	defb 255,255
+	defb 63,1
+	defb 255,255
+	defb 63,1
+	defb 255,255
+	defb 63,1
+	defb 255,255
+	defb 63,1
+	defb 255,223
+	defb 63,1
+	defb 255,31
+	defb 63,1
+	defb 255,31
+	defb 45,3
+	defb 111,4
+	defb 45,27
+	defb 111,6
+	defb 45,19
+	defb 111,2
+	defb 45,13
+	defb 63,11
+	defb 45,5
+	defb 111,4
+	defb 45,12
+	defb 9,11
+	defb 45,4
+	defb 111,6
+	defb 45,11
+	defb 9,11
+	defb 45,18
+	defb 63,17
+	defb 45,10
+	defb 111,2
+	defb 45,3
+	defb 9,17
+	defb 45,9
+	defb 111,4
+	defb 45,2
+	defb 9,17
+	defb 45,8
+	defb 111,4
+	defb 47,4
+	defb 63,15
+	defb 47,4
+	defb 45,9
+	defb 9,23
+	defb 45,9
+	defb 9,23
+	defb 45,9
+	defb 47,23
+	defb 45,9
+	defb 63,2
+	defb 45,1
+	defb 9,2
+	defb 63,1
+	defb 9,2
+	defb 63,1
+	defb 9,2
+	defb 63,1
+	defb 9,2
+	defb 63,1
+	defb 9,2
+	defb 63,1
+	defb 9,2
+	defb 45,1
+	defb 63,2
+	defb 45,10
+	defb 63,2
+	defb 9,2
+	defb 63,1
+	defb 9,2
+	defb 63,1
+	defb 9,2
+	defb 63,1
+	defb 9,2
+	defb 63,1
+	defb 9,2
+	defb 63,1
+	defb 9,2
+	defb 63,2
+	defb 45,12
+	defb 63,19
+	defb 45,18
+	defb 63,9
+	defb 45,23
+	defb 63,9
+	defb 45,23
+	defb 63,9
+	defb 45,23
+	defb 63,9
+	defb 45,12
+	defb 36,11
+	defb 54,2
+	defb 36,31
+	defb 54,6
+	defb 36,27
+	defb 54,7
+	defb 36,30
+	defb 54,2
+	defb 36,31
+	defb 54,2
+	defb 36,11
+	defb 0,0
+
 ; Character data looks like:
 ; struct character {
 ;   <name>_name - 10 bytes
@@ -107,6 +284,7 @@ shoe_sprite_attributes:
 	defb 2,4
 	defb 71,7
 	defb 0,0
+
 
 
 sprite_data:
@@ -296,9 +474,64 @@ sprite_sprite_attributes:
 	defb 120,36
 	defb 0,0
 
+
+
+;Sprite movement stuff 
+; Character cell coordinates with bit offset for sprite 1
+sprite_one_x_location:
+	defb 4
+sprite_one_y_location:
+	defb 10
+sprite_one_x_bit_offset:
+	defb 0
+sprite_one_y_bit_offset:
+	defb 0
+
+
+; Character cell coordinates with bit offset for sprite 2
+sprite_two_x_location:
+	defb 21
+sprite_two_y_location:
+	defb 10
+sprite_two_x_bit_offset:
+	defb 0
+sprite_two_y_bit_offset:
+	defb 0
+
+; Pixel coordinates 
+sprite_one_x_pixel_location:
+	defb 32 			; Character cell 4
+sprite_one_y_pixel_location:	
+	defb 80				; Character cell 10 
+
+sprite_two_x_pixel_location:
+	defb 168			; Character cell 21 
+sprite_two_y_pixel_location:
+	defb 80				; Character cell 10 
+
+current_sprite_x_location:
+	defb 0 		; Will be set by appropriate methods 
+current_sprite_y_location: 
+	defb 0 		; Will be set by appropriate methods 
+clear_loop_counter: 
+	defb 0 		; Will be set by appropriate methods 
+
+jump_sprite_number: 
+	defb 0
+
+
+jump_sprite_counter: 
+	defb 0 
+
+
+;End sprite movement stuff 
+
 ; 2 bytes of memory reserved for storing screen addresses in draw routines
 draw_memory_store:
 	defb 0,0
+
+
+
 
 ; label needs to go after data for stacks
 character_select_input_store:
