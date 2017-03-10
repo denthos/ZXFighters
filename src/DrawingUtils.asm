@@ -306,6 +306,7 @@ init_status_bar:
         ld de,20629
         call draw_bar_init
         call update_health
+        call test_sprite_flip
         ret
 
 ; ------------------------------------------------------------------------------
@@ -496,3 +497,82 @@ clear_screen:
 	ld bc,6144
 	ld d,0x0
 	jp fill_byte
+;         ret
+
+test_sprite_flip:
+        ld a,6
+        ld a,6
+        ld a,6
+        ld a,6
+        ld a,6
+        ld hl,test_sprite_1
+        ld de,test_sprite_2
+        ld b,2
+        ld c,2
+        call flip_sprite
+
+        ld hl,test_sprite_1
+        ld de,0x4000
+        call flip_sprite_draw
+
+        ld hl,test_sprite_2
+        ld de,0x4100
+        call flip_sprite_draw
+        ret
+
+; need:
+;       hl - address to read from
+;       de - address to write to
+flip_sprite_draw:
+        ld b,4
+_flip_sprite_draw_loop:
+        ld a,(hl)
+        ld (de),a
+        inc l
+        inc e
+        djnz _flip_sprite_draw_loop
+        ret
+
+; TODO: make sure l,e dont overflow when increased
+; need:
+;       sprite address                   hl
+;       sprite destination               de
+;       sprite width                     b
+;       sprite height(?)                 c
+flip_sprite:
+        ld ixl,b
+        ld ixh,e
+_flip_sprite_begining:
+        ld a,e
+        add a,b
+        ld e,a
+;         dec e
+_flip_sprite_loop:
+        dec e
+        ld a,(hl)
+        call _flip_a
+        ld (de),a
+        inc l
+        djnz _flip_sprite_loop
+        ld b,ixl
+;         inc l
+        ld a,e
+        add a,b
+        ld e,a
+        dec c
+        xor a
+        cp c
+        jp nz,_flip_sprite_begining
+        ret
+
+_flip_a:
+        exx                     ; 4
+        ld b,8                  ; 8
+        ld c,a                  ; 4
+        xor a                   ; 4
+_flip_a_loop:
+        rl c                    ; 8
+        rra                     ; 4
+        djnz _flip_a_loop       ; 8(b=0), 13(b!=0)
+        exx
+        ret
