@@ -192,150 +192,6 @@ shoe_name:
 	defb '   Shoe   '
 
 shoe_sprite_data:
-; 	defb 0,5
-; 	defb 255,1
-; 	defb 0,5
-; 	defb 255,1
-; 	defb 0,5
-; 	defb 255,1
-; 	defb 0,5
-; 	defb 255,1
-; 	defb 0,5
-; 	defb 255,1
-; 	defb 0,5
-; 	defb 255,1
-; 	defb 0,5
-; 	defb 255,1
-; 	defb 0,5
-; 	defb 255,1
-; 	defb 0,5
-; 	defb 255,1
-; 	defb 0,5
-; 	defb 255,1
-; 	defb 0,5
-; 	defb 255,1
-; 	defb 0,5
-; 	defb 255,1
-; 	defb 0,5
-; 	defb 255,1
-; 	defb 0,4
-; 	defb 12,1
-; 	defb 255,1
-; 	defb 0,4
-; 	defb 12,1
-; 	defb 255,1
-; 	defb 0,2
-; 	defb 31,1
-; 	defb 0,1
-; 	defb 12,1
-; 	defb 255,1
-; 	defb 0,2
-; 	defb 255,2
-; 	defb 140,1
-; 	defb 255,1
-; 	defb 0,2
-; 	defb 255,2
-; 	defb 140,1
-; 	defb 255,1
-; 	defb 0,1
-; 	defb 31,1
-; 	defb 255,2
-; 	defb 140,1
-; 	defb 255,1
-; 	defb 0,1
-; 	defb 255,3
-; 	defb 140,1
-; 	defb 255,1
-; 	defb 3,1
-; 	defb 255,3
-; 	defb 140,1
-; 	defb 255,1
-; 	defb 15,1
-; 	defb 255,3
-; 	defb 140,1
-; 	defb 255,1
-; 	defb 31,1
-; 	defb 255,3
-; 	defb 140,1
-; 	defb 255,1
-; 	defb 63,1
-; 	defb 255,3
-; 	defb 140,1
-; 	defb 255,1
-; 	defb 127,1
-; 	defb 255,1
-; 	defb 0,1
-; 	defb 1,1
-; 	defb 140,1
-; 	defb 255,3
-; 	defb 0,1
-; 	defb 31,1
-; 	defb 140,1
-; 	defb 255,3
-; 	defb 0,1
-; 	defb 255,1
-; 	defb 140,1
-; 	defb 255,5
-; 	defb 140,1
-; 	defb 255,1
-; 	defb 127,1
-; 	defb 255,3
-; 	defb 140,1
-; 	defb 255,1
-; 	defb 127,1
-; 	defb 255,3
-; 	defb 140,1
-; 	defb 255,1
-; 	defb 63,1
-; 	defb 255,3
-; 	defb 140,1
-; 	defb 255,1
-; 	defb 31,1
-; 	defb 255,3
-; 	defb 140,1
-; 	defb 255,1
-; 	defb 3,1
-; 	defb 255,3
-; 	defb 12,1
-; 	defb 255,1
-; 	defb 0,4
-; 	defb 12,1
-; 	defb 255,1
-; 	defb 0,4
-; 	defb 12,1
-; 	defb 255,1
-; 	defb 0,4
-; 	defb 12,1
-; 	defb 255,1
-; 	defb 0,4
-; 	defb 12,1
-; 	defb 255,1
-; 	defb 0,4
-; 	defb 12,1
-; 	defb 255,1
-; 	defb 0,5
-; 	defb 255,1
-; 	defb 0,5
-; 	defb 255,1
-; 	defb 0,5
-; 	defb 255,1
-; 	defb 0,5
-; 	defb 255,1
-; 	defb 0,5
-; 	defb 255,1
-; 	defb 0,5
-; 	defb 255,1
-; 	defb 0,5
-; 	defb 255,1
-; 	defb 0,5
-; 	defb 255,1
-; 	defb 0,5
-; 	defb 255,1
-; 	defb 0,5
-; 	defb 255,1
-; 	defb 0,0
-
-; ; 	For the truly great old shoe 
 	defb 0,93
 	defb 31,1
 	defb 0,5
@@ -410,26 +266,6 @@ shoe_sprite_data:
 	defb 0,91
 	defb 0,0
 shoe_sprite_attributes:
-; 	defb 71,5
-; 	defb 0,1
-; 	defb 71,3
-; 	defb 4,1
-; 	defb 0,2
-; 	defb 71,1
-; 	defb 20,1
-; 	defb 4,2
-; 	defb 0,2
-; 	defb 71,1
-; 	defb 20,1
-; 	defb 34,2
-; 	defb 0,2
-; 	defb 71,1
-; 	defb 2,3
-; 	defb 0,2
-; 	defb 71,5
-; 	defb 0,1
-; 	defb 0,0
-; 	For the truly great old shoe 
 	defb 71,9
 	defb 4,1
 	defb 71,1
@@ -446,181 +282,6 @@ shoe_sprite_attributes:
 	defb 2,4
 	defb 71,7
 	defb 0,0
-
-
-
-; dildo_2: 
-; 	defb 0,5
-; 	defb 31,1
-; 	defb 0,5
-; 	defb 31,1
-; 	defb 0,5
-; 	defb 31,1
-; 	defb 0,5
-; 	defb 31,1
-; 	defb 0,5
-; 	defb 31,1
-; 	defb 0,5
-; 	defb 31,1
-; 	defb 0,5
-; 	defb 31,1
-; 	defb 0,5
-; 	defb 31,1
-; 	defb 0,5
-; 	defb 31,1
-; 	defb 0,5
-; 	defb 31,1
-; 	defb 0,5
-; 	defb 31,1
-; 	defb 0,5
-; 	defb 31,1
-; 	defb 0,5
-; 	defb 31,1
-; 	defb 0,4
-; 	defb 1,1
-; 	defb 159,1
-; 	defb 0,4
-; 	defb 1,1
-; 	defb 159,1
-; 	defb 0,2
-; 	defb 3,1
-; 	defb 224,1
-; 	defb 1,1
-; 	defb 159,1
-; 	defb 0,2
-; 	defb 31,1
-; 	defb 255,1
-; 	defb 241,1
-; 	defb 159,1
-; 	defb 0,2
-; 	defb 31,1
-; 	defb 255,1
-; 	defb 241,1
-; 	defb 159,1
-; 	defb 0,1
-; 	defb 3,1
-; 	defb 255,2
-; 	defb 241,1
-; 	defb 159,1
-; 	defb 0,1
-; 	defb 63,1
-; 	defb 255,2
-; 	defb 241,1
-; 	defb 159,1
-; 	defb 0,1
-; 	defb 127,1
-; 	defb 255,2
-; 	defb 241,1
-; 	defb 159,1
-; 	defb 1,1
-; 	defb 255,3
-; 	defb 241,1
-; 	defb 159,1
-; 	defb 3,1
-; 	defb 255,3
-; 	defb 241,1
-; 	defb 159,1
-; 	defb 7,1
-; 	defb 255,3
-; 	defb 241,1
-; 	defb 159,1
-; 	defb 15,1
-; 	defb 255,1
-; 	defb 224,1
-; 	defb 0,1
-; 	defb 49,1
-; 	defb 159,1
-; 	defb 255,2
-; 	defb 224,1
-; 	defb 3,1
-; 	defb 241,1
-; 	defb 159,1
-; 	defb 255,2
-; 	defb 224,1
-; 	defb 31,1
-; 	defb 241,1
-; 	defb 159,1
-; 	defb 255,4
-; 	defb 241,1
-; 	defb 159,1
-; 	defb 15,1
-; 	defb 255,3
-; 	defb 241,1
-; 	defb 159,1
-; 	defb 15,1
-; 	defb 255,3
-; 	defb 241,1
-; 	defb 159,1
-; 	defb 7,1
-; 	defb 255,3
-; 	defb 241,1
-; 	defb 159,1
-; 	defb 3,1
-; 	defb 255,3
-; 	defb 241,1
-; 	defb 159,1
-; 	defb 0,1
-; 	defb 127,1
-; 	defb 255,2
-; 	defb 225,1
-; 	defb 159,1
-; 	defb 0,4
-; 	defb 1,1
-; 	defb 159,1
-; 	defb 0,4
-; 	defb 1,1
-; 	defb 159,1
-; 	defb 0,4
-; 	defb 1,1
-; 	defb 159,1
-; 	defb 0,4
-; 	defb 1,1
-; 	defb 159,1
-; 	defb 0,4
-; 	defb 1,1
-; 	defb 159,1
-; 	defb 0,5
-; 	defb 31,1
-; 	defb 0,5
-; 	defb 31,1
-; 	defb 0,5
-; 	defb 31,1
-; 	defb 0,5
-; 	defb 31,1
-; 	defb 0,5
-; 	defb 31,1
-; 	defb 0,5
-; 	defb 31,1
-; 	defb 0,5
-; 	defb 31,1
-; 	defb 0,5
-; 	defb 31,1
-; 	defb 0,5
-; 	defb 31,1
-; 	defb 0,5
-; 	defb 31,1
-; 	defb 0,0
-; shoe_sprite_attributes_2:
-; 	defb 71,5
-; 	defb 0,1
-; 	defb 71,3
-; 	defb 4,1
-; 	defb 0,2
-; 	defb 71,1
-; 	defb 20,1
-; 	defb 4,2
-; 	defb 0,2
-; 	defb 71,1
-; 	defb 20,1
-; 	defb 34,2
-; 	defb 0,2
-; 	defb 71,1
-; 	defb 2,3
-; 	defb 0,2
-; 	defb 71,5
-; 	defb 0,1
-; 	defb 0,0
-
 
 sprite_data:
 sprite_name:
@@ -808,6 +469,17 @@ sprite_sprite_data:
 sprite_sprite_attributes:
 	defb 120,36
 	defb 0,0
+
+
+; For character overlap detection 
+sprite_one_offset_middle:
+	defb 1
+sprite_two_offset_middle:
+	defb 1 
+; sprite_one_offset_middle + sprite_two_offset_middle
+; Stores 6 - (sprite_one_offset_middle + sprite_two_offset_middle)
+pre_calculate_offset_middle:
+	defb 0
 
 ; Character cell coordinates with bit offset for sprite 1
 sprite_one_x_location:

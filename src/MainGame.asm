@@ -13,6 +13,10 @@ start_main_game:
 ; 	ld b,4
 ; 	ld c,10
 ; 	call calculate_color_cell_pixel_address
+
+	call calculate_offset_middle	; Set up the offset calculation for character overlap detection 
+	
+
 	ld b, 32
 	ld c, 80 
 	call calculate_pixel_byte_address
@@ -30,6 +34,7 @@ start_main_game:
 	call draw_sprite
 
 	call play_loop
+	ret 
 ; 	call test_draw_sprite
 	
 
@@ -47,3 +52,14 @@ start_main_game:
 ; 	jp _start_main_game_loop
 ; 	ret
 
+calculate_offset_middle:
+	ld a, (sprite_one_offset_middle)	; Load offset1 into a 
+	ld b, a 				; Load b into a 
+	ld a, (sprite_two_offset_middle)	; Load offset2 into a 
+	add a, b 				; Add together into a 
+	ld b, a 				; Load into b 
+	ld a, 6					; Load width of sprite 
+	sub a, b 				; Sub the width of sprite from offset sum 
+
+	ld (pre_calculate_offset_middle), a 	; Save the value to memory 
+	ret

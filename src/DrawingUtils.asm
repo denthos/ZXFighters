@@ -855,24 +855,36 @@ check_sprite_overlap:
 	ld a, (sprite_two_x_location)
 	call absA
 
-	sub d 
+	sub d ; Subtract sprite two x from sprite one, guarenteed to be positive 
 
-	call absA
 
-	cp 6
-	jp nc, return_sprite_overlap_false 	; If difference is greater than or equal to 6 then return false
 
-	ld a, (sprite_one_y_location)
-	call absA
-	ld d, a
+	;call absA ; Only needed for when characters can jump over on another 
 
-	ld a, (sprite_two_y_location)
-	call absA
+	; a now has the value of x2 - x1 
 
-	sub d 
-	call absA
-	cp 6
-	jp nc, return_sprite_overlap_false 	; If it is equal to 6 or greater then return false
+	; Compare with the pre_calculate_offset_middle
+; 	ld d, a ; save the difference in d 
+	push af  				; Save a on stack 
+	ld a, (pre_calculate_offset_middle)	; Load pre_calculate_offset_middle into a to load to d  
+	ld d, a 				; Load the pre_calculate_offset_middle into d for compare with a
+	pop af  				; Get back the difference into a 
+	cp d 					; Compare d with a 
+	jp nc, return_sprite_overlap_false 	; If difference is greater than or equal to d(4) then return false
+
+
+	; This is for y axis checking, not needed for our game anymore 
+; 	ld a, (sprite_one_y_location)
+; 	call absA
+; 	ld d, a
+
+; 	ld a, (sprite_two_y_location)
+; 	call absA
+
+; 	sub d 
+; 	call absA
+; 	cp 6
+; 	jp nc, return_sprite_overlap_false 	; If it is equal to 6 or greater then return false
 	jp return_sprite_overlap_true
 
 return_sprite_overlap_false:
