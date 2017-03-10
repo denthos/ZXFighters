@@ -192,95 +192,251 @@ shoe_name:
 	defb '   Shoe   '
 
 shoe_sprite_data:
-	defb 0,93
-	defb 31,1
-	defb 0,5
-	defb 255,2
-	defb 128,1
-	defb 0,3
-	defb 255,2
-	defb 128,1
-	defb 0,2
-	defb 31,1
-	defb 255,2
-	defb 128,1
-	defb 0,2
-	defb 255,3
+	defb 0,37
+	defb 2,1
+	defb 0,4
+	defb 1,1
+	defb 252,1
+	defb 0,4
+	defb 1,1
+	defb 254,1
+	defb 0,4
+	defb 3,1
+	defb 130,1
+	defb 0,1
+	defb 63,1
 	defb 128,1
 	defb 0,1
 	defb 3,1
-	defb 255,3
+	defb 26,1
+	defb 0,1
+	defb 63,1
+	defb 128,1
+	defb 0,1
+	defb 3,1
+	defb 1,1
+	defb 0,1
+	defb 63,1
+	defb 128,1
+	defb 0,1
+	defb 2,1
+	defb 1,1
+	defb 0,1
+	defb 63,1
+	defb 128,1
+	defb 0,1
+	defb 2,2
+	defb 0,1
+	defb 63,1
+	defb 128,1
+	defb 0,1
+	defb 1,1
+	defb 14,1
+	defb 0,1
+	defb 63,1
+	defb 128,1
+	defb 0,1
+	defb 1,1
+	defb 16,1
+	defb 0,1
+	defb 63,1
 	defb 128,1
 	defb 0,1
 	defb 15,1
-	defb 255,2
-	defb 0,1
-	defb 128,1
-	defb 0,1
-	defb 31,1
-	defb 255,2
-	defb 0,1
-	defb 128,1
-	defb 0,1
-	defb 63,1
-	defb 255,2
-	defb 0,1
-	defb 128,1
+	defb 28,1
 	defb 0,1
 	defb 127,1
-	defb 0,2
-	defb 1,1
 	defb 128,1
 	defb 0,1
-	defb 255,1
-	defb 0,2
-	defb 31,1
-	defb 128,1
-	defb 0,1
-	defb 255,1
-	defb 0,2
-	defb 255,1
-	defb 128,1
-	defb 0,1
-	defb 255,4
-	defb 128,1
-	defb 0,1
-	defb 127,1
-	defb 255,3
-	defb 128,1
-	defb 0,1
-	defb 127,1
-	defb 255,3
-	defb 128,1
-	defb 0,1
-	defb 63,1
-	defb 255,3
-	defb 128,1
-	defb 0,1
-	defb 31,1
-	defb 255,3
-	defb 128,1
-	defb 0,1
+	defb 16,1
 	defb 3,1
-	defb 255,3
-	defb 0,91
+	defb 6,1
+	defb 127,1
+	defb 128,1
+	defb 0,1
+	defb 32,1
+	defb 0,1
+	defb 137,1
+	defb 127,1
+	defb 128,1
+	defb 0,1
+	defb 32,1
+	defb 0,1
+	defb 73,1
+	defb 63,1
+	defb 224,1
+	defb 0,1
+	defb 66,1
+	defb 0,1
+	defb 117,1
+	defb 63,1
+	defb 144,1
+	defb 0,1
+	defb 65,1
+	defb 84,1
+	defb 34,1
+	defb 127,1
+	defb 144,1
+	defb 0,1
+	defb 65,1
+	defb 6,1
+	defb 4,1
+	defb 127,1
+	defb 224,1
+	defb 0,1
+	defb 65,1
+	defb 7,1
+	defb 136,1
+	defb 127,1
+	defb 128,1
+	defb 0,1
+	defb 65,1
+	defb 4,1
+	defb 240,1
+	defb 127,1
+	defb 128,1
+	defb 0,1
+	defb 35,1
+	defb 14,1
+	defb 0,1
+	defb 127,1
+	defb 128,1
+	defb 0,1
+	defb 48,1
+	defb 241,1
+	defb 0,1
+	defb 127,1
+	defb 128,1
+	defb 0,1
+	defb 24,1
+	defb 1,1
+	defb 0,1
+	defb 127,1
+	defb 128,1
+	defb 0,1
+	defb 15,1
+	defb 249,1
+	defb 0,1
+	defb 127,1
+	defb 128,1
+	defb 0,1
+	defb 7,1
+	defb 254,1
+	defb 0,1
+	defb 127,1
+	defb 128,1
+	defb 0,1
+	defb 7,1
+	defb 252,1
+	defb 0,1
+	defb 127,1
+	defb 128,1
+	defb 0,1
+	defb 7,1
+	defb 250,1
+	defb 0,1
+	defb 127,1
+	defb 128,1
+	defb 0,1
+	defb 15,1
+	defb 253,1
+	defb 0,1
+	defb 127,1
+	defb 128,1
+	defb 0,1
+	defb 13,1
+	defb 254,1
+	defb 128,1
+	defb 127,1
+	defb 128,1
+	defb 0,1
+	defb 31,1
+	defb 255,1
+	defb 0,1
+	defb 127,1
+	defb 128,1
+	defb 0,1
+	defb 27,1
+	defb 255,1
+	defb 192,1
+	defb 191,1
+	defb 128,1
+	defb 0,1
+	defb 63,1
+	defb 223,1
+	defb 192,1
+	defb 191,1
+	defb 128,1
+	defb 0,1
+	defb 55,1
+	defb 143,1
+	defb 224,1
+	defb 255,1
+	defb 128,1
+	defb 0,1
+	defb 127,1
+	defb 7,1
+	defb 224,1
+	defb 191,1
+	defb 128,1
+	defb 0,1
+	defb 127,1
+	defb 7,1
+	defb 224,1
+	defb 127,1
+	defb 128,1
+	defb 0,1
+	defb 126,1
+	defb 3,1
+	defb 224,1
+	defb 255,1
+	defb 128,1
+	defb 0,1
+	defb 126,1
+	defb 3,1
+	defb 224,1
+	defb 127,1
+	defb 128,1
+	defb 0,1
+	defb 126,1
+	defb 3,1
+	defb 224,1
+	defb 255,1
+	defb 128,1
+	defb 0,1
+	defb 126,1
+	defb 3,1
+	defb 192,1
+	defb 0,3
+	defb 36,1
+	defb 1,1
+	defb 48,1
+	defb 0,3
+	defb 66,1
+	defb 2,1
+	defb 8,1
+	defb 0,3
+	defb 66,1
+	defb 2,1
+	defb 8,1
+	defb 0,3
+	defb 60,1
+	defb 1,1
+	defb 240,1
+	defb 0,3
 	defb 0,0
 shoe_sprite_attributes:
-	defb 71,9
-	defb 4,1
-	defb 71,1
-	defb 4,1
-	defb 71,1
-	defb 4,3
-	defb 39,1
-	defb 4,1
-	defb 71,1
-	defb 2,1
-	defb 34,3
-	defb 2,1
-	defb 71,1
-	defb 2,4
-	defb 71,7
+	defb 120,9
+	defb 127,2
+	defb 120,4
+	defb 127,2
+	defb 120,4
+	defb 127,2
+	defb 120,4
+	defb 127,2
+	defb 120,4
+	defb 127,2
+	defb 120,1
 	defb 0,0
 
 sprite_data:
@@ -476,6 +632,14 @@ sprite_one_offset_middle:
 	defb 1
 sprite_two_offset_middle:
 	defb 1 
+
+
+
+sprite_one_width_from_left:
+	defb 0 ; Defined at run time 
+
+; sprite_two_width_from_right: ; Not needed 
+
 ; sprite_one_offset_middle + sprite_two_offset_middle
 ; Stores 6 - (sprite_one_offset_middle + sprite_two_offset_middle)
 pre_calculate_offset_middle:

@@ -522,7 +522,7 @@ _move_sprite_down_done:
 ; ------------------------------------------------------------------------------
 move_sprite_right:
 	cp 0					; Check if sprite 1 or 2 move
-	jp nz, move_sprite_right_2		; If 1 then absolute jump to sprite 2 movement right code
+	jp nz, _move_sprite_right_2		; If 1 then absolute jump to sprite 2 movement right code
 	ld a,(sprite_one_x_location)		; Else load sprite 1 x position into a register
 	cp 26					; Check if the sprite is already as far right as possible 
 	jp z,_move_sprite_right_done_edge	; If so then skip to the end and return 
@@ -570,7 +570,7 @@ _erase_old_sprite_right:
 	jp _move_sprite_right_done		; Finish and return 
 
 	
-move_sprite_right_2:
+_move_sprite_right_2:
 	ld a,(sprite_two_x_location)		; Load the old x position of sprite 2
 	cp 26					; Check if already to the farthest right of the screen 
 	jp z,_move_sprite_right_done_edge	; If so then skip to the end and return 
@@ -596,12 +596,20 @@ _erase_old_sprite_right_2:
 	call clear_old_sprite_horizontal
 	jp _move_sprite_right_done		; Finish and return 
 
-
+; Input: A - Which sprite , IX, 
 _finish_move_sprite_right:
+	push af 
 	call calculate_color_cell_pixel_address	; Will set up HL 	
-; 	call calculate_pixel_byte_address		; To now support pixel movement 
+; 	call calculate_pixel_byte_address	; To now support pixel movement 
 	ld c,0					; Set to not overwrite
-	ld d,6					; Set the width of the sprite to be 6
+	ld d, 6					; Assume sprite 2 to save cycles
+	; Check player one or player two 
+	pop af
+	cp 1					; Check if sprite 1 or 2
+	jp z, _continue_finish_move_sprite_right ; Set d to 6 for sprite 2 
+	ld a, (sprite_one_width_from_left)
+	ld d, a					; Set the width of the sprite to be 6
+_continue_finish_move_sprite_right:
 	call draw_sprite			; Actually draw the sprite in the new location 
 	ret 					; return to original call 
 
