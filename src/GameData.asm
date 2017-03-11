@@ -201,6 +201,7 @@ player_1_current_attack:
 	defw 0
 player_1_name:
 	defw 0
+player_1_sprites:
 player_1_sprite_idle:
 	defw 0 ; sprite for standing still animation
 player_1_sprite_walk_forward_1:
@@ -227,6 +228,8 @@ player_1_sprite_attack_3_3:
 	defw 0
 player_1_sprite_block:
 	defw 0 ; blocking animation
+player_1_sprite_hit:
+	defw 0 ; getting hit animation
 player_1_attack_1_active_frames:
 	defw 0
 player_1_attack_1_total_frames:
@@ -265,6 +268,7 @@ player_2_current_attack:
 	defw 0
 player_2_name:
 	defw 0
+player_2_sprites:
 player_2_sprite_idle:
 	defw 0
 player_2_sprite_walk_forward_1:
@@ -290,6 +294,8 @@ player_2_sprite_attack_3_2:
 player_2_sprite_attack_3_3:
 	defw 0
 player_2_sprite_block:
+	defw 0
+player_2_sprite_hit:
 	defw 0
 player_2_attack_1_active_frames:
 	defw 0
@@ -348,6 +354,8 @@ character_sprite_attack_3_3:
 ; sprite data
 character_sprite_block:
 ; sprite data
+character_sprite_hit:
+; sprite data
 character_attack_1_active_frames:
 ; 2 bytes (first and last active frame)
 character_attack_1_total_frames:
@@ -376,6 +384,112 @@ character_attack_3_execute:
 shoe_data:
 shoe_name:
 	defb '   Shoe   '
+
+shoe_init:
+        ld bc,shoe_sprite_idle
+        ld (hl),b
+        inc hl
+        ld (hl),c
+        inc hl
+        ld bc,shoe_sprite_walk_forward_1
+        ld (hl),b
+        inc hl
+        ld (hl),c
+        inc hl
+        ld bc,shoe_sprite_walk_forward_2
+        ld (hl),b
+        inc hl
+        ld (hl),c
+        inc hl
+        ld bc,shoe_sprite_attack_1_1
+        ld (hl),b
+        inc hl
+        ld (hl),c
+        inc hl
+        ld bc,shoe_sprite_attack_1_2
+        ld (hl),b
+        inc hl
+        ld (hl),c
+        inc hl
+        ld bc,shoe_sprite_attack_1_3
+        ld (hl),b
+        inc hl
+        ld (hl),c
+        inc hl
+        ld bc,shoe_sprite_attack_2_1
+        ld (hl),b
+        inc hl
+        ld (hl),c
+        inc hl
+        ld bc,shoe_sprite_attack_2_2
+        ld (hl),b
+        inc hl
+        ld (hl),c
+        inc hl
+        ld bc,shoe_sprite_attack_2_3
+        ld (hl),b
+        inc hl
+        ld (hl),c
+        inc hl
+        ld bc,shoe_sprite_attack_3_1
+        ld (hl),b
+        inc hl
+        ld (hl),c
+        inc hl
+        ld bc,shoe_sprite_attack_3_2
+        ld (hl),b
+        inc hl
+        ld (hl),c
+        inc hl
+        ld bc,shoe_sprite_attack_3_3
+        ld (hl),b
+        inc hl
+        ld (hl),c
+        inc hl
+        ld bc,shoe_sprite_block
+        ld (hl),b
+        inc hl
+        ld (hl),c
+        inc hl
+        ld bc,shoe_sprite_hit
+        ld (hl),b
+        inc hl
+        ld (hl),c
+        ret
+
+
+shoe_sprite_idle:
+; sprite data
+shoe_sprite_walk_forward_1:
+; sprite data
+shoe_sprite_walk_forward_2:
+; sprite data
+shoe_sprite_walk_backward_1:
+; sprite data
+shoe_sprite_walk_backward_2:
+; sprite data
+shoe_sprite_attack_1_1:
+; sprite data
+shoe_sprite_attack_1_2:
+; sprite data
+shoe_sprite_attack_1_3:
+; sprite data
+shoe_sprite_attack_2_1:
+; sprite data
+shoe_sprite_attack_2_2:
+; sprite data
+shoe_sprite_attack_2_3:
+; sprite data
+shoe_sprite_attack_3_1:
+; sprite data
+shoe_sprite_attack_3_2:
+; sprite data
+shoe_sprite_attack_3_3:
+; sprite data
+shoe_sprite_block:
+; sprite data
+shoe_sprite_hit:
+; sprite data
 
 shoe_sprite_data:
 	defb 0,93
