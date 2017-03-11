@@ -413,14 +413,6 @@ player_two_remainder_stuff:
 	defb 00000011B
 	defb 00000001B
 
-test_sprite_1:
-	defb 10000000B
-	defb 11000000B
-	defb 11100000B
-	defb 11110000B
-
-test_sprite_2:
-	defs 4
 
 ; flip_sprite_stuff:
 ;         defb 00000000B

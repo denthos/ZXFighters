@@ -292,23 +292,6 @@ _ld_character_data_address_char_1:
 	ld ix,sprite_data
 	ret
 
-init_status_bar:
-        ld hl,status_bar_attrib_bytes
-        ld de,23136                             ; address in vram of start of status bar attribs
-        ld bc,160
-
-        ld b,10
-        ld h,8
-        ld de,20609
-        call draw_bar_init
-        ld b,10
-        ld h,8
-        ld de,20629
-        call draw_bar_init
-        call update_health
-        call test_sprite_flip
-        ret
-
 ; ------------------------------------------------------------------------------
 ; Subroutine for drawing a solid bar on screen, only takes care of pixels, not
 ; attributes. Only tested when drawing within a single row of color cells.
@@ -497,28 +480,6 @@ clear_screen:
 	ld bc,6144
 	ld d,0x0
 	jp fill_byte
-;         ret
-
-test_sprite_flip:
-        ld a,6
-        ld a,6
-        ld a,6
-        ld a,6
-        ld a,6
-        ld hl,test_sprite_1
-        ld de,test_sprite_2
-        ld b,2
-        ld c,2
-        call flip_sprite
-
-        ld hl,test_sprite_1
-        ld de,0x4000
-        call flip_sprite_draw
-
-        ld hl,test_sprite_2
-        ld de,0x4100
-        call flip_sprite_draw
-        ret
 
 ; need:
 ;       hl - address to read from
@@ -576,3 +537,67 @@ _flip_a_loop:
         djnz _flip_a_loop       ; 8(b=0), 13(b!=0)
         exx
         ret
+
+; need: //assumes that there will never be a sprite (288B) that has 255 of the same consecutive bytes
+;       source addr             hl
+;       dest addr               de
+;       num bytes               b,c
+compress_sprite:
+        di
+        ld a,(hl)
+
+        exx
+        ld b,a                                  ; initialize oldByte, otherwise a random byte gets written to dest
+        ld c,1                                  ; initialize counter
+        exx
+        dec b
+
+_compress_sprite_loop:
+        inc hl
+        ld a,(hl)                               ; load next byte
+
+        exx                                     ; a-currByte, b-oldByte, c-counter, d-holder
+        cp b                                    ; same byte?
+        jp z,_compress_sprite_same              ; jp if bytes are same
+
+        ld d,a                                  ; store curr byte
+        ld a,b                                  ; load old byte to write to mem
+        exx
+
+        ld (de),a                               ; write byte to memory
+        inc de                                  ; move to next dest addr
+
+        exx
+        ld a,c                                  ; ld counter
+        ld c,1                                  ; reset counter
+        ld b,d                                  ; reset old byte
+        exx
+
+        ld (de),a                               ; write counter to memory
+        inc de                                  ; move to next dest addr
+
+_compress_sprite_end_exx_stuff:
+        djnz _compress_sprite_loop
+        dec c
+        jp nz,_compress_sprite_loop
+        exx
+        ld a,b
+        exx
+        ld (de),a
+        exx
+        ld a,c
+        exx
+        inc de
+        ld (de),a
+        xor a
+        inc de
+        ld (de),a
+        inc de
+        ld (de),a
+        ei
+        ret
+
+_compress_sprite_same:
+        inc c                                   ; increase counter
+        exx
+        jp _compress_sprite_end_exx_stuff
