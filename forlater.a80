@@ -849,3 +849,19 @@ _erase_old_sprite_left_2:
 ;       jp z, play_loop
 ;       call _finish_move_sprite_right
 ;       call _erase_old_sprite_right
+
+
+
+; In revert thing 
+; 	ld b, a
+; 	ld a, (sprite_one_y_location)
+; 	ld c, a
+; 	ld ix, shoe_sprite_data
+; 	ld a, 0 
+; 	call _finish_move_sprite_right	
+
+
+	ld b, a 
+	ld a, (sprite_two_y_location)
+	ld c, a
+	call _finish_move_sprite_right	
