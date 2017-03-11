@@ -1149,3 +1149,46 @@ w_down:
 s_down:
 	defb 0
 >>>>>>> a9894f1fc465bfbf30dd9e734c5180553cc5d120
+
+
+
+; Temp stuff to keep the master making 
+; For character overlap detection 
+sprite_one_offset_middle:
+	defb 1
+sprite_two_offset_middle:
+	defb 1
+
+sprite_one_width_from_left:
+	defb 0 ; Defined at run time
+; sprite_two_width_from_right: ; Not needed 
+
+; sprite_one_offset_middle + sprite_two_offset_middle
+; Stores 6 - (sprite_one_offset_middle + sprite_two_offset_middle)
+pre_calculate_offset_middle:
+	defb 0
+
+; Number to pass into e for draw sprite 
+pre_calculate_offset_middle_for_e:
+	defb 0
+
+; Character cell coordinates with bit offset for sprite 1
+sprite_one_x_location:
+	defb 3
+sprite_one_y_location:
+	defb 10
+sprite_one_x_bit_offset:
+	defb 0
+sprite_one_y_bit_offset:
+	defb 0
+
+
+; Character cell coordinates with bit offset for sprite 2
+sprite_two_x_location:
+	defb 21
+sprite_two_y_location:
+	defb 10
+sprite_two_x_bit_offset:
+	defb 0
+sprite_two_y_bit_offset:
+	defb 0
