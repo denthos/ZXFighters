@@ -1,19 +1,6 @@
 ; This is a temporary placeholder function
 start_main_game:
-; 	inc a
-; 	cp 16
-; 	jp nz,_start_main_game_continue
-; 	ld a,0
-; _start_main_game_continue:
-; 	out (0xfe),a
-; 	halt
-; 	jp start_main_game
-; 	ret
 	call draw_background
-; 	ld b,4
-; 	ld c,10
-; 	call calculate_color_cell_pixel_address
-
 	call calculate_offset_middle	; Set up the offset calculation for character overlap detection 
 	call calculate_sprite_one_width
 
@@ -29,27 +16,12 @@ start_main_game:
 	ld c,10
 	call calculate_color_cell_pixel_address
 	ld c,0
-; 	ld d,6
 	ld e, 0 
 	ld ix,sprite_sprite_data
 	call draw_sprite
 
 	call play_loop
 	ret 
-; 	call test_draw_sprite
-; 	ld d,0x47
-; 	call clear_screen
-
-; 	ld a,0
-; _start_main_game_loop:
-; 	inc a
-; 	cp 16
-; 	jp nz,_start_main_game_continue
-; 	ld a,0
-; _start_main_game_continue:
-; 	out (0xfe),a
-; 	jp _start_main_game_loop
-; 	ret
 
 calculate_offset_middle:
 	ld a, (sprite_one_offset_middle)	; Load offset1 into a 

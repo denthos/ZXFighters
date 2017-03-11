@@ -35,17 +35,14 @@ play_loop:
       ld ix, shoe_sprite_data_3
       ld a, 0 
       call _finish_move_sprite_left
-;       call _erase_old_sprite_left
       jp __character_select_loop_a_done
 _draw_second_walking_sprite_left:
       ld ix, shoe_sprite_data_2          ; Load second walking one 
       ld a, 0
       call _finish_move_sprite_left
-;       call _erase_old_sprite_left
       jp __character_select_loop_a_done
 _draw_first_walking_sprite_left:
       call _finish_move_sprite_left       ; Actually draw the sprite to the udpated location
-;       call _erase_old_sprite_left
 __character_select_loop_a_done:
       ld a,(character_select_input_store)
       and 0x4                             ; check key D
@@ -66,18 +63,14 @@ __character_select_loop_a_done:
       ld a, 0                                   ; For finish_move_spritedd
 
       call _finish_move_sprite_right
-;       call _erase_old_sprite_right
       jp __character_select_loop_d_done
 _draw_second_walking_sprite_right:
       ld ix, shoe_sprite_data_2          ; Load second walking one 
       ld a, 0
       call _finish_move_sprite_right
-;       call _erase_old_sprite_right
       jp __character_select_loop_d_done
 _draw_first_walking_sprite_right:
-
       call _finish_move_sprite_right
-;       call _erase_old_sprite_right
 __character_select_loop_d_done:
 ;       ld a,(character_select_input_store)
 ;       and 0x2               ; check key S
@@ -114,7 +107,6 @@ __character_select_loop_w_done:
       cp 0                                ; Check if movement is allowed 
       jp z, __character_select_loop_j_done
       call _finish_move_sprite_left       ; Actually draw the sprite to the updated location
-      call _erase_old_sprite_left_2       ; 
 __character_select_loop_j_done:
       ld a,(character_select_input_store)
       and 0x2               ; check key L
@@ -127,7 +119,6 @@ __character_select_loop_j_done:
       jp z, __character_select_loop_l_done
       ld a, 1
       call _finish_move_sprite_right
-      call _erase_old_sprite_right_2
 __character_select_loop_l_done:
 ;       ld a,(character_select_input_store)
 ;       and 0x4               ; check key K
@@ -155,168 +146,7 @@ __character_select_loop_i_done:
 
 
 
-;Commented out code for a basic running jump 
-; play_loop:
 
-;       ld ix, shoe_sprite_data 
-;       call halt_2 
-;       ld a, 0 
-;       call move_sprite_up
-;       cp 0                                ; Check if movement is allowed 
-;       jp z, end 
-; ;       call _finish_move_sprite_up
-;       call _erase_old_sprite_up
-
-;       ld a, 0 
-;       ld ix, shoe_sprite_data 
-;       call move_sprite_right
-;       cp 0 
-;       jp z, end 
-;       call _finish_move_sprite_right
-;       call _erase_old_sprite_right
-
-;       call halt_8
-
-;       ld ix, shoe_sprite_data 
-;       call halt_2 
-;       ld a, 0 
-;       call move_sprite_up
-;       cp 0                                ; Check if movement is allowed 
-;       jp z, end 
-; ;       call _finish_move_sprite_up
-;       call _erase_old_sprite_up
-
-;       ld a, 0 
-;       ld ix, shoe_sprite_data 
-;       call move_sprite_right
-;       cp 0 
-;       jp z, end 
-;       call _finish_move_sprite_right
-;       call _erase_old_sprite_right
-
-;       call halt_8
-
-;       ld ix, shoe_sprite_data 
-;       call halt_2 
-;       ld a, 0 
-;       call move_sprite_up
-;       cp 0                                ; Check if movement is allowed 
-;       jp z, end 
-; ;       call _finish_move_sprite_up
-;       call _erase_old_sprite_up
-
-;       ld a, 0 
-;       ld ix, shoe_sprite_data 
-;       call move_sprite_right
-;       cp 0 
-;       jp z, end 
-;       call _finish_move_sprite_right
-;       call _erase_old_sprite_right
-
-;       call halt_8
-
-
-; ; - --- - -- - - - - - - - - - -  -- - - - -- - - -
-
-;       ld ix, shoe_sprite_data 
-;       call halt_2 
-;       ld a, 0 
-;       call move_sprite_down
-;       cp 0                                ; Check if movement is allowed 
-;       jp z, end 
-; ;       call _finish_move_sprite_up
-;       call _erase_old_sprite_down
-
-;       ld a, 0 
-;       ld ix, shoe_sprite_data 
-;       call move_sprite_right
-;       cp 0 
-;       jp z, end 
-;       call _finish_move_sprite_right
-;       call _erase_old_sprite_right
-
-
-;       call halt_8
-
-
-;       ld ix, shoe_sprite_data 
-;       call halt_2 
-;       ld a, 0 
-;       call move_sprite_down
-;       cp 0                                ; Check if movement is allowed 
-;       jp z, end 
-; ;       call _finish_move_sprite_up
-;       call _erase_old_sprite_down
-
-;       ld a, 0 
-;       ld ix, shoe_sprite_data 
-;       call move_sprite_right
-;       cp 0 
-;       jp z, end 
-;       call _finish_move_sprite_right
-;       call _erase_old_sprite_right
-
-
-;       call halt_8
-
-
-;       ld ix, shoe_sprite_data 
-;       call halt_2 
-;       ld a, 0 
-;       call move_sprite_down
-;       cp 0                                ; Check if movement is allowed 
-;       jp z, end 
-; ;       call _finish_move_sprite_up
-;       call _erase_old_sprite_down
-
-;       ld a, 0 
-;       ld ix, shoe_sprite_data 
-;       call move_sprite_right
-;       cp 0 
-;       jp z, end 
-;       call _finish_move_sprite_right
-;       call _erase_old_sprite_right
-
-;       ld a, 0 
-;       ld ix, shoe_sprite_data 
-;       call move_sprite_jump
-
-
-
-
-;       ld ix, shoe_sprite_data 
-;       call halt_2 
-;       ld a, 0 
-;       call move_sprite_down
-;       cp 0                                ; Check if movement is allowed 
-;       jp z, play_loop
-; ;       call _finish_move_sprite_up
-;       call _erase_old_sprite_down
-
-;       ld a, 0 
-;       ld ix, shoe_sprite_data 
-;       call move_sprite_right
-;       cp 0 
-;       jp z, play_loop
-;       call _finish_move_sprite_right
-;       call _erase_old_sprite_right
-
-;       ld ix, shoe_sprite_data 
-;       call halt_2 
-;       ld a, 0 
-;       call move_sprite_down
-;       cp 0                                ; Check if movement is allowed 
-;       jp z, play_loop
-; ;       call _finish_move_sprite_up
-;       call _erase_old_sprite_down
-
-;       ld a, 0 
-;       ld ix, shoe_sprite_data 
-;       call move_sprite_right
-;       cp 0 
-;       jp z, play_loop
-;       call _finish_move_sprite_right
-;       call _erase_old_sprite_right
 
 
 end: 

@@ -499,3 +499,353 @@ A_Is_Positive:
 ;      ret p
 ;      neg         ;or you can use      cpl \ inc a
 ;      ret
+
+
+
+
+; For checking if c should be blend or not 
+; 	call clear_sprite
+; 	call _move_sprite_right_done_edge
+; 	ret 
+; 	ret 	
+; 	; Check if c should blend or overwrite 
+; 	ld a, (sprite_one_x_location)
+; 	ld b, a 
+; 	ld a, (sprite_two_x_location)
+; 	sub b ; subs b from a and stores in a (a = a - b)
+; 	cp 6 
+; 	jp nc, _finish_move_sprite_right_no_blend ; Greater than or equal to 6 then no blend 
+; 	ld c, 1
+; 	jp _continue_finish_move_sprite_right_from_blend
+; _finish_move_sprite_right_no_blend:
+; 	ld c, 0					; Set to not overwrite
+; _continue_finish_move_sprite_right_from_blend:
+
+
+; 	call calculate_color_cell_pixel_address
+; 	call clear_sprite
+; 	ld a, (sprite_one_x_location)		; Save the updated x position in memory
+; 	ld b,a
+; 	ld a,(sprite_one_y_location)		; Load the sprite 1 y location into the a register to be loaded into the c register
+; 	ld c,a					; Load the y position into the c register for calculate_color_cell_pixel_address
+
+
+
+;move sprite right 2
+
+; 	call check_sprite_overlap
+; 	cp 1					; Will set the Z flag if A == 1, means overlapping 
+; 	jp z, _revert_move_right_2 		; a = 1 means overlapping now
+
+
+
+
+
+
+
+; Clearing stuff 
+
+
+; _erase_old_sprite_right_2:
+; 	ld a, (sprite_two_y_location)		; Ensure that a has the y value of sprite 1
+; 	ld c, a 				; Reload the old y value into b for calculate_color_cell_pixel_address
+; 	ld a, (sprite_two_x_location)		; Load the new x location into the a register to sub 6 from 
+; 	sub a, 1	
+; 	ld b, a 				; Load the original y into the c register for calculate_color_cell_pixel_address
+; 	call clear_old_sprite_horizontal
+; 	jp _move_sprite_right_done		; Finish and return 
+
+
+_erase_old_sprite_right:
+	ld a, (sprite_one_y_location)		; Ensure that a has the y value of sprite 1
+	ld c, a 				; Reload the old y value into c for calculate_color_cell_pixel_address
+	ld a, (sprite_one_x_location)		; Load the new x location into the a register to sub 6 from 
+	sub a, 1				; Just draw the char cell to the left	
+	ld b, a 				; Load the original(old) x into the c register for calculate_color_cell_pixel_address
+	call clear_old_sprite_horizontal	; Actually clear the last column of color cells occupied
+	jp _move_sprite_right_done		; Finish and return 
+
+
+
+
+; ------------------------------------------------------------------------------
+; Routine for drawing 1 character cell in 6 consecutive rows in the same column 
+;
+; Note: There is probably some way to do this like with EXX but it all seems 
+; really hard lol
+; Inputs: 
+; 
+; 	b = x
+;	c = y
+; Outputs: 
+; ------------------------------------------------------------------------------
+clear_old_sprite_horizontal: 
+	; save the x and y before drawing the thing which will modify them 
+	ld a, 6 
+	ld (clear_loop_counter), a
+_clear_old_sprite_loop_horizontal: 
+	ld a, b
+	ld (current_sprite_x_location), a
+	ld a, c
+	ld (current_sprite_y_location), a
+	call draw_black_character_cell		; This will modify a
+	ld a, (clear_loop_counter)
+	dec a
+	cp 0
+	jp z, _finish_clear_old_sprite_horizontal
+	ld (clear_loop_counter), a
+	ld a, (current_sprite_x_location)
+	ld b, a
+	ld a, (current_sprite_y_location)
+	inc a
+	ld c, a 
+	ld (current_sprite_y_location), a
+	jp _clear_old_sprite_loop_horizontal
+	;update the values 
+_finish_clear_old_sprite_horizontal:
+	ret
+
+
+; ------------------------------------------------------------------------------
+; Routine for drawing 1 character cell in 6 columns in the same row
+; 
+; Note: There is probably some way to do this like with EXX but it all seems 
+; really hard lol
+; Inputs: 
+; 
+; 	b = x
+;	c = y
+; Outputs: 
+; ------------------------------------------------------------------------------
+clear_old_sprite_vertical: 
+	; save the x and y before drawing the thing which will modify them 
+	ld a, 6 
+	ld (clear_loop_counter), a
+_clear_old_sprite_loop_vertical: 
+	ld a, b
+	ld (current_sprite_x_location), a
+	ld a, c
+	ld (current_sprite_y_location), a
+	call draw_black_character_cell		; This will modify a
+	ld a, (clear_loop_counter)
+	dec a
+	cp 0
+	jp z, _finish_clear_old_sprite_vertical
+	ld (clear_loop_counter), a
+	ld a, (current_sprite_x_location)
+	inc a					; This is the only difference between the two methods...
+	ld b, a
+	ld a, (current_sprite_y_location)
+	ld c, a 
+	ld (current_sprite_y_location), a
+	jp _clear_old_sprite_loop_vertical 
+	;update the values 
+_finish_clear_old_sprite_vertical:
+	ret
+
+
+
+_erase_old_sprite_left:
+	ld a, (sprite_one_y_location)		; Ensure that a has the y value of sprite 1
+	ld c, a 				; Reload the old y value into b for calculate_color_cell_pixel_address
+	ld a, (sprite_one_x_location)		; Load the new x location into the a register to sub 6 from 
+; 	cp 24					; Check if the sprite is starting within the top 6 pixel blocks of the screen 
+; 	jp nc, _move_sprite_left_done		; If it is then just don't do anything 
+	add a, 6	
+	ld b, a 				; Load the original y into the c register for calculate_color_cell_pixel_address
+	call clear_old_sprite_horizontal	; Actually clear the last column of color cells occupied  
+	jp _move_sprite_left_done		; Finish and return 
+
+_erase_old_sprite_left_2:
+	ld a, (sprite_two_y_location)		; Ensure that a has the y value of sprite 1
+	ld c, a 				; Reload the old y value into b for calculate_color_cell_pixel_address
+	ld a, (sprite_two_x_location)		; Load the new x location into the a register to sub 6 from 
+; 	cp 24					; Check if the sprite is starting within the top 6 pixel blocks of the screen 
+; 	jp nc, _move_sprite_left_done		; If it is then just don't do anything 
+	add a, 6	
+	ld b, a 				; Load the original y into the c register for calculate_color_cell_pixel_address
+	call clear_old_sprite_horizontal	; Actually clear the last column of color cells occupied 
+	jp _move_sprite_left_done		; Finish and return 
+
+
+; _finish_move_sprite_left:
+; 	call calculate_color_cell_pixel_address ; sprite data shold already be in ix, this will set HL with address
+; 	ld c,0					; 0 for no overwrite
+; 	ld d,6					; 6 for the width of the sprite 
+; 	call draw_sprite			; Draw sprite to updated location of screen
+; 	ret
+
+
+; Tuning movement speed
+
+; 	cp 1
+; 	jp z, _move_sprite_left_done_edge
+; 	cp 3
+; 	jp z, _move_sprite_left_done_edge
+; 	cp 5
+; 	jp z, _move_sprite_left_done_edge
+
+
+
+;Commented out code for a basic running jump 
+; play_loop:
+
+;       ld ix, shoe_sprite_data 
+;       call halt_2 
+;       ld a, 0 
+;       call move_sprite_up
+;       cp 0                                ; Check if movement is allowed 
+;       jp z, end 
+; ;       call _finish_move_sprite_up
+;       call _erase_old_sprite_up
+
+;       ld a, 0 
+;       ld ix, shoe_sprite_data 
+;       call move_sprite_right
+;       cp 0 
+;       jp z, end 
+;       call _finish_move_sprite_right
+;       call _erase_old_sprite_right
+
+;       call halt_8
+
+;       ld ix, shoe_sprite_data 
+;       call halt_2 
+;       ld a, 0 
+;       call move_sprite_up
+;       cp 0                                ; Check if movement is allowed 
+;       jp z, end 
+; ;       call _finish_move_sprite_up
+;       call _erase_old_sprite_up
+
+;       ld a, 0 
+;       ld ix, shoe_sprite_data 
+;       call move_sprite_right
+;       cp 0 
+;       jp z, end 
+;       call _finish_move_sprite_right
+;       call _erase_old_sprite_right
+
+;       call halt_8
+
+;       ld ix, shoe_sprite_data 
+;       call halt_2 
+;       ld a, 0 
+;       call move_sprite_up
+;       cp 0                                ; Check if movement is allowed 
+;       jp z, end 
+; ;       call _finish_move_sprite_up
+;       call _erase_old_sprite_up
+
+;       ld a, 0 
+;       ld ix, shoe_sprite_data 
+;       call move_sprite_right
+;       cp 0 
+;       jp z, end 
+;       call _finish_move_sprite_right
+;       call _erase_old_sprite_right
+
+;       call halt_8
+
+
+; ; - --- - -- - - - - - - - - - -  -- - - - -- - - -
+
+;       ld ix, shoe_sprite_data 
+;       call halt_2 
+;       ld a, 0 
+;       call move_sprite_down
+;       cp 0                                ; Check if movement is allowed 
+;       jp z, end 
+; ;       call _finish_move_sprite_up
+;       call _erase_old_sprite_down
+
+;       ld a, 0 
+;       ld ix, shoe_sprite_data 
+;       call move_sprite_right
+;       cp 0 
+;       jp z, end 
+;       call _finish_move_sprite_right
+;       call _erase_old_sprite_right
+
+
+;       call halt_8
+
+
+;       ld ix, shoe_sprite_data 
+;       call halt_2 
+;       ld a, 0 
+;       call move_sprite_down
+;       cp 0                                ; Check if movement is allowed 
+;       jp z, end 
+; ;       call _finish_move_sprite_up
+;       call _erase_old_sprite_down
+
+;       ld a, 0 
+;       ld ix, shoe_sprite_data 
+;       call move_sprite_right
+;       cp 0 
+;       jp z, end 
+;       call _finish_move_sprite_right
+;       call _erase_old_sprite_right
+
+
+;       call halt_8
+
+
+;       ld ix, shoe_sprite_data 
+;       call halt_2 
+;       ld a, 0 
+;       call move_sprite_down
+;       cp 0                                ; Check if movement is allowed 
+;       jp z, end 
+; ;       call _finish_move_sprite_up
+;       call _erase_old_sprite_down
+
+;       ld a, 0 
+;       ld ix, shoe_sprite_data 
+;       call move_sprite_right
+;       cp 0 
+;       jp z, end 
+;       call _finish_move_sprite_right
+;       call _erase_old_sprite_right
+
+;       ld a, 0 
+;       ld ix, shoe_sprite_data 
+;       call move_sprite_jump
+
+
+
+
+;       ld ix, shoe_sprite_data 
+;       call halt_2 
+;       ld a, 0 
+;       call move_sprite_down
+;       cp 0                                ; Check if movement is allowed 
+;       jp z, play_loop
+; ;       call _finish_move_sprite_up
+;       call _erase_old_sprite_down
+
+;       ld a, 0 
+;       ld ix, shoe_sprite_data 
+;       call move_sprite_right
+;       cp 0 
+;       jp z, play_loop
+;       call _finish_move_sprite_right
+;       call _erase_old_sprite_right
+
+;       ld ix, shoe_sprite_data 
+;       call halt_2 
+;       ld a, 0 
+;       call move_sprite_down
+;       cp 0                                ; Check if movement is allowed 
+;       jp z, play_loop
+; ;       call _finish_move_sprite_up
+;       call _erase_old_sprite_down
+
+;       ld a, 0 
+;       ld ix, shoe_sprite_data 
+;       call move_sprite_right
+;       cp 0 
+;       jp z, play_loop
+;       call _finish_move_sprite_right
+;       call _erase_old_sprite_right
