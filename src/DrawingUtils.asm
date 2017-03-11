@@ -328,14 +328,15 @@ move_sprite_left:
 	ld (sprite_one_x_location),a		; Save the updated x position in memory
 	jp resume_move_sprite_right		; Absolute jump to skip normal case 
 move_left_bit_offset_normal:
-	dec a, 1 				; CAn be 0, 2, 4
+	dec a	 				; CAn be 0, 2, 4
+	dec a
 	ld (sprite_one_x_bit_offset), a 	; Save the new bit offset into memory 
-	cp 1
-	jp z, _move_sprite_left_done_edge
-	cp 3
-	jp z, _move_sprite_left_done_edge
-	cp 5
-	jp z, _move_sprite_left_done_edge
+; 	cp 1
+; 	jp z, _move_sprite_left_done_edge
+; 	cp 3
+; 	jp z, _move_sprite_left_done_edge
+; 	cp 5
+; 	jp z, _move_sprite_left_done_edge
 resume_move_sprite_left:
 	ld a, (sprite_one_x_location)		; For now always increment since we're doing single pixel movement
 	ld b,a
@@ -668,14 +669,14 @@ _finish_move_sprite_right:
 	call calculate_color_cell_pixel_address	; Will set up HL 	
 ; 	call calculate_pixel_byte_address	; To now support pixel movement 
 	ld c, 0					; Set to not overwrite
-; 	ld d, 6					; Assume sprite 2 to save cycles
+; 	ld d, 6					; Assume sprite 2 to save cyclesaaaaaaaaaaa
 	ld e, 0
 	; Check player one or player two 
 	pop af
 	cp 1					; Check if sprite 1 or 2
 	jp z, _continue_finish_move_sprite_right ; Set d to 6 for sprite 2 
 	ld a, (sprite_one_width_from_left)
-	ld e, 2;a					; Set the width of the sprite to be 6
+	ld e, 1;a					; Set the width of the sprite to be 6
 _continue_finish_move_sprite_right:
 ; 	halt 
 ; 	halt
