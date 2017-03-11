@@ -571,6 +571,9 @@ _erase_old_sprite_right_2:
 _finish_move_sprite_right:
 	push af 
 	call calculate_color_cell_pixel_address	; Will set up HL 
+; 	call clear_sprite
+; 	call _move_sprite_right_done_edge
+; 	ret 
 ; 	ret 	
 ; 	; Check if c should blend or overwrite 
 ; 	ld a, (sprite_one_x_location)
@@ -584,7 +587,7 @@ _finish_move_sprite_right:
 ; _finish_move_sprite_right_no_blend:
 ; 	ld c, 0					; Set to not overwrite
 ; _continue_finish_move_sprite_right_from_blend:
-	ld c, 1 ; Blend always 
+	ld c, 0 ; Blend always 
 	ld e, 0
 
 	; Check player one or player two 
