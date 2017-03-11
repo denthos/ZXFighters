@@ -1682,3 +1682,37 @@ _move_sprite_right_done_edge:
 
 _move_sprite_right_done:
 	ret
+	
+	
+; ------------------------------------------------------------------------------
+; Subroutine for checking if the two sprites are now overlapping
+; Outputs:
+;	A - 1 for overlapping 0 for not overlapping
+; ------------------------------------------------------------------------------
+check_sprite_overlap:
+	ld a, (sprite_one_x_location)
+; 	call absA
+	ld d, a
+	ld a, (sprite_two_x_location)
+; 	call absA
+	sub d 
+	push af  				; Save a on stack 
+	ld a, (pre_calculate_offset_middle)	; Load pre_calculate_offset_middle into a to load to d  
+	out (254), a
+	ld d, a 				; Load the pre_calculate_offset_middle into d for compare with a
+	pop af  				; Get back the difference into a 
+	cp d ;6 					; Compare d with a 
+	jp nc, return_sprite_overlap_false 	; If difference is greater than or equal to d(4) then return false
+
+	jp return_sprite_overlap_true
+
+return_sprite_overlap_false:
+	ld a, 0
+	jp check_sprite_overlap_done
+
+return_sprite_overlap_true:
+	ld a, 1
+
+check_sprite_overlap_done:
+	ret
+
