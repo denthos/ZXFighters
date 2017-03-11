@@ -7,23 +7,6 @@ left_arrow:
 right_arrow:
 	defb '>'
 
-
-; For drawing over old sprites and stuff 
-black_sprite:
-	defb 0,255
-	defb 0,33
-	defb 0,0
-black_sprite_attr_bytes:
-	defb 0,36
-	defb 0,0
-
-black_character_cell:
-	defb 0,8
-	defb 0,0
-black_character_cell_attr_bytes:
-	defb 0,1
-	defb 0,0
-
 black_background:
 	defb 0,255
 	defb 0,255
@@ -55,6 +38,20 @@ black_background:
 	defb 7,255
 	defb 7,3
 
+black_sprite:
+	defb 0,255
+	defb 0,33
+	defb 0,0
+black_sprite_attr_bytes:
+	defb 0,36
+	defb 0,0
+
+black_character_cell:
+	defb 0,8
+	defb 0,0
+black_character_cell_attr_bytes:
+	defb 0,1
+	defb 0,0
 
 
 title_screen_data:
@@ -184,6 +181,193 @@ title_screen_data:
 	defb 36,11
 	defb 0,0
 
+; Player data for storing runtime game information
+player_1:
+player_1_sprite_x_location:
+	defb 4
+player_1_sprite_y_location:
+	defb 10
+player_1_hit_stun:
+	defb 0
+player_1_attack_stun:
+	defb 0
+player_1_movement_stun:
+	defb 0
+player_1_invincibility_frames:
+	defb 0
+player_1_current_attack_frame:
+	defb 0
+player_1_current_attack:
+	defw 0
+player_1_name:
+	defw 0
+player_1_sprite_idle:
+	defw 0 ; sprite for standing still animation
+player_1_sprite_walk_forward_1:
+	defw 0 ; sprite for walking first 4 bits
+player_1_sprite_walk_forward_2:
+	defw 0 ; sprite for walking second 4 bits
+player_1_sprite_attack_1_1:
+	defw 0 ; wind up for attack 1
+player_1_sprite_attack_1_2:
+	defw 0 ; attack is out for attack 1
+player_1_sprite_attack_1_3:
+	defw 0 ; wind down for attack 1
+player_1_sprite_attack_2_1:
+	defw 0
+player_1_sprite_attack_2_2:
+	defw 0
+player_1_sprite_attack_2_3:
+	defw 0
+player_1_sprite_attack_3_1:
+	defw 0
+player_1_sprite_attack_3_2:
+	defw 0
+player_1_sprite_attack_3_3:
+	defw 0
+player_1_sprite_block:
+	defw 0 ; blocking animation
+player_1_attack_1_active_frames:
+	defw 0
+player_1_attack_1_total_frames:
+	defw 0
+player_1_attack_1_execute:
+	defw 0
+player_1_attack_2_active_frames:
+	defw 0
+player_1_attack_2_total_frames:
+	defw 0
+player_1_attack_2_execute:
+	defw 0
+player_1_attack_3_active_frames:
+	defw 0
+player_1_attack_3_total_frames:
+	defw 0
+player_1_attack_3_execute:
+	defw 0
+
+player_2:
+player_2_sprite_x_location:
+	defb 21
+player_2_sprite_y_location:
+	defb 10
+player_2_hit_stun:
+	defb 0
+player_2_attack_stun:
+	defb 0
+player_2_movement_stun:
+	defb 0
+player_2_invincibility_frames:
+	defb 0
+player_2_current_attack_frame:
+	defb 0
+player_2_current_attack:
+	defw 0
+player_2_name:
+	defw 0
+player_2_sprite_idle:
+	defw 0
+player_2_sprite_walk_forward_1:
+	defw 0
+player_2_sprite_walk_forward_2:
+	defw 0
+player_2_sprite_attack_1_1:
+	defw 0
+player_2_sprite_attack_1_2:
+	defw 0
+player_2_sprite_attack_1_3:
+	defw 0
+player_2_sprite_attack_2_1:
+	defw 0
+player_2_sprite_attack_2_2:
+	defw 0
+player_2_sprite_attack_2_3:
+	defw 0
+player_2_sprite_attack_3_1:
+	defw 0
+player_2_sprite_attack_3_2:
+	defw 0
+player_2_sprite_attack_3_3:
+	defw 0
+player_2_sprite_block:
+	defw 0
+player_2_attack_1_active_frames:
+	defw 0
+player_2_attack_1_total_frames:
+	defw 0
+player_2_attack_1_execute:
+	defw 0
+player_2_attack_2_active_frames:
+	defw 0
+player_2_attack_2_total_frames:
+	defw 0
+player_2_attack_2_execute:
+	defw 0
+player_2_attack_3_active_frames:
+	defw 0
+player_2_attack_3_total_frames:
+	defw 0
+player_2_attack_3_execute:
+	defw 0
+
+; player_1 data looks like:
+; struct player_1 {
+;   <name>_name - 10 bytes
+;   <name>_sprite_data - 6x6 pixel bytes followed by corresponding attributes
+; }
+character_data:
+character_name:
+; 10 bytes of name data
+character_sprite_idle:
+; sprite data
+character_sprite_walk_forward_1:
+; sprite data
+character_sprite_walk_forward_2:
+; sprite data
+character_sprite_walk_backward_1:
+; sprite data
+character_sprite_walk_backward_2:
+; sprite data
+character_sprite_attack_1_1:
+; sprite data
+character_sprite_attack_1_2:
+; sprite data
+character_sprite_attack_1_3:
+; sprite data
+character_sprite_attack_2_1:
+; sprite data
+character_sprite_attack_2_2:
+; sprite data
+character_sprite_attack_2_3:
+; sprite data
+character_sprite_attack_3_1:
+; sprite data
+character_sprite_attack_3_2:
+; sprite data
+character_sprite_attack_3_3:
+; sprite data
+character_sprite_block:
+; sprite data
+character_attack_1_active_frames:
+; 2 bytes (first and last active frame)
+character_attack_1_total_frames:
+; 1 bytes (total number of frames that the attack is out)
+character_attack_1_execute:
+; code for handling the attack
+character_attack_2_active_frames:
+; 2 bytes (first and last active frame)
+character_attack_2_total_frames:
+; 1 bytes (total number of frames that the attack is out)
+character_attack_2_execute:
+; code for handling the attack
+character_attack_3_active_frames:
+; 2 bytes (first and last active frame)
+character_attack_3_total_frames:
+; 1 bytes (total number of frames that the attack is out)
+character_attack_3_execute:
+; code for handling the attack
+
+
 ; Character data looks like:
 ; struct character {
 ;   <name>_name - 10 bytes
@@ -284,7 +468,6 @@ shoe_sprite_attributes:
 	defb 2,4
 	defb 71,7
 	defb 0,0
-
 
 
 sprite_data:
@@ -474,64 +657,36 @@ sprite_sprite_attributes:
 	defb 120,36
 	defb 0,0
 
-
-
-;Sprite movement stuff 
-; Character cell coordinates with bit offset for sprite 1
 sprite_one_x_location:
 	defb 4
 sprite_one_y_location:
 	defb 10
+
 sprite_one_x_bit_offset:
 	defb 0
-sprite_one_y_bit_offset:
-	defb 0
 
-
-; Character cell coordinates with bit offset for sprite 2
 sprite_two_x_location:
 	defb 21
 sprite_two_y_location:
 	defb 10
-sprite_two_x_bit_offset:
-	defb 0
-sprite_two_y_bit_offset:
-	defb 0
-
-; Pixel coordinates 
-sprite_one_x_pixel_location:
-	defb 32 			; Character cell 4
-sprite_one_y_pixel_location:	
-	defb 80				; Character cell 10 
-
-sprite_two_x_pixel_location:
-	defb 168			; Character cell 21 
-sprite_two_y_pixel_location:
-	defb 80				; Character cell 10 
 
 current_sprite_x_location:
-	defb 0 		; Will be set by appropriate methods 
-current_sprite_y_location: 
-	defb 0 		; Will be set by appropriate methods 
-clear_loop_counter: 
-	defb 0 		; Will be set by appropriate methods 
+	defb 0 		; Will be set by appropriate methods
+current_sprite_y_location:
+	defb 0 		; Will be set by appropriate methods
+clear_loop_counter:
+	defb 0 		; Will be set by appropriate methods
 
-jump_sprite_number: 
+jump_sprite_number:
 	defb 0
 
 
-jump_sprite_counter: 
-	defb 0 
-
-
-;End sprite movement stuff 
+jump_sprite_counter:
+	defb 0
 
 ; 2 bytes of memory reserved for storing screen addresses in draw routines
 draw_memory_store:
 	defb 0,0
-
-
-
 
 ; label needs to go after data for stacks
 character_select_input_store:
@@ -550,4 +705,8 @@ d_down:
 j_down:
 	defb 0
 l_down:
+	defb 0
+w_down:
+	defb 0
+s_down:
 	defb 0
