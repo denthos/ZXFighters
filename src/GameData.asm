@@ -8,49 +8,49 @@ right_arrow:
 	defb '>'
 
 black_background:
-	defb 0,255
-	defb 0,255
-	defb 0,255
-	defb 0,255
-	defb 0,255
-	defb 0,255
-	defb 0,255
-	defb 0,255
-	defb 0,255
-	defb 0,255
-	defb 0,255
-	defb 0,255
-	defb 0,255
-	defb 0,255
-	defb 0,255
-	defb 0,255
-	defb 0,255
-	defb 0,255
-	defb 0,255
-	defb 0,255
-	defb 0,255
-	defb 0,255
-	defb 0,255
-	defb 0,255
-	defb 0,24
-	defb 7,255
-	defb 7,255
-	defb 7,255
-	defb 7,3
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,24
+	defb 255,255
+	defb 255,255
+	defb 255,255
+	defb 255,3
 
 black_sprite:
-	defb 0,255
-	defb 0,33
+	defb 255,255
+	defb 255,33
 	defb 0,0
 black_sprite_attr_bytes:
-	defb 0,36
+	defb 255,36
 	defb 0,0
 
 black_character_cell:
-	defb 0,8
+	defb 255,8
 	defb 0,0
 black_character_cell_attr_bytes:
-	defb 0,1
+	defb 255,1
 	defb 0,0
 
 
@@ -192,7 +192,7 @@ shoe_name:
 	defb '   Shoe   '
 
 shoe_sprite_data:
-	defb 0,37
+	defb 0,38
 	defb 2,1
 	defb 0,4
 	defb 1,1
@@ -203,207 +203,122 @@ shoe_sprite_data:
 	defb 0,4
 	defb 3,1
 	defb 130,1
-	defb 0,1
-	defb 63,1
-	defb 128,1
-	defb 0,1
+	defb 0,4
 	defb 3,1
 	defb 26,1
-	defb 0,1
-	defb 63,1
-	defb 128,1
-	defb 0,1
+	defb 0,4
 	defb 3,1
 	defb 1,1
-	defb 0,1
-	defb 63,1
-	defb 128,1
-	defb 0,1
+	defb 0,4
 	defb 2,1
 	defb 1,1
-	defb 0,1
-	defb 63,1
-	defb 128,1
-	defb 0,1
+	defb 0,4
 	defb 2,2
-	defb 0,1
-	defb 63,1
-	defb 128,1
-	defb 0,1
+	defb 0,4
 	defb 1,1
 	defb 14,1
-	defb 0,1
-	defb 63,1
-	defb 128,1
-	defb 0,1
+	defb 0,4
 	defb 1,1
 	defb 16,1
-	defb 0,1
-	defb 63,1
-	defb 128,1
-	defb 0,1
+	defb 0,4
 	defb 15,1
 	defb 28,1
-	defb 0,1
-	defb 127,1
-	defb 128,1
-	defb 0,1
+	defb 0,4
 	defb 16,1
 	defb 3,1
 	defb 6,1
-	defb 127,1
-	defb 128,1
-	defb 0,1
+	defb 0,3
 	defb 32,1
 	defb 0,1
 	defb 137,1
-	defb 127,1
-	defb 128,1
-	defb 0,1
+	defb 0,3
 	defb 32,1
 	defb 0,1
 	defb 73,1
-	defb 63,1
-	defb 224,1
-	defb 0,1
+	defb 0,3
 	defb 66,1
 	defb 0,1
 	defb 117,1
-	defb 63,1
-	defb 144,1
-	defb 0,1
+	defb 0,3
 	defb 65,1
 	defb 84,1
 	defb 34,1
-	defb 127,1
-	defb 144,1
-	defb 0,1
+	defb 0,3
 	defb 65,1
 	defb 6,1
 	defb 4,1
-	defb 127,1
-	defb 224,1
-	defb 0,1
+	defb 0,3
 	defb 65,1
 	defb 7,1
 	defb 136,1
-	defb 127,1
-	defb 128,1
-	defb 0,1
+	defb 0,3
 	defb 65,1
 	defb 4,1
 	defb 240,1
-	defb 127,1
-	defb 128,1
-	defb 0,1
+	defb 0,3
 	defb 35,1
 	defb 14,1
-	defb 0,1
-	defb 127,1
-	defb 128,1
-	defb 0,1
+	defb 0,4
 	defb 48,1
 	defb 241,1
-	defb 0,1
-	defb 127,1
-	defb 128,1
-	defb 0,1
+	defb 0,4
 	defb 24,1
 	defb 1,1
-	defb 0,1
-	defb 127,1
-	defb 128,1
-	defb 0,1
+	defb 0,4
 	defb 15,1
 	defb 249,1
-	defb 0,1
-	defb 127,1
-	defb 128,1
-	defb 0,1
+	defb 0,4
 	defb 7,1
 	defb 254,1
-	defb 0,1
-	defb 127,1
-	defb 128,1
-	defb 0,1
+	defb 0,4
 	defb 7,1
 	defb 252,1
-	defb 0,1
-	defb 127,1
-	defb 128,1
-	defb 0,1
+	defb 0,4
 	defb 7,1
 	defb 250,1
-	defb 0,1
-	defb 127,1
-	defb 128,1
-	defb 0,1
+	defb 0,4
 	defb 15,1
 	defb 253,1
-	defb 0,1
-	defb 127,1
-	defb 128,1
-	defb 0,1
+	defb 0,4
 	defb 13,1
 	defb 254,1
 	defb 128,1
-	defb 127,1
-	defb 128,1
-	defb 0,1
+	defb 0,3
 	defb 31,1
 	defb 255,1
-	defb 0,1
-	defb 127,1
-	defb 128,1
-	defb 0,1
+	defb 0,4
 	defb 27,1
 	defb 255,1
 	defb 192,1
-	defb 191,1
-	defb 128,1
-	defb 0,1
+	defb 0,3
 	defb 63,1
 	defb 223,1
 	defb 192,1
-	defb 191,1
-	defb 128,1
-	defb 0,1
+	defb 0,3
 	defb 55,1
 	defb 143,1
 	defb 224,1
-	defb 255,1
-	defb 128,1
-	defb 0,1
+	defb 0,3
 	defb 127,1
 	defb 7,1
 	defb 224,1
-	defb 191,1
-	defb 128,1
-	defb 0,1
+	defb 0,3
 	defb 127,1
 	defb 7,1
 	defb 224,1
-	defb 127,1
-	defb 128,1
-	defb 0,1
+	defb 0,3
 	defb 126,1
 	defb 3,1
 	defb 224,1
-	defb 255,1
-	defb 128,1
-	defb 0,1
+	defb 0,3
 	defb 126,1
 	defb 3,1
 	defb 224,1
-	defb 127,1
-	defb 128,1
-	defb 0,1
+	defb 0,3
 	defb 126,1
 	defb 3,1
 	defb 224,1
-	defb 255,1
-	defb 128,1
-	defb 0,1
+	defb 0,3
 	defb 126,1
 	defb 3,1
 	defb 192,1
@@ -423,20 +338,309 @@ shoe_sprite_data:
 	defb 60,1
 	defb 1,1
 	defb 240,1
-	defb 0,3
+	defb 0,2
 	defb 0,0
 shoe_sprite_attributes:
-	defb 120,9
-	defb 127,2
-	defb 120,4
-	defb 127,2
-	defb 120,4
-	defb 127,2
-	defb 120,4
-	defb 127,2
-	defb 120,4
-	defb 127,2
-	defb 120,1
+	defb 120,36
+	defb 0,0
+
+
+; Second step walking motion 
+shoe_sprite_data_2:
+	defb 0,39
+	defb 128,1
+	defb 0,4
+	defb 127,1
+	defb 0,5
+	defb 127,1
+	defb 128,1
+	defb 0,4
+	defb 224,1
+	defb 128,1
+	defb 0,4
+	defb 198,1
+	defb 128,1
+	defb 0,4
+	defb 192,1
+	defb 64,1
+	defb 0,4
+	defb 128,1
+	defb 64,1
+	defb 0,4
+	defb 128,2
+	defb 0,4
+	defb 67,1
+	defb 128,1
+	defb 0,4
+	defb 68,1
+	defb 0,4
+	defb 3,1
+	defb 199,1
+	defb 0,4
+	defb 4,1
+	defb 0,1
+	defb 193,1
+	defb 128,1
+	defb 0,2
+	defb 8,1
+	defb 0,1
+	defb 34,1
+	defb 64,1
+	defb 0,2
+	defb 8,1
+	defb 0,1
+	defb 18,1
+	defb 64,1
+	defb 0,2
+	defb 16,1
+	defb 128,1
+	defb 29,1
+	defb 64,1
+	defb 0,2
+	defb 16,1
+	defb 85,1
+	defb 8,1
+	defb 128,1
+	defb 0,2
+	defb 16,1
+	defb 65,1
+	defb 129,1
+	defb 0,3
+	defb 16,1
+	defb 65,1
+	defb 226,1
+	defb 0,3
+	defb 16,1
+	defb 65,1
+	defb 60,1
+	defb 0,3
+	defb 8,1
+	defb 195,1
+	defb 128,1
+	defb 0,3
+	defb 12,1
+	defb 60,1
+	defb 64,1
+	defb 0,3
+	defb 6,1
+	defb 0,1
+	defb 64,1
+	defb 0,3
+	defb 3,1
+	defb 254,1
+	defb 64,1
+	defb 0,3
+	defb 1,1
+	defb 255,1
+	defb 128,1
+	defb 0,4
+	defb 255,1
+	defb 0,5
+	defb 255,1
+	defb 0,4
+	defb 1,1
+	defb 255,1
+	defb 0,4
+	defb 1,1
+	defb 253,1
+	defb 128,1
+	defb 0,3
+	defb 1,1
+	defb 254,1
+	defb 128,1
+	defb 0,3
+	defb 1,1
+	defb 255,1
+	defb 128,1
+	defb 0,4
+	defb 255,1
+	defb 128,1
+	defb 0,4
+	defb 127,1
+	defb 128,1
+	defb 0,3
+	defb 1,1
+	defb 255,1
+	defb 128,1
+	defb 0,3
+	defb 1,1
+	defb 255,1
+	defb 0,4
+	defb 3,1
+	defb 255,1
+	defb 0,4
+	defb 15,1
+	defb 255,1
+	defb 0,4
+	defb 19,1
+	defb 255,1
+	defb 0,4
+	defb 17,1
+	defb 254,1
+	defb 0,4
+	defb 8,1
+	defb 201,1
+	defb 128,1
+	defb 0,3
+	defb 4,1
+	defb 80,1
+	defb 64,1
+	defb 0,3
+	defb 2,1
+	defb 80,1
+	defb 64,1
+	defb 0,3
+	defb 1,1
+	defb 143,1
+	defb 128,1
+	defb 0,2
+	defb 0,0
+shoe_sprite_attributes_2:
+	defb 120,36
+	defb 0,0
+
+shoe_sprite_data_3:
+	defb 0,39
+	defb 8,1
+	defb 0,4
+	defb 7,1
+	defb 240,1
+	defb 0,4
+	defb 7,1
+	defb 248,1
+	defb 0,4
+	defb 14,1
+	defb 8,1
+	defb 0,4
+	defb 12,1
+	defb 104,1
+	defb 0,4
+	defb 12,1
+	defb 4,1
+	defb 0,4
+	defb 8,1
+	defb 4,1
+	defb 0,4
+	defb 8,2
+	defb 0,4
+	defb 4,1
+	defb 56,1
+	defb 0,4
+	defb 4,1
+	defb 64,1
+	defb 0,4
+	defb 60,1
+	defb 112,1
+	defb 0,4
+	defb 64,1
+	defb 12,1
+	defb 24,1
+	defb 0,3
+	defb 128,1
+	defb 2,1
+	defb 36,1
+	defb 0,3
+	defb 128,1
+	defb 1,1
+	defb 36,1
+	defb 0,2
+	defb 1,1
+	defb 8,1
+	defb 1,1
+	defb 212,1
+	defb 0,2
+	defb 1,1
+	defb 5,1
+	defb 80,1
+	defb 136,1
+	defb 0,2
+	defb 1,1
+	defb 4,1
+	defb 24,1
+	defb 16,1
+	defb 0,2
+	defb 1,1
+	defb 4,1
+	defb 30,1
+	defb 32,1
+	defb 0,2
+	defb 1,1
+	defb 4,1
+	defb 19,1
+	defb 192,1
+	defb 0,3
+	defb 140,1
+	defb 56,1
+	defb 0,4
+	defb 195,1
+	defb 196,1
+	defb 0,4
+	defb 96,1
+	defb 4,1
+	defb 0,4
+	defb 63,1
+	defb 228,1
+	defb 0,4
+	defb 31,1
+	defb 248,1
+	defb 0,4
+	defb 15,1
+	defb 224,1
+	defb 0,4
+	defb 15,1
+	defb 240,1
+	defb 0,4
+	defb 31,1
+	defb 248,1
+	defb 0,4
+	defb 31,1
+	defb 244,1
+	defb 0,4
+	defb 31,1
+	defb 250,1
+	defb 0,4
+	defb 31,1
+	defb 253,1
+	defb 0,4
+	defb 15,1
+	defb 255,1
+	defb 0,4
+	defb 7,1
+	defb 255,1
+	defb 0,4
+	defb 7,1
+	defb 254,1
+	defb 0,4
+	defb 9,1
+	defb 252,1
+	defb 0,4
+	defb 8,1
+	defb 248,1
+	defb 0,4
+	defb 4,1
+	defb 112,1
+	defb 0,4
+	defb 2,1
+	defb 32,1
+	defb 0,4
+	defb 7,1
+	defb 32,1
+	defb 0,4
+	defb 4,1
+	defb 192,1
+	defb 0,4
+	defb 8,1
+	defb 32,1
+	defb 0,4
+	defb 8,1
+	defb 32,1
+	defb 0,4
+	defb 7,1
+	defb 192,1
+	defb 0,2
+	defb 0,0
+shoe_sprite_attributes_3:
+	defb 120,36
 	defb 0,0
 
 sprite_data:
@@ -625,6 +829,8 @@ sprite_sprite_data:
 sprite_sprite_attributes:
 	defb 120,36
 	defb 0,0
+
+
 
 
 ; For character overlap detection 

@@ -36,8 +36,6 @@ start_main_game:
 	call play_loop
 	ret 
 ; 	call test_draw_sprite
-	
-
 ; 	ld d,0x47
 ; 	call clear_screen
 

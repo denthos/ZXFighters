@@ -27,6 +27,19 @@ play_loop:
       call move_sprite_left
       cp 0                                ; Check if movement is allowed 
       jp z, __character_select_loop_a_done
+      cp 1
+      jp z, _draw_first_walking_sprite_left
+      cp 3
+      jp z, _draw_second_walking_sprite_left
+      ld ix, shoe_sprite_data_3
+      ld a, 0 
+      jp __character_select_loop_a_done
+_draw_second_walking_sprite_left:
+      ld ix, shoe_sprite_data_2          ; Load second walking one 
+      ld a, 0
+      call _finish_move_sprite_left
+      jp __character_select_loop_a_done
+_draw_first_walking_sprite_left:
       call _finish_move_sprite_left       ; Actually draw the sprite to the udpated location
       call _erase_old_sprite_left
 __character_select_loop_a_done:
@@ -41,13 +54,33 @@ __character_select_loop_a_done:
       jp z, __character_select_loop_d_done
       cp 1
       jp z, _draw_first_walking_sprite_right
-      ld ix, shoe_sprite_data;_2          ; Load second walking one 
-      ld a, 0
+      cp 3
+      jp z, _draw_second_walking_sprite_right
+      ; must be 5, the last one in the sequence 
+      ld ix, shoe_sprite_data_3               ; Load second walking one 
+      ld a, 0                                   ; For finish_move_sprite
+
       call _finish_move_sprite_right
+;       call halt_8 
+;       call halt_8 
+;       call halt_8 
+      jp __character_select_loop_d_done
+_draw_second_walking_sprite_right:
+      ld ix, shoe_sprite_data_2          ; Load second walking one 
+      ld a, 0
+
+      call _finish_move_sprite_right
+;       call halt_8 
+;       call halt_8 
+;       call halt_8 
       jp __character_select_loop_d_done
 _draw_first_walking_sprite_right:
+
       call _finish_move_sprite_right
       call _erase_old_sprite_right
+;       call halt_8 
+;       call halt_8 
+;       call halt_8 
 
 __character_select_loop_d_done:
 ;       ld a,(character_select_input_store)
