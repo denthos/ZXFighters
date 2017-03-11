@@ -106,6 +106,7 @@ __character_select_loop_w_done:
       call move_sprite_left               ; 
       cp 0                                ; Check if movement is allowed 
       jp z, __character_select_loop_j_done
+      ld a, 1 
       call _finish_move_sprite_left       ; Actually draw the sprite to the updated location
 __character_select_loop_j_done:
       ld a,(character_select_input_store)

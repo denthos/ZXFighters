@@ -286,7 +286,7 @@ _move_sprite_left_2:
 	jp nz,move_left_bit_offset_normal_2	; If equal to 7 then increment sprite_one_x_location 
 	xor a 					; Clear the a register 
 	ld a, 4 
-	ld (sprite_one_x_bit_offset), a 	; Save 4 as the bit offset 
+	ld (sprite_two_x_bit_offset), a 	; Save 4 as the bit offset 
 	jp resume_move_sprite_left_2 		; Absolute jump to skip normal case 
 move_left_bit_offset_normal_2:
 	dec a	 				; CAn be 0, 2, 4
@@ -309,6 +309,8 @@ resume_move_sprite_left_2:
 	inc a 					; a will be 1, 3, 5 ---- 0 is for failure 
 	ret 
 
+
+
 _finish_move_sprite_left:
 	push af 
 	call calculate_color_cell_pixel_address	; Will set up HL 	
@@ -318,8 +320,9 @@ _finish_move_sprite_left:
 	pop af
 	cp 1					; Check if sprite 1 or 2
 	jp z, _continue_finish_move_sprite_left ; Set d to 6 for sprite 2 
-	ld a, (sprite_one_width_from_left)
-	ld e, 0 
+; 	ld a, (pre_calculate_offset_middle_for_e)
+; 	dec a 
+; 	ld e, 0
 _continue_finish_move_sprite_left:
 	call draw_sprite			; Actually draw the sprite in the new location 
 	ret 					; return to original call 
