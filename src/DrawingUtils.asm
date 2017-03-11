@@ -318,15 +318,15 @@ move_sprite_left:
 
 	;for smoother movement 
 	ld a, (sprite_one_x_bit_offset)		; Load the bit offsett to check to see where we are in the character cell 
-	cp 0; 6					; Check if the bit offset is = 4 (after 4 moves to next character cell)
+	cp 0; 6					; Check if the bit offset is = 0 (after 0 moves to the left character cell)
 	jp nz,move_left_bit_offset_normal	; If equal to 7 then increment sprite_one_x_location 
 	xor a 					; Clear the a register 
 	ld a, 4 
-	ld (sprite_one_x_bit_offset), a 	; Save 0 as the bit offset 
-	ld a,(sprite_one_x_location)		; Else load sprite 1 x position into a register
-	dec a					; Else increment a to move to the right of the screen
-	ld (sprite_one_x_location),a		; Save the updated x position in memory
-	jp resume_move_sprite_right		; Absolute jump to skip normal case 
+	ld (sprite_one_x_bit_offset), a 	; Save 4 as the bit offset 
+; 	ld a,(sprite_one_x_location)		; Else load sprite 1 x position into a register
+; 	dec a					; Else increment a to move to the right of the screen
+; 	ld (sprite_one_x_location), a		; Save the updated x position in memory
+	jp resume_move_sprite_left 		; Absolute jump to skip normal case 
 move_left_bit_offset_normal:
 	dec a	 				; CAn be 0, 2, 4
 	dec a
@@ -339,16 +339,22 @@ move_left_bit_offset_normal:
 ; 	jp z, _move_sprite_left_done_edge
 resume_move_sprite_left:
 	ld a, (sprite_one_x_location)		; For now always increment since we're doing single pixel movement
+	dec a					; Else increment a to move to the right of the screen
+; 	dec a
+	ld (sprite_one_x_location),a		; Save the updated x position in memory
 	ld b,a
 	ld a,(sprite_one_y_location) 		; Load sprite one y location into a, in order to load c
 	ld c,a			      		; Load c with the y location of sprite 1 from a 
-	call check_sprite_overlap		; Check to make sure no sprite overlap 
-	cp 1					; Will set the Z flag if A == 1
-	jp z, _revert_move_left 		; a = 1 means overlapping now
-; 	call _finish_move_sprite_left    	; Call to actual drawing of new sprite
-; 	ld a, 1
+; 	call check_sprite_overlap		; Check to make sure no sprite overlap 
+; 	cp 1					; Will set the Z flag if A == 1
+; 	jp z, _revert_move_left 		; a = 1 means overlapping now
+; ; 	call _finish_move_sprite_left    	; Call to actual drawing of new sprite
+; ; 	ld a, 1
 	ld a, (sprite_one_x_bit_offset)		; 
 	inc a 					; a will be 1, 3, 5, 7---- 0 is for failure 
+
+; 	ld a, 1
+
 	ret 
 
 _erase_old_sprite_left:
@@ -411,13 +417,13 @@ _finish_move_sprite_left:
 	cp 1					; Check if sprite 1 or 2
 	jp z, _continue_finish_move_sprite_left ; Set d to 6 for sprite 2 
 	ld a, (sprite_one_width_from_left)
-; 	ld d, 6;a					; Set the width of the sprite to be 6
+; 	ld d, 6;a				; Set the width of the sprite to be 6
 	ld e, 0 
 _continue_finish_move_sprite_left:
 ; 	call halt_2				; Let it do stuff 
 ; 	call halt_2
-	halt 
-	halt
+; 	halt 
+; 	halt
 	call draw_sprite			; Actually draw the sprite in the new location 
 	ret 					; return to original call 
 
@@ -453,7 +459,178 @@ _move_sprite_left_done:				; Finish
 
 
 
+; ------------------------------------------------------------------------------
+; Subroutine for drawing a sprite onto the screen 1 pixel to the right 
+; of it's current location 
+;
+; Inputs: 
+; 	IX - the input sprite to be input to draw_sprite routine 
+; 	A  - the sprite number ( 0 = sprite #1, 1 = sprite #2)
+; Outputs:
+; 	A - (0 = Character overlap no drawing)
+;	    (1 = Draw the first walking sprite)
+; 	    (5 = Draw the second walking sprite)
+; ------------------------------------------------------------------------------
+move_sprite_right:
+	cp 0					; Check if sprite 1 or 2 move
+	jp nz, _move_sprite_right_2		; If 1 then absolute jump to sprite 2 movement right code
+	ld a,(sprite_one_x_location)		; Else load sprite 1 x position into a register
+	cp 26					; Check if the sprite is already as far right as possible 
+	jp z,_move_sprite_right_done_edge	; If so then skip to the end and return 
 
+	;for smoother movement 
+	ld a, (sprite_one_x_bit_offset)		; Load the bit offsett to check to see where we are in the character cell 
+	cp 4; 6					; Check if the bit offset is = 4 (after 4 moves to next character cell)
+	jp nz,move_right_bit_offset_normal	; If equal to 7 then increment sprite_one_x_location 
+	xor a 					; Clear the a register 
+	ld (sprite_one_x_bit_offset), a 	; Save 0 as the bit offset 
+; 	ld a,(sprite_one_x_location)		; Else load sprite 1 x position into a register
+; 	inc a					; Else increment a to move to the right of the screen
+; 	ld (sprite_one_x_location),a		; Save the updated x position in memory
+	; Check if the new character_cell in the other thing 
+; 	call check_sprite_overlap
+; 	cp 1					; Will set the Z flag if A == 1
+; 	jp nz, resume_move_sprite_right;	; Absolute jump to skip normal case 	; a = 1 means overlapping now
+; 	call _revert_move_right 
+
+; 	jp _move_sprite_right_done_edge	
+	jp resume_move_sprite_right
+move_right_bit_offset_normal:
+	add a, 2 				; CAn be 0, 2, 4
+	ld (sprite_one_x_bit_offset), a 	; Save the new bit offset into memory 
+; 	cp 1
+; 	jp z, _move_sprite_right_done_edge
+; 	cp 3
+; 	jp z, _move_sprite_right_done_edge
+; 	cp 5
+; 	jp z, _move_sprite_right_done_edge
+resume_move_sprite_right:
+
+	ld a, (sprite_one_x_location)		; For now always increment since we're doing single pixel movement
+	inc a					; Else increment a to move to the right of the screen
+	ld (sprite_one_x_location),a		; Save the updated x position in memory
+	ld b,a
+; 	inc a					; Else increment a to move to the right of the screen 
+; 	ld (sprite_one_x_location),a		; Save the updated x position in memory
+; 	ld b,a					; Load the updated x position into b register for calculate_color_cell_pixel_address
+	ld a,(sprite_one_y_location)		; Load the sprite 1 y location into the a register to be loaded into the c register
+	ld c,a					; Load the y position into the c register for calculate_color_cell_pixel_address
+	call check_sprite_overlap
+	cp 1					; Will set the Z flag if A == 1
+	jp z, _revert_move_right 		; a = 1 means overlapping now
+; 	call _finish_move_sprite_right		; Absoulte jump to actually draw the sprite in the new position
+	
+	ld a, (sprite_one_x_bit_offset)		; 
+	inc a 					; a will be 1, 3, 5, 7---- 0 is for failure 
+	ret  
+
+_erase_old_sprite_right:
+	ld a, (sprite_one_y_location)		; Ensure that a has the y value of sprite 1
+	ld c, a 				; Reload the old y value into c for calculate_color_cell_pixel_address
+	ld a, (sprite_one_x_location)		; Load the new x location into the a register to sub 6 from 
+	sub a, 1				; Just draw the char cell to the left	
+	ld b, a 				; Load the original(old) x into the c register for calculate_color_cell_pixel_address
+	call clear_old_sprite_horizontal	; Actually clear the last column of color cells occupied
+	jp _move_sprite_right_done		; Finish and return 
+
+	
+_move_sprite_right_2:
+	ld a,(sprite_two_x_location)		; Load the old x position of sprite 2
+	cp 26					; Check if already to the farthest right of the screen 
+	jp z,_move_sprite_right_done_edge	; If so then skip to the end and return 
+	inc a					; Increment the old x position to move to the right 
+	ld (sprite_two_x_location),a		; Save the new x position in memory
+	ld b,a					; Load new x position in b register for calculate_color_cell_pixel_address
+	ld a,(sprite_two_y_location)		; Load the y position of sprite 2 into the a register to be moved into the c register
+	ld c,a					; Load the y position into the c register for calculate_color_cell_pixel_address
+	call check_sprite_overlap
+	cp 1					; Will set the Z flag if A == 1, means overlapping 
+	jp z, _revert_move_right_2 		; a = 1 means overlapping now
+; 	call _finish_move_sprite_right 		; Call to actually draw the sprite in the updated part of the screen 
+	ld a, 1
+	ret
+
+_erase_old_sprite_right_2:
+	ld a, (sprite_two_y_location)		; Ensure that a has the y value of sprite 1
+	ld c, a 				; Reload the old y value into b for calculate_color_cell_pixel_address
+	ld a, (sprite_two_x_location)		; Load the new x location into the a register to sub 6 from 
+	sub a, 1	
+	ld b, a 				; Load the original y into the c register for calculate_color_cell_pixel_address
+	call clear_old_sprite_horizontal
+	jp _move_sprite_right_done		; Finish and return 
+
+; Input: A - Which sprite , IX, 
+_finish_move_sprite_right:
+	push af 
+	call calculate_color_cell_pixel_address	; Will set up HL 	
+; 	call calculate_pixel_byte_address	; To now support pixel movement 
+	ld c, 0					; Set to not overwrite
+; 	ld d, 6					; Assume sprite 2 to save cyclesaaaaaaaaaaa
+	ld e, 0
+	; Check player one or player two 
+	pop af
+	cp 1					; Check if sprite 1 or 2
+	jp z, _continue_finish_move_sprite_right ; Set d to 6 for sprite 2 
+	ld a, (sprite_one_width_from_left)
+	ld e, 1;a					; Set the width of the sprite to be 6
+_continue_finish_move_sprite_right:
+; 	halt 
+; 	halt
+	call draw_sprite			; Actually draw the sprite in the new location 
+	ret 					; return to original call 
+
+_revert_move_right:
+
+	ld a, (sprite_one_x_bit_offset)		; 
+	cp 0 					; 
+	jp nz, _revert_move_right_sub_offset	; 
+	xor a 
+	ld a, 4					; 
+	jp _resume_revert_move_right
+_revert_move_right_sub_offset: 
+	dec a 
+	dec a 
+_resume_revert_move_right:
+	ld (sprite_one_x_bit_offset), a 	; Save the old offset back to memory 
+	ld a, (sprite_one_x_location)		; Load the new faulty x position into the register a 
+	dec a					; Revert the change by decrementing the x position 
+
+	ld (sprite_one_x_location), a		; Save the position in memory
+; 	ld b, a
+; 	ld a, (sprite_one_y_location)
+; 	ld c, a
+; 	ld ix, shoe_sprite_data
+; 	ld a, 0 
+; 	call _finish_move_sprite_right	
+	ld a, 0					; Failure 
+; 	ld a,2 
+; 	out (254), a
+	jp _move_sprite_right_done		; Finish 
+
+_revert_move_right_2:
+	ld a, (sprite_two_x_location)		; Load the new faulty x position into the regsiter a 
+	dec a                                   ; Revert the change by decrementing the x position 
+	ld (sprite_two_x_location), a		; Save the position to memory
+	ld b, a 
+	ld a, (sprite_two_y_location)
+	ld c, a
+	call _finish_move_sprite_right
+	ld a, 0
+	jp _move_sprite_right_done		; Finish 
+
+_erase_old_sprite_right_finish: 
+; 	call calculate_color_cell_pixel_address ; This will put the pixel address to draw to in the HL register
+; 	call calculate_pixel_byte_address		; To now support pixel movement 
+; 	ld c, 0
+; 	ld d, 1
+; 	ld ix, black_character_cell
+; 	call draw_sprite
+	ret
+_move_sprite_right_done_edge:
+	ld a, 0					; Output that no drawing is necessary
+
+_move_sprite_right_done:
+	ret
 
 ; ------------------------------------------------------------------------------
 ; Subroutine for drawing a sprite onto the screen 1 pixel below it's current
@@ -533,7 +710,6 @@ _finish_move_sprite_down:
 	call draw_sprite			; Actually draw the sprite to the new location 
 	ret
 
-
 _erase_old_sprite_down_finish: 
 	call calculate_color_cell_pixel_address ; This will put the pixel address to draw to in the HL register
 	ld c, 0
@@ -564,175 +740,6 @@ _move_sprite_down_done_edge:
 
 _move_sprite_down_done:
 	ret
-
-
-; ------------------------------------------------------------------------------
-; Subroutine for drawing a sprite onto the screen 1 pixel to the right 
-; of it's current location 
-;
-; Inputs: 
-; 	IX - the input sprite to be input to draw_sprite routine 
-; 	A  - the sprite number ( 0 = sprite #1, 1 = sprite #2)
-; Outputs:
-; 	A - (0 = Character overlap no drawing)
-;	    (1 = Draw the first walking sprite)
-; 	    (5 = Draw the second walking sprite)
-; ------------------------------------------------------------------------------
-move_sprite_right:
-	cp 0					; Check if sprite 1 or 2 move
-	jp nz, _move_sprite_right_2		; If 1 then absolute jump to sprite 2 movement right code
-	ld a,(sprite_one_x_location)		; Else load sprite 1 x position into a register
-	cp 26					; Check if the sprite is already as far right as possible 
-	jp z,_move_sprite_right_done_edge	; If so then skip to the end and return 
-
-	;for smoother movement 
-	ld a, (sprite_one_x_bit_offset)		; Load the bit offsett to check to see where we are in the character cell 
-	cp 4; 6					; Check if the bit offset is = 4 (after 4 moves to next character cell)
-	jp nz,move_right_bit_offset_normal	; If equal to 7 then increment sprite_one_x_location 
-	xor a 					; Clear the a register 
-	ld (sprite_one_x_bit_offset), a 	; Save 0 as the bit offset 
-	ld a,(sprite_one_x_location)		; Else load sprite 1 x position into a register
-	inc a					; Else increment a to move to the right of the screen
-	ld (sprite_one_x_location),a		; Save the updated x position in memory
-	; Check if the new character_cell in the other thing 
-	call check_sprite_overlap
-	cp 1					; Will set the Z flag if A == 1
-	jp nz, resume_move_sprite_right;	; Absolute jump to skip normal case 	; a = 1 means overlapping now
-	call _revert_move_right 
-	ld a,2 
-	out (254), a
-	jp _move_sprite_right_done_edge	
-move_right_bit_offset_normal:
-	add a, 2 				; CAn be 0, 2, 4
-	ld (sprite_one_x_bit_offset), a 	; Save the new bit offset into memory 
-; 	cp 1
-; 	jp z, _move_sprite_right_done_edge
-; 	cp 3
-; 	jp z, _move_sprite_right_done_edge
-; 	cp 5
-; 	jp z, _move_sprite_right_done_edge
-resume_move_sprite_right:
-	ld a, (sprite_one_x_location)		; For now always increment since we're doing single pixel movement
-	ld b,a
-; 	inc a					; Else increment a to move to the right of the screen 
-; 	ld (sprite_one_x_location),a		; Save the updated x position in memory
-; 	ld b,a					; Load the updated x position into b register for calculate_color_cell_pixel_address
-	ld a,(sprite_one_y_location)		; Load the sprite 1 y location into the a register to be loaded into the c register
-	ld c,a					; Load the y position into the c register for calculate_color_cell_pixel_address
-; 	call check_sprite_overlap
-; 	cp 1					; Will set the Z flag if A == 1
-; 	jp z, _revert_move_right 		; a = 1 means overlapping now
-; 	call _finish_move_sprite_right		; Absoulte jump to actually draw the sprite in the new position
-	
-	ld a, (sprite_one_x_bit_offset)		; 
-	inc a 					; a will be 1, 3, 5, 7---- 0 is for failure 
-	ret  
-
-_erase_old_sprite_right:
-	ld a, (sprite_one_y_location)		; Ensure that a has the y value of sprite 1
-	ld c, a 				; Reload the old y value into c for calculate_color_cell_pixel_address
-	ld a, (sprite_one_x_location)		; Load the new x location into the a register to sub 6 from 
-	sub a, 1				; Just draw the char cell to the left	
-	ld b, a 				; Load the original(old) x into the c register for calculate_color_cell_pixel_address
-	call clear_old_sprite_horizontal	; Actually clear the last column of color cells occupied
-	jp _move_sprite_right_done		; Finish and return 
-
-	
-_move_sprite_right_2:
-	ld a,(sprite_two_x_location)		; Load the old x position of sprite 2
-	cp 26					; Check if already to the farthest right of the screen 
-	jp z,_move_sprite_right_done_edge	; If so then skip to the end and return 
-	inc a					; Increment the old x position to move to the right 
-	ld (sprite_two_x_location),a		; Save the new x position in memory
-	ld b,a					; Load new x position in b register for calculate_color_cell_pixel_address
-	ld a,(sprite_two_y_location)		; Load the y position of sprite 2 into the a register to be moved into the c register
-	ld c,a					; Load the y position into the c register for calculate_color_cell_pixel_address
-	call check_sprite_overlap
-	cp 1					; Will set the Z flag if A == 1, means overlapping 
-	jp z, _revert_move_right_2 		; a = 1 means overlapping now
-; 	call _finish_move_sprite_right 		; Call to actually draw the sprite in the updated part of the screen 
-	ld a, 1
-	ret
-
-_erase_old_sprite_right_2:
-	ld a, (sprite_two_y_location)		; Ensure that a has the y value of sprite 1
-	ld c, a 				; Reload the old y value into b for calculate_color_cell_pixel_address
-	ld a, (sprite_two_x_location)		; Load the new x location into the a register to sub 6 from 
-	sub a, 1	
-	ld b, a 				; Load the original y into the c register for calculate_color_cell_pixel_address
-	call clear_old_sprite_horizontal
-	jp _move_sprite_right_done		; Finish and return 
-
-; Input: A - Which sprite , IX, 
-_finish_move_sprite_right:
-	push af 
-	call calculate_color_cell_pixel_address	; Will set up HL 	
-; 	call calculate_pixel_byte_address	; To now support pixel movement 
-	ld c, 0					; Set to not overwrite
-; 	ld d, 6					; Assume sprite 2 to save cyclesaaaaaaaaaaa
-	ld e, 0
-	; Check player one or player two 
-	pop af
-	cp 1					; Check if sprite 1 or 2
-	jp z, _continue_finish_move_sprite_right ; Set d to 6 for sprite 2 
-	ld a, (sprite_one_width_from_left)
-	ld e, 1;a					; Set the width of the sprite to be 6
-_continue_finish_move_sprite_right:
-; 	halt 
-; 	halt
-	call draw_sprite			; Actually draw the sprite in the new location 
-	ret 					; return to original call 
-
-_revert_move_right:
-
-	ld a, (sprite_one_x_bit_offset)
-	cp 0 
-	jp nz, _revert_move_right_sub_offset
-	; Assume it will never be 0 
-	ld a, 4
-	jp _resume_rever_move_right
-_revert_move_right_sub_offset: 
-	dec a 
-_resume_rever_move_right:
-	ld (sprite_one_x_bit_offset), a 	; Save the old offset back to memory 
-	ld a, (sprite_one_x_location)		; Load the new faulty x position into the register a 
-	dec a					; Revert the change by decrementing the x position 
-	ld (sprite_one_x_location), a		; Save the position in memory
-	ld b, a
-; 	ld a, (sprite_one_y_location)
-; 	ld c, a
-; 	ld ix, shoe_sprite_data
-; 	ld a, 0 
-; 	call _finish_move_sprite_right	
-	ld a, 0					; Failure 
-	jp _move_sprite_right_done		; Finish 
-
-_revert_move_right_2:
-	ld a, (sprite_two_x_location)		; Load the new faulty x position into the regsiter a 
-	dec a                                   ; Revert the change by decrementing the x position 
-	ld (sprite_two_x_location), a		; Save the position to memory
-	ld b, a 
-	ld a, (sprite_two_y_location)
-	ld c, a
-	call _finish_move_sprite_right
-	ld a, 0
-	jp _move_sprite_right_done		; Finish 
-
-_erase_old_sprite_right_finish: 
-; 	call calculate_color_cell_pixel_address ; This will put the pixel address to draw to in the HL register
-; 	call calculate_pixel_byte_address		; To now support pixel movement 
-; 	ld c, 0
-; 	ld d, 1
-; 	ld ix, black_character_cell
-; 	call draw_sprite
-	ret
-_move_sprite_right_done_edge:
-	ld a, 0					; Output that no drawing is necessary
-
-_move_sprite_right_done:
-	ret
-
-
 
 ; ------------------------------------------------------------------------------
 ; Subroutine for drawing a sprite onto the screen 1 pixel above it's current 
