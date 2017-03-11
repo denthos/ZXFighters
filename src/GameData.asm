@@ -8,67 +8,67 @@ right_arrow:
 	defb '>'
 
 black_background:
-; 	defb 0,255
-; 	defb 0,255
-; 	defb 0,255
-; 	defb 0,255
-; 	defb 0,255
-; 	defb 0,255
-; 	defb 0,255
-; 	defb 0,255
-; 	defb 0,255
-; 	defb 0,255
-; 	defb 0,255
-; 	defb 0,255
-; 	defb 0,255
-; 	defb 0,255
-; 	defb 0,255
-; 	defb 0,255
-; 	defb 0,255
-; 	defb 0,255
-; 	defb 0,255
-; 	defb 0,255
-; 	defb 0,255
-; 	defb 0,255
-; 	defb 0,255
-; 	defb 0,255
-; 	defb 0,24
-; 	defb 0,255
-; 	defb 0,255
-; 	defb 0,255
-; 	defb 0,3
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,24
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,3
 
 
 
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,24
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,3
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,24
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,3
 
 black_sprite:
 	defb 255,255
@@ -79,10 +79,10 @@ black_sprite_attr_bytes:
 	defb 0,0
 
 black_character_cell:
-	defb 255,8
+	defb 0,8
 	defb 0,0
 black_character_cell_attr_bytes:
-	defb 255,1
+	defb 0,1
 	defb 0,0
 
 
@@ -850,17 +850,15 @@ sprite_sprite_attributes:
 
 
 
+
 ; For character overlap detection 
 sprite_one_offset_middle:
 	defb 1
 sprite_two_offset_middle:
-	defb 1 
-
-
+	defb 1
 
 sprite_one_width_from_left:
-	defb 0 ; Defined at run time 
-
+	defb 0 ; Defined at run time
 ; sprite_two_width_from_right: ; Not needed 
 
 ; sprite_one_offset_middle + sprite_two_offset_middle
@@ -868,9 +866,13 @@ sprite_one_width_from_left:
 pre_calculate_offset_middle:
 	defb 0
 
+; Number to pass into e for draw sprite 
+pre_calculate_offset_middle_for_e:
+	defb 0
+
 ; Character cell coordinates with bit offset for sprite 1
 sprite_one_x_location:
-	defb 4
+	defb 3
 sprite_one_y_location:
 	defb 10
 sprite_one_x_bit_offset:
@@ -891,7 +893,7 @@ sprite_two_y_bit_offset:
 
 ; Pixel coordinates 
 sprite_one_x_pixel_location:
-	defb 32 			; Character cell 4
+	defb 24 			; Character cell 4
 sprite_one_y_pixel_location:	
 	defb 80				; Character cell 10 
 

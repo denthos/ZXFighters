@@ -56,6 +56,8 @@ calculate_offset_middle:
 	ld b, a 				; Load b into a 
 	ld a, (sprite_two_offset_middle)	; Load offset2 into a 
 	add a, b 				; Add together into a 
+	inc a 					; For some reason not really sure lol 
+	ld (pre_calculate_offset_middle_for_e), a 
 	ld b, a 				; Load into b 
 	ld a, 6					; Load width of sprite 
 	sub a, b 				; Sub the width of sprite from offset sum 
