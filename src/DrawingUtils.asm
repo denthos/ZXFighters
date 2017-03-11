@@ -132,10 +132,19 @@ _draw_sprite_attributes_unpack:
 _draw_sprite_attributes_loop_start:
 	ld a,e
 	cp d
-	jp nc,_draw_sprite_attributes_write_skip
+	jp nc,_draw_sprite_attributes_write_byte_skip
+	bit 0,c                ; set zero flag if we are in overwrite mode
 	ld a,(ix+0)
+	jr z,_draw_sprite_attributes_write_byte
+	ld a,(hl)
+	and 0x38
 	ld (hl),a
-_draw_sprite_attributes_write_skip:
+	ld a,(ix+0)
+	and 0xc7
+	or (hl)
+_draw_sprite_attributes_write_byte:
+	ld (hl),a
+_draw_sprite_attributes_write_byte_skip:
 	inc hl
 	dec d
 	ld a,d
