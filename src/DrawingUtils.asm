@@ -80,101 +80,104 @@ fill_byte_fast:
 ; Outputs:
 ;
 ; ------------------------------------------------------------------------------
-	draw_sprite:
-		ld e,d
-		ld (draw_memory_store),hl
-		dec ix
-		dec ix
-	_draw_sprite_unpack:
-		inc ix
-		inc ix
-		ld a,(ix+1)
-		or a
-		jp z,_draw_sprite_attributes ; maybe need to store hl first
-		ld b,a
-	_draw_sprite_loop_start:
-		bit 0,c                ; set zero flag if we are in overwrite mode (c==0)
-		ld a,(ix+0)            ; load byte of sprite data
-		                       ; skip blend logic if we are in overwrite mode
-		jr z,_draw_sprite_write_byte
-		and (hl)               ; check for collisions between screen data and sprite
-		ret nz
-		ld a,(ix+0)            ; reload sprite data
-		or (hl)                ; blend with screen data
-	_draw_sprite_write_byte:
-		ld (hl),a              ; write pixel byte to screen
-		inc l                  ; move to next cell on right
-		dec d
-		ld a,d
-		or a
-		jp z,_draw_sprite_row_decrement
-	_draw_sprite_row_decrement_return:
-		djnz _draw_sprite_loop_start
-		jp _draw_sprite_unpack
+draw_sprite:
+	ld d,6
+	ld (draw_memory_store),hl
+	dec ix
+	dec ix
+_draw_sprite_unpack:
+	inc ix
+	inc ix
+	ld a,(ix+1)
+	or a
+	jp z,_draw_sprite_attributes ; maybe need to store hl first
+	ld b,a
+_draw_sprite_loop_start:
+	ld a,e
+	cp d
+	jp nc,_draw_sprite_write_byte_skip
+	bit 0,c                ; set zero flag if we are in overwrite mode (c==0)
+	ld a,(ix+0)            ; load byte of sprite data
+	                       ; skip blend logic if we are in overwrite mode
+	jr z,_draw_sprite_write_byte
+	or (hl)                ; blend with screen data
+_draw_sprite_write_byte:
+	ld (hl),a              ; write pixel byte to screen
+_draw_sprite_write_byte_skip:
+	inc l                  ; move to next cell on right
+	dec d
+	ld a,d
+	or a
+	jp z,_draw_sprite_row_decrement
+_draw_sprite_row_decrement_return:
+	djnz _draw_sprite_loop_start
+	jp _draw_sprite_unpack
 
-	_draw_sprite_attributes:
-		ld d,e
-		ld hl,(draw_memory_store)
-		ld a,h
-		srl a
-		srl a
-		srl a
-		or 88                  ; convert address of first pixel byte to
-		ld h,a                 ;   address of first attribute byte
-	_draw_sprite_attributes_unpack:
-		inc ix
-		inc ix
-		ld a,(ix+1)
-		or a
-		jp z,_draw_sprite_done
-		ld b,a
-	_draw_sprite_attributes_loop_start:
-		ld a,(ix+0)
-		ld (hl),a
-		inc hl
-		dec d
-		ld a,d
-		or a
-		jr z,_draw_sprite_attributes_row_decrement
-	_draw_sprite_attributes_row_decrement_return:
-		djnz _draw_sprite_attributes_loop_start
-		jp _draw_sprite_attributes_unpack
+_draw_sprite_attributes:
+	ld d,6
+	ld hl,(draw_memory_store)
+	ld a,h
+	srl a
+	srl a
+	srl a
+	or 88                  ; convert address of first pixel byte to
+	ld h,a                 ;   address of first attribute byte
+_draw_sprite_attributes_unpack:
+	inc ix
+	inc ix
+	ld a,(ix+1)
+	or a
+	jp z,_draw_sprite_done
+	ld b,a
+_draw_sprite_attributes_loop_start:
+	ld a,e
+	cp d
+	jp nc,_draw_sprite_attributes_write_skip
+	ld a,(ix+0)
+	ld (hl),a
+_draw_sprite_attributes_write_skip:
+	inc hl
+	dec d
+	ld a,d
+	or a
+	jr z,_draw_sprite_attributes_row_decrement
+_draw_sprite_attributes_row_decrement_return:
+	djnz _draw_sprite_attributes_loop_start
+	jp _draw_sprite_attributes_unpack
 
-	_draw_sprite_done:
-		ret
+_draw_sprite_done:
+	ret
 
-	_draw_sprite_row_decrement:
-		ld d,e                 ; restore column counter
-		ld a,l                 ; move to next pixel row down in cell <e> to left
-		sub e
-		ld l,a
-		inc h
-		ld a,h                 ; check if we overflowed into y6
-		and 7
-		jr nz,_draw_sprite_row_decrement_return
-		ld a,h
-		sub 8                  ; decrement y6
-		ld h,a
-		ld a,l
-		add a,32               ; increment y3
-		ld l,a
-		and 224                ; check if we overflowed into y0
-		jr nz,_draw_sprite_row_decrement_return
-		ld a,h
-		add a,8                ; increment y6
-		ld h,a
-		jp _draw_sprite_row_decrement_return
+_draw_sprite_row_decrement:
+	ld d,6                 ; restore column counter
+	ld a,l                 ; move to next pixel row down in cell <e> to left
+	sub 6
+	ld l,a
+	inc h
+	ld a,h                 ; check if we overflowed into y6
+	and 7
+	jr nz,_draw_sprite_row_decrement_return
+	ld a,h
+	sub 8                  ; decrement y6
+	ld h,a
+	ld a,l
+	add a,32               ; increment y3
+	ld l,a
+	and 224                ; check if we overflowed into y0
+	jr nz,_draw_sprite_row_decrement_return
+	ld a,h
+	add a,8                ; increment y6
+	ld h,a
+	jp _draw_sprite_row_decrement_return
 
-	_draw_sprite_attributes_row_decrement:
-		ld d,e
-		ld a,32
-		sub e
-		ld c,a
-		ld a,b
-		ld b,0
-		add hl,bc
-		ld b,a
-		jp _draw_sprite_attributes_row_decrement_return
+_draw_sprite_attributes_row_decrement:
+	ld d,6
+	ld c,26
+	ld a,b
+	ld b,0
+	add hl,bc
+	ld b,a
+	jp _draw_sprite_attributes_row_decrement_return
 
 ; ------------------------------------------------------------------------------
 ; Routine for drawing 1 character cell in 6 consecutive rows in the same column 
@@ -394,21 +397,20 @@ _erase_old_sprite_left_2:
 
 
 
-
-
-
 _finish_move_sprite_left:
 	push af 
 	call calculate_color_cell_pixel_address	; Will set up HL 	
 	; 	call calculate_pixel_byte_address	; To now support pixel movement 
 	ld c,0					; Set to not overwrite
-	ld d, 6					; Assume sprite 2 to save cycles
+; 	ld d,6					; Assume sprite 2 to save cycles
+	ld e, 0 
 	; Check player one or player two because of the offset and touching 
 	pop af
 	cp 1					; Check if sprite 1 or 2
 	jp z, _continue_finish_move_sprite_left ; Set d to 6 for sprite 2 
 	ld a, (sprite_one_width_from_left)
-	ld d, 6;a					; Set the width of the sprite to be 6
+; 	ld d, 6;a					; Set the width of the sprite to be 6
+	ld e, 0 
 _continue_finish_move_sprite_left:
 ; 	call halt_2				; Let it do stuff 
 ; 	call halt_2
@@ -650,7 +652,6 @@ _move_sprite_right_2:
 	ld a, 1
 	ret
 
-
 _erase_old_sprite_right_2:
 	ld a, (sprite_two_y_location)		; Ensure that a has the y value of sprite 1
 	ld c, a 				; Reload the old y value into b for calculate_color_cell_pixel_address
@@ -666,13 +667,14 @@ _finish_move_sprite_right:
 	call calculate_color_cell_pixel_address	; Will set up HL 	
 ; 	call calculate_pixel_byte_address	; To now support pixel movement 
 	ld c, 0					; Set to not overwrite
-	ld d, 6					; Assume sprite 2 to save cycles
+; 	ld d, 6					; Assume sprite 2 to save cycles
+	ld e, 0
 	; Check player one or player two 
 	pop af
 	cp 1					; Check if sprite 1 or 2
 	jp z, _continue_finish_move_sprite_right ; Set d to 6 for sprite 2 
 	ld a, (sprite_one_width_from_left)
-	ld d, 6;a					; Set the width of the sprite to be 6
+	ld e, 2;a					; Set the width of the sprite to be 6
 _continue_finish_move_sprite_right:
 	halt 
 	halt

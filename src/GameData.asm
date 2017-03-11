@@ -8,35 +8,67 @@ right_arrow:
 	defb '>'
 
 black_background:
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,24
-	defb 255,255
-	defb 255,255
-	defb 255,255
-	defb 255,3
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,24
+	defb 0,255
+	defb 0,255
+	defb 0,255
+	defb 0,3
+
+
+
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,24
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,255
+; 	defb 255,3
 
 black_sprite:
 	defb 255,255

@@ -21,7 +21,7 @@ start_main_game:
 	ld c, 80 
 	call calculate_pixel_byte_address
 	ld c,0
-	ld d,6
+	ld e, 0
 	ld ix,shoe_sprite_data
 	call draw_sprite
 
@@ -29,7 +29,8 @@ start_main_game:
 	ld c,10
 	call calculate_color_cell_pixel_address
 	ld c,0
-	ld d,6
+; 	ld d,6
+	ld e, 0 
 	ld ix,sprite_sprite_data
 	call draw_sprite
 
