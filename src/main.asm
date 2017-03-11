@@ -16,7 +16,7 @@ start:
   ld bc,0x100           ; 256
   ld h,a                ; a = 0xfe
   ld l,c                ; c = 0
-  ld (hl),0xfdfd
+  ld (hl),0xfd; fd cuz you want stuff 
   ld d,a                ; a = 0xfe
   ld e,b                ; b = 1
   ldir                  ; do the 256 byte copy
@@ -41,11 +41,9 @@ start:
   ; start character select loop
   ;   this will return once the player(s) push Enter to start the game
   call start_character_select
-  call draw_background
   call init_status_bar
   ;call start_stage_select   ; if we intend to have standalone stage selection, will go here
   call start_main_game
-
 
 
   include "src/ByteAddressUtils.asm"
@@ -55,4 +53,6 @@ start:
   include "src/MainGame.asm"
   include "src/PrintingUtils.asm"
   include "src/MathUtils.asm"
+  include "src/CharacterMove.asm"
   include "src/InterruptHandler.asm"
+
