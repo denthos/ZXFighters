@@ -1172,23 +1172,5 @@ pre_calculate_offset_middle:
 pre_calculate_offset_middle_for_e:
 	defb 0
 
-; Character cell coordinates with bit offset for sprite 1
-sprite_one_x_location:
-	defb 3
-sprite_one_y_location:
-	defb 10
-sprite_one_x_bit_offset:
-	defb 0
-sprite_one_y_bit_offset:
-	defb 0
-
-
-; Character cell coordinates with bit offset for sprite 2
-sprite_two_x_location:
-	defb 21
-sprite_two_y_location:
-	defb 10
 sprite_two_x_bit_offset:
-	defb 0
-sprite_two_y_bit_offset:
 	defb 0
