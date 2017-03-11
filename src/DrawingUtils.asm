@@ -80,101 +80,101 @@ fill_byte_fast:
 ; Outputs:
 ;
 ; ------------------------------------------------------------------------------
-draw_sprite:
-	ld e,d
-	ld (draw_memory_store),hl
-	dec ix
-	dec ix
-_draw_sprite_unpack:
-	inc ix
-	inc ix
-	ld a,(ix+1)
-	or a
-	jp z,_draw_sprite_attributes ; maybe need to store hl first
-	ld b,a
-_draw_sprite_loop_start:
-	bit 0,c                ; set zero flag if we are in overwrite mode (c==0)
-	ld a,(ix+0)            ; load byte of sprite data
-	                       ; skip blend logic if we are in overwrite mode
-	jr z,_draw_sprite_write_byte
-	and (hl)               ; check for collisions between screen data and sprite
-	ret nz
-	ld a,(ix+0)            ; reload sprite data
-	or (hl)                ; blend with screen data
-_draw_sprite_write_byte:
-	ld (hl),a              ; write pixel byte to screen
-	inc l                  ; move to next cell on right
-	dec d
-	ld a,d
-	or a
-	jp z,_draw_sprite_row_decrement
-_draw_sprite_row_decrement_return:
-	djnz _draw_sprite_loop_start
-	jp _draw_sprite_unpack
+	draw_sprite:
+		ld e,d
+		ld (draw_memory_store),hl
+		dec ix
+		dec ix
+	_draw_sprite_unpack:
+		inc ix
+		inc ix
+		ld a,(ix+1)
+		or a
+		jp z,_draw_sprite_attributes ; maybe need to store hl first
+		ld b,a
+	_draw_sprite_loop_start:
+		bit 0,c                ; set zero flag if we are in overwrite mode (c==0)
+		ld a,(ix+0)            ; load byte of sprite data
+		                       ; skip blend logic if we are in overwrite mode
+		jr z,_draw_sprite_write_byte
+		and (hl)               ; check for collisions between screen data and sprite
+		ret nz
+		ld a,(ix+0)            ; reload sprite data
+		or (hl)                ; blend with screen data
+	_draw_sprite_write_byte:
+		ld (hl),a              ; write pixel byte to screen
+		inc l                  ; move to next cell on right
+		dec d
+		ld a,d
+		or a
+		jp z,_draw_sprite_row_decrement
+	_draw_sprite_row_decrement_return:
+		djnz _draw_sprite_loop_start
+		jp _draw_sprite_unpack
 
-_draw_sprite_attributes:
-	ld d,e
-	ld hl,(draw_memory_store)
-	ld a,h
-	srl a
-	srl a
-	srl a
-	or 88                  ; convert address of first pixel byte to
-	ld h,a                 ;   address of first attribute byte
-_draw_sprite_attributes_unpack:
-	inc ix
-	inc ix
-	ld a,(ix+1)
-	or a
-	jp z,_draw_sprite_done
-	ld b,a
-_draw_sprite_attributes_loop_start:
-	ld a,(ix+0)
-	ld (hl),a
-	inc hl
-	dec d
-	ld a,d
-	or a
-	jr z,_draw_sprite_attributes_row_decrement
-_draw_sprite_attributes_row_decrement_return:
-	djnz _draw_sprite_attributes_loop_start
-	jp _draw_sprite_attributes_unpack
+	_draw_sprite_attributes:
+		ld d,e
+		ld hl,(draw_memory_store)
+		ld a,h
+		srl a
+		srl a
+		srl a
+		or 88                  ; convert address of first pixel byte to
+		ld h,a                 ;   address of first attribute byte
+	_draw_sprite_attributes_unpack:
+		inc ix
+		inc ix
+		ld a,(ix+1)
+		or a
+		jp z,_draw_sprite_done
+		ld b,a
+	_draw_sprite_attributes_loop_start:
+		ld a,(ix+0)
+		ld (hl),a
+		inc hl
+		dec d
+		ld a,d
+		or a
+		jr z,_draw_sprite_attributes_row_decrement
+	_draw_sprite_attributes_row_decrement_return:
+		djnz _draw_sprite_attributes_loop_start
+		jp _draw_sprite_attributes_unpack
 
-_draw_sprite_done:
-	ret
+	_draw_sprite_done:
+		ret
 
-_draw_sprite_row_decrement:
-	ld d,e                 ; restore column counter
-	ld a,l                 ; move to next pixel row down in cell <e> to left
-	sub e
-	ld l,a
-	inc h
-	ld a,h                 ; check if we overflowed into y6
-	and 7
-	jr nz,_draw_sprite_row_decrement_return
-	ld a,h
-	sub 8                  ; decrement y6
-	ld h,a
-	ld a,l
-	add a,32               ; increment y3
-	ld l,a
-	and 224                ; check if we overflowed into y0
-	jr nz,_draw_sprite_row_decrement_return
-	ld a,h
-	add a,8                ; increment y6
-	ld h,a
-	jp _draw_sprite_row_decrement_return
+	_draw_sprite_row_decrement:
+		ld d,e                 ; restore column counter
+		ld a,l                 ; move to next pixel row down in cell <e> to left
+		sub e
+		ld l,a
+		inc h
+		ld a,h                 ; check if we overflowed into y6
+		and 7
+		jr nz,_draw_sprite_row_decrement_return
+		ld a,h
+		sub 8                  ; decrement y6
+		ld h,a
+		ld a,l
+		add a,32               ; increment y3
+		ld l,a
+		and 224                ; check if we overflowed into y0
+		jr nz,_draw_sprite_row_decrement_return
+		ld a,h
+		add a,8                ; increment y6
+		ld h,a
+		jp _draw_sprite_row_decrement_return
 
-_draw_sprite_attributes_row_decrement:
-	ld d,e
-	ld a,32
-	sub e
-	ld c,a
-	ld a,b
-	ld b,0
-	add hl,bc
-	ld b,a
-	jp _draw_sprite_attributes_row_decrement_return
+	_draw_sprite_attributes_row_decrement:
+		ld d,e
+		ld a,32
+		sub e
+		ld c,a
+		ld a,b
+		ld b,0
+		add hl,bc
+		ld b,a
+		jp _draw_sprite_attributes_row_decrement_return
 
 ; ------------------------------------------------------------------------------
 ; Routine for drawing 1 character cell in 6 consecutive rows in the same column 
@@ -590,7 +590,14 @@ move_sprite_right:
 	ld a,(sprite_one_x_location)		; Else load sprite 1 x position into a register
 	inc a					; Else increment a to move to the right of the screen
 	ld (sprite_one_x_location),a		; Save the updated x position in memory
-	jp resume_move_sprite_right		; Absolute jump to skip normal case 
+	; Check if the new character_cell in the other thing 
+	call check_sprite_overlap
+	cp 1					; Will set the Z flag if A == 1
+	jp nz, resume_move_sprite_right;	; Absolute jump to skip normal case 	; a = 1 means overlapping now
+	call _revert_move_right 
+	ld a,2 
+	out (254), a
+	jp _move_sprite_right_done_edge	
 move_right_bit_offset_normal:
 	add a, 1 				; CAn be 0, 2, 4
 	ld (sprite_one_x_bit_offset), a 	; Save the new bit offset into memory 
@@ -608,9 +615,9 @@ resume_move_sprite_right:
 ; 	ld b,a					; Load the updated x position into b register for calculate_color_cell_pixel_address
 	ld a,(sprite_one_y_location)		; Load the sprite 1 y location into the a register to be loaded into the c register
 	ld c,a					; Load the y position into the c register for calculate_color_cell_pixel_address
-	call check_sprite_overlap
-	cp 1					; Will set the Z flag if A == 1
-	jp z, _revert_move_right 		; a = 1 means overlapping now
+; 	call check_sprite_overlap
+; 	cp 1					; Will set the Z flag if A == 1
+; 	jp z, _revert_move_right 		; a = 1 means overlapping now
 ; 	call _finish_move_sprite_right		; Absoulte jump to actually draw the sprite in the new position
 	
 	ld a, (sprite_one_x_bit_offset)		; 
@@ -658,7 +665,7 @@ _finish_move_sprite_right:
 	push af 
 	call calculate_color_cell_pixel_address	; Will set up HL 	
 ; 	call calculate_pixel_byte_address	; To now support pixel movement 
-	ld c,0					; Set to not overwrite
+	ld c, 0					; Set to not overwrite
 	ld d, 6					; Assume sprite 2 to save cycles
 	; Check player one or player two 
 	pop af
@@ -667,8 +674,6 @@ _finish_move_sprite_right:
 	ld a, (sprite_one_width_from_left)
 	ld d, 6;a					; Set the width of the sprite to be 6
 _continue_finish_move_sprite_right:
-; 	call halt_2				; Let it do stuff 
-; 	call halt_2
 	halt 
 	halt
 	call draw_sprite			; Actually draw the sprite in the new location 
@@ -676,17 +681,26 @@ _continue_finish_move_sprite_right:
 
 _revert_move_right:
 
-; 	ld a, (sprite_one_x_bit_offset)
-
-
+	ld a, (sprite_one_x_bit_offset)
+	cp 0 
+	jp nz, _revert_move_right_sub_offset
+	; Assume it will never be 0 
+	ld a, 4
+	jp _resume_rever_move_right
+_revert_move_right_sub_offset: 
+	dec a 
+_resume_rever_move_right:
+	ld (sprite_one_x_bit_offset), a 	; Save the old offset back to memory 
 	ld a, (sprite_one_x_location)		; Load the new faulty x position into the register a 
 	dec a					; Revert the change by decrementing the x position 
 	ld (sprite_one_x_location), a		; Save the position in memory
 	ld b, a
-	ld a, (sprite_one_y_location)
-	ld c, a
-	call _finish_move_sprite_right
-	ld a, 0
+; 	ld a, (sprite_one_y_location)
+; 	ld c, a
+; 	ld ix, shoe_sprite_data
+; 	ld a, 0 
+; 	call _finish_move_sprite_right	
+	ld a, 0					; Failure 
 	jp _move_sprite_right_done		; Finish 
 
 _revert_move_right_2:
