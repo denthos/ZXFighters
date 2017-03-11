@@ -40,6 +40,7 @@ start:
   ; start character select loop
   ;   this will return once the player(s) push Enter to start the game
   call start_character_select
+  call init_status_bar
   ;call start_stage_select   ; if we intend to have standalone stage selection, will go here
 
   ; INITIALIZE STARTING GAME DATA
@@ -54,6 +55,7 @@ start:
   include "src/GameData.asm"
   include "src/MainGame.asm"
   include "src/PrintingUtils.asm"
+  include "src/MathUtils.asm"
   include "src/CharacterMove.asm"
   include "src/InterruptHandler.asm"
 
