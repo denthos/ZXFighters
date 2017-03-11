@@ -21,7 +21,6 @@ start:
   ld e,b                ; b = 1
   ldir                  ; do the 256 byte copy
   im 2                  ; set interrupt mode to 2
-  ei
 
   ;;; DRAW TITLE SCREEN AND START CHARACTER SELECT
 
@@ -42,7 +41,11 @@ start:
   ;   this will return once the player(s) push Enter to start the game
   call start_character_select
   ;call start_stage_select   ; if we intend to have standalone stage selection, will go here
-  call start_main_game
+
+  ; INITIALIZE STARTING GAME DATA
+
+  ei
+  halt
 
 
   include "src/ByteAddressUtils.asm"

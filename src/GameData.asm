@@ -183,10 +183,12 @@ title_screen_data:
 
 ; Player data for storing runtime game information
 player_1:
-player_1_sprite_x_location:
+player_1_current_location:
 	defb 4
-player_1_sprite_y_location:
-	defb 10
+player_1_last_location:
+	defb 4
+player_1_current_sprite:
+	defw 0
 player_1_hit_stun:
 	defb 0
 player_1_attack_stun:
@@ -250,10 +252,12 @@ player_1_attack_3_execute:
 	defw 0
 
 player_2:
-player_2_sprite_x_location:
+player_2_current_location:
 	defb 21
-player_2_sprite_y_location:
-	defb 10
+player_2_last_location:
+	defb 21
+player_2_current_sprite:
+	defw 0
 player_2_hit_stun:
 	defb 0
 player_2_attack_stun:

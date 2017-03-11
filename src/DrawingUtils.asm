@@ -74,17 +74,16 @@ fill_byte_fast:
 ;
 ; Inputs:
 ;   C  = 0 for overwrite mode, 1 for blending mode
-;   E  = Number of columns to skip from right side
 ;   HL = Address of vram to write to
 ;   IX = Address of sprite pixel data
 ; Outputs:
 ;
 ; ------------------------------------------------------------------------------
 draw_sprite:
-	ld d,6
+	ld e,(ix+0)            ; get the number of columns to cut off at rightside of sprite
+	ld d,6                 ; number of columns (not variable)
 	ld (draw_memory_store),hl
-	dec ix
-	dec ix
+	dec ix                 ; decrement ix so double increment at start of unpack gets us to the data
 _draw_sprite_unpack:
 	inc ix
 	inc ix
@@ -187,6 +186,36 @@ _draw_sprite_attributes_row_decrement:
 	add hl,bc
 	ld b,a
 	jp _draw_sprite_attributes_row_decrement_return
+
+
+; ------------------------------------------------------------------------------
+; Subroutine for clearing a sprite sized block of the screen
+;
+; Inputs:
+;   HL = Address of vram to start clearing
+; Outputs:
+;
+; ------------------------------------------------------------------------------
+clear_sprite:
+	ld b,48
+_clear_sprite_loop:
+	ld a,0
+	ld (hl),a
+	inc l
+	ld (hl),a
+	inc l
+	ld (hl),a
+	inc l
+	ld (hl),a
+	inc l
+	ld (hl),a
+	inc l
+	ld (hl),a
+	ld a,l
+	sub 5
+	ld l,a
+	inc h
+	djnz _clear_sprite_loop
 
 
 ; ------------------------------------------------------------------------------
