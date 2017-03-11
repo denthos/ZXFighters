@@ -287,7 +287,8 @@ _finish_clear_old_sprite_vertical:
 draw_black_character_cell:
 	call calculate_color_cell_pixel_address ; This will put the pixel address to draw to in the HL register
 	ld c, 0
-	ld d, 1
+; 	ld d, 1
+	ld e, 5
 	ld ix, black_character_cell
 	call draw_sprite
 	ret
@@ -601,14 +602,14 @@ move_sprite_right:
 	out (254), a
 	jp _move_sprite_right_done_edge	
 move_right_bit_offset_normal:
-	add a, 1 				; CAn be 0, 2, 4
+	add a, 2 				; CAn be 0, 2, 4
 	ld (sprite_one_x_bit_offset), a 	; Save the new bit offset into memory 
-	cp 1
-	jp z, _move_sprite_right_done_edge
-	cp 3
-	jp z, _move_sprite_right_done_edge
-	cp 5
-	jp z, _move_sprite_right_done_edge
+; 	cp 1
+; 	jp z, _move_sprite_right_done_edge
+; 	cp 3
+; 	jp z, _move_sprite_right_done_edge
+; 	cp 5
+; 	jp z, _move_sprite_right_done_edge
 resume_move_sprite_right:
 	ld a, (sprite_one_x_location)		; For now always increment since we're doing single pixel movement
 	ld b,a
@@ -676,8 +677,8 @@ _finish_move_sprite_right:
 	ld a, (sprite_one_width_from_left)
 	ld e, 2;a					; Set the width of the sprite to be 6
 _continue_finish_move_sprite_right:
-	halt 
-	halt
+; 	halt 
+; 	halt
 	call draw_sprite			; Actually draw the sprite in the new location 
 	ret 					; return to original call 
 
