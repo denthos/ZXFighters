@@ -187,6 +187,8 @@ player_1_current_location:
 	defb 4
 player_1_last_location:
 	defb 4
+player_1_current_bit_offset:
+	defb 0
 player_1_current_sprite:
 	defw 0
 player_1_damage_taken:
@@ -258,6 +260,8 @@ player_2_current_location:
 	defb 21
 player_2_last_location:
 	defb 21
+player_2_current_bit_offset:
+	defb 0
 player_2_current_sprite:
 	defw 0
 player_2_damage_taken:
