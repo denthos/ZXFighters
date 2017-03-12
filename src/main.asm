@@ -46,6 +46,13 @@ main_start:
 
   ;;; INITIALIZE STARTING GAME DATA
   
+  ; initialize frame counter
+  ld a,0
+  ld hl,23672
+  ld (hl),a
+  inc hl
+  ld (hl),a
+
   ; initialize player 1 data
   ld a,0
   ld (player_1_damage_taken),a
