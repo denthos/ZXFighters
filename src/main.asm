@@ -90,4 +90,5 @@ main_loop:
   include "src/MathUtils.asm"
   include "src/CharacterMove.asm"
   include "src/CharacterAttack.asm"
+  include "src/InputUtils.asm"
 

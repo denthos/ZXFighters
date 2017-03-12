@@ -16,7 +16,7 @@
 ; ------------------------------------------------------------------------------
 ; Character select should use this 
 
-read_player_one_input: 
+read_player_1_input: 
 read_input_check_a:
       ld bc, 65022                        ; read keys G,F,D,S,A
       in a, (c) 
@@ -64,7 +64,7 @@ read_input_check_e:
       ret 
 
 ;Player two check 
-read_player_two_input: 
+read_player_2_input: 
 read_input_check_j:
       ld bc, 49150                              ; H, J, K, L, Enter
       in a, (c)

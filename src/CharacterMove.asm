@@ -11,7 +11,8 @@ update_check_a:
       cp 1 
       jp nz, no_movement_player_1 
       ld a, 0
-      call move_sprite_left
+
+      call move_sprite_right
       ;Check result to know what the sprite is 
       cp 0 
       jp nz, update_movement_check_end
@@ -23,7 +24,7 @@ update_check_d_a_pressed:
       cp 1
       jp z, no_movement_player_1                ; Will return 
       ld a, 0 
-      call move_sprite_right 
+      call move_sprite_left
       cp 0                                      ; Check success or failure 
       jp nz, update_movement_check_end          ; Will end if success
       jp no_movement_player_1

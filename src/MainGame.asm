@@ -149,6 +149,11 @@ _player_1_attacking_done:
 	jp _player_1_done
 
 _player_1_not_attacking:
+
+	; read player input
+	call read_player_1_input
+
+
 	; check if player is in attack stun
 	ld a,(player_1_attack_stun)
 	or a
@@ -160,7 +165,7 @@ _player_1_not_attacking:
 
 _player_1_no_attack_stun:
 	; process attack commands
-	; TODO
+	call update_player_1_attacks
 	; check if an attack command was issued
 	ld bc,(player_1_current_attack)
 	ld a,b
@@ -180,7 +185,7 @@ _player_1_movement_logic:
 
 _player_1_no_movement_stun:
 	; process movement commands
-	; TODO
+	call update_player_1_movements
 
 
 _player_1_done:
@@ -273,6 +278,11 @@ _player_2_attacking_done:
 	jp _player_2_done
 
 _player_2_not_attacking:
+
+	; read player input
+	call read_player_2_input
+
+
 	; check if player is in attack stun
 	ld a,(player_2_attack_stun)
 	or a
@@ -284,7 +294,7 @@ _player_2_not_attacking:
 
 _player_2_no_attack_stun:
 	; process attack commands
-	; TODO
+	call update_player_2_attacks
 	; check if an attack command was issued
 	ld bc,(player_2_current_attack)
 	ld a,b
@@ -304,7 +314,7 @@ _player_2_movement_logic:
 
 _player_2_no_movement_stun:
 	; process movement commands
-	; TODO
+	call update_player_2_movements
 
 
 _player_2_done:

@@ -9,12 +9,14 @@ update_player_check_w:
 	ld a, (w_down)
 	cp 1
 	jp nz, update_player_check_e
+	ld a, 2
 	ld (player_1_current_attack), a
 	ret 
 update_player_check_e:
 	ld a, (e_down)
 	cp 1
 	jp nz, update_player_attack_end
+	ld a, 3
 	ld (player_1_current_attack), a
 	ret 
 
@@ -31,12 +33,14 @@ update_player_check_i:
 	ld a, (i_down)
 	cp 1
 	jp nz, update_player_check_o
+	ld a, 2
 	ld (player_2_current_attack), a
 	ret 
 update_player_check_o:
 	ld a, (o_down)
 	cp 1
 	jp nz, update_player_attack_end
+	ld a, 3
 	ld (player_2_current_attack), a
 	ret 
 
