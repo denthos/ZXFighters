@@ -212,6 +212,10 @@ player_1_sprite_idle_1:
 	defw 0 ; sprite for standing still animation
 player_1_sprite_idle_2:
 	defw 0 ; second sprite for standing still animation
+
+player_1_current_idle_sprite:
+	defb 0 ; 0 means not idle, 1 means idle 1 2 means idle 2 
+
 player_1_sprite_walk_forward_1:
 	defw 0 ; sprite for walking first 4 bits
 player_1_sprite_walk_forward_2:
@@ -296,6 +300,10 @@ player_2_sprite_idle_1:
 	defw 0 ; sprite for standing still animation
 player_2_sprite_idle_2:
 	defw 0 ; second sprite for standing still animation
+
+player_2_current_idle_sprite:
+	defb 0 ; 0 means not idle, 1 means idle_1, 2 means idle_2 
+
 player_2_sprite_walk_forward_1:
 	defw 0 ; sprite for walking first 4 bits
 player_2_sprite_walk_forward_2:
@@ -996,15 +1004,27 @@ selected_character_max:
 	defb 1
 a_down:
 	defb 0
+s_down:
+	defb 0
 d_down:
 	defb 0
-j_down:
-	defb 0
-l_down:
+q_down:
 	defb 0
 w_down:
 	defb 0
-s_down:
+e_down:
+	defb 0
+j_down:
+	defb 0
+k_down:
+	defb 0
+l_down:
+	defb 0
+u_down:
+	defb 0
+i_down:
+	defb 0
+o_down:
 	defb 0
 
 ; stores the attribute bytes for the layout of the status bar, may need to
