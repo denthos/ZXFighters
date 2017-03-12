@@ -23,18 +23,21 @@ read_input_check_a:
       ld (character_select_input_store),a ; store input for later
       and 0x1 
       jp nz, read_input_check_d
-      ld (a_down), 1                      ; Note that a was pressed 
+      ld a, 1 
+      ld (a_down), a                      ; Note that a was pressed 
 
  read_input_check_d:
       ld a, (character_select_input_store)
       and 0x4 
       jp nz, read_input_check_s 
-      ld (d_down), 1
+      ld a, 1 
+      ld (d_down), a
 read_input_check_s:
       ld a, (character_select_input_store)
       and 0x2 
       jp nz, read_input_check_q 
-      ld (s_down), 1
+      ld a, 1 
+      ld (s_down), a
 
 read_input_check_q:
       ld bc, 64510                              ; T, R, E, W, Q
@@ -42,19 +45,22 @@ read_input_check_q:
       ld (character_select_input_store), a 
       and 0x1 
       jp nz, read_input_check_w 
-      ld (q_down), 1
+      ld a, 1 
+      ld (q_down), a
 
 read_input_check_w: 
       ld a, (character_select_input_store)
       and 0x2 
       jp nz, read_input_check_e 
-      ld (w_down), 1
+      ld a, 1 
+      ld (w_down), a
 
 read_input_check_e: 
       ld a, (character_select_input_store)
       and 0x4 
       jp nz, read_input_end  
-      ld (e_down), 1
+      ld a, 1 
+      ld (e_down), a
       ret 
 
 ;Player two check 
@@ -65,19 +71,22 @@ read_input_check_j:
       ld (character_select_input_store), a 
       and 0x8 
       jp nz, read_input_check_l
-      ld (j_down), 1
+      ld a, 1 
+      ld (j_down), a
 
 read_input_check_l:
       ld a, (character_select_input_store)
       and 0x2 
       jp nz, read_input_check_k 
-      ld (l_down), 1
+      ld a, 1 
+      ld (l_down), a
 
 read_input_check_k:
       ld a, (character_select_input_store)
       and 0x4 
       jp nz, read_input_check_u 
-      ld (k_down), 1
+      ld a, 1 
+      ld (k_down), a
 
 read_input_check_u:
       ld bc, 57342                              ; Y, U, I, O, P
@@ -85,18 +94,21 @@ read_input_check_u:
       ld (character_select_input_store), a 
       and 0x8 
       jp nz, read_input_check_i
-      ld (u_down), 1
+      ld a, 1 
+      ld (u_down), a
 
 read_input_check_i:
       ld a, (character_select_input_store)
       and 0x4 
       jp nz, read_input_check_o 
-      ld (i_down), 1
+      ld a, 1 
+      ld (i_down), a
 
 read_input_check_o:
       ld a, (character_select_input_store)
       and 0x2 
       jp nz, read_input_end 
-      ld (o_down), 1
+      ld a, 1 
+      ld (o_down), a
 read_input_end:
       ret 
