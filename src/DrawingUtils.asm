@@ -711,63 +711,63 @@ move_sprite_left:
 	cp 0
 	jp nz, _move_sprite_left_2     		; Check if the first or second sprite
 
-	ld a,(sprite_one_x_location)  		; Load first sprite x location
+	ld a,(player_1_current_location)  	; Load first sprite x location
 	cp 0			      		; Is sprite at left edge?
 	jp z, _move_sprite_left_done_edge  	; If it is, then skip to the end 
 	;for smoother movement 
-	ld a, (sprite_one_x_bit_offset)		; Load the bit offsett to check to see where we are in the character cell 
+	ld a, (player_1_current_bit_offset)	; Load the bit offsett to check to see where we are in the character cell 
 	cp 0; 6					; Check if the bit offset is = 0 (after 0 moves to the left character cell)
-	jp nz,move_left_bit_offset_normal	; If equal to 7 then increment sprite_one_x_location 
+	jp nz,move_left_bit_offset_normal	; If equal to 7 then increment player_1_current_bit_offset 
 	xor a 					; Clear the a register 
 	ld a, 4 
-	ld (sprite_one_x_bit_offset), a 	; Save 4 as the bit offset 
+	ld (player_1_current_bit_offset), a 	; Save 4 as the bit offset 
 	jp resume_move_sprite_left 		; Absolute jump to skip normal case 
 move_left_bit_offset_normal:
 	dec a	 				; CAn be 0, 2, 4
 	dec a
-	ld (sprite_one_x_bit_offset), a 	; Save the new bit offset into memory 
+	ld (player_1_current_bit_offset), a 	; Save the new bit offset into memory 
 
 resume_move_sprite_left:
-	ld a, (sprite_one_x_location)		; For now always increment since we're doing single pixel movement
+	ld a, (player_1_current_location)		; For now always increment since we're doing single pixel movement
 	dec a					; Else increment a to move to the right of the screen
-	ld (sprite_one_x_location),a		; Save the updated x position in memory
+	ld (player_1_current_location),a		; Save the updated x position in memory
 	ld b,a
-	ld a,(sprite_one_y_location) 		; Load sprite one y location into a, in order to load c
+	ld a,(8); 10  				; Load sprite one y location into a, in order to load c
 	ld c,a			      		; Load c with the y location of sprite 1 from a 
-	ld a, (sprite_one_x_bit_offset)		; 
+	ld a, (player_1_current_bit_offset)		; 
 	inc a 					; a will be 1, 3, 5, 7---- 0 is for failure 
 	ret 
 
 _move_sprite_left_2: 
-	ld a,(sprite_two_x_location)  		; Load second sprite x location 
+	ld a,(player_2_current_location)  		; Load second sprite x location 
 	cp 0                          		; Is sprite at left edge?
 	jp z, _move_sprite_left_done_edge  	; If so, then skip to end and return 
 	;for smoother movement 
-	ld a, (sprite_two_x_bit_offset)		; Load the bit offsett to check to see where we are in the character cell 
+	ld a, (player_2_current_bit_offset)		; Load the bit offsett to check to see where we are in the character cell 
 	cp 0; 6					; Check if the bit offset is = 0 (after 0 moves to the left character cell)
-	jp nz,move_left_bit_offset_normal_2	; If equal to 7 then increment sprite_one_x_location 
+	jp nz,move_left_bit_offset_normal_2	; If equal to 7 then increment player_1_current_bit_offset 
 	xor a 					; Clear the a register 
 	ld a, 4 
-	ld (sprite_two_x_bit_offset), a 	; Save 4 as the bit offset 
+	ld (player_2_current_bit_offset), a 	; Save 4 as the bit offset 
 	jp resume_move_sprite_left_2 		; Absolute jump to skip normal case 
 move_left_bit_offset_normal_2:
 	dec a	 				; CAn be 0, 2, 4
 	dec a
-	ld (sprite_two_x_bit_offset), a 	; Save the new bit offset into memory 
+	ld (player_2_current_bit_offset), a 	; Save the new bit offset into memory 
 
 resume_move_sprite_left_2:
-	ld a, (sprite_two_x_location)		; For now always increment since we're doing single pixel movement
+	ld a, (player_2_current_location)		; For now always increment since we're doing single pixel movement
 	dec a					; Else increment a to move to the right of the screen
-	ld (sprite_two_x_location),a		; Save the updated x position in memory
+	ld (player_2_current_location),a		; Save the updated x position in memory
 	ld b,a
-	ld a,(sprite_two_y_location) 		; Load sprite one y location into a, in order to load c
+	ld a,(8) 				; Load sprite one y location into a, in order to load c
 	ld c,a			      		; Load c with the y location of sprite 1 from a 
 
 	call check_sprite_overlap
 	cp 1					; Will set the Z flag if A == 1
 	jp z, _revert_move_left_2 		; a = 1 means overlapping now
 
-	ld a, (sprite_two_x_bit_offset)		; 
+	ld a, (player_2_current_bit_offset)		; 
 	inc a 					; a will be 1, 3, 5 ---- 0 is for failure 
 	ret 
 
@@ -777,11 +777,10 @@ _finish_move_sprite_left:
 	push af 
 	call calculate_color_cell_pixel_address	; Will set up HL 	
 	ld c,0					; Set to not overwrite
-	ld e, 0 
 	; Check player one or player two because of the offset and touching 
 	pop af
-	cp 1					; Check if sprite 1 or 2
-	jp z, _continue_finish_move_sprite_left ; Set d to 6 for sprite 2 
+; 	cp 1					; Check if sprite 1 or 2
+; 	jp z, _continue_finish_move_sprite_left ; Set d to 6 for sprite 2 
 ; 	ld a, (pre_calculate_offset_middle_for_e)
 ; 	dec a 
 ; 	ld e, 0
@@ -791,14 +790,14 @@ _continue_finish_move_sprite_left:
 
 ; May never need this 
 ; _revert_move_left:
-; 	ld a, (sprite_one_x_location)		; Load the new faulty x position into the register a 
+; 	ld a, (player_1_current_bit_offset)		; Load the new faulty x position into the register a 
 ; 	inc a					; Revert the change by decrementing the x position 
-; 	ld (sprite_one_x_location), a		; Save the position in memory
+; 	ld (player_1_current_bit_offset), a		; Save the position in memory
 ; 	ld a, 0
 ; 	jp _move_sprite_left_done		; Finish 
 
 _revert_move_left_2:
-	ld a, (sprite_two_x_bit_offset)		; 
+	ld a, (player_2_current_bit_offset)		; 
 	cp 4 					; 
 	jp nz, _revert_move_left_sub_offset_2	; 
 	xor a 					; Now onto the next thing  
@@ -806,10 +805,10 @@ _revert_move_left_2:
 _revert_move_left_sub_offset_2: 
 	add a, 2
 _resume_revert_move_left_2:
-	ld (sprite_two_x_bit_offset), a 	; Save the old offset back to memory 
-	ld a, (sprite_two_x_location)		; Load the new faulty x position into the register a 
+	ld (player_2_current_bit_offset), a 	; Save the old offset back to memory 
+	ld a, (player_2_current_location)		; Load the new faulty x position into the register a 
 	inc a					; Revert the change by decrementing the x position 
-	ld (sprite_two_x_location), a		; Save the position in memory
+	ld (player_2_current_location), a		; Save the position in memory
 	ld a, 0					; Failure 
 	jp _move_sprite_left_done		; Finish 
 
@@ -838,59 +837,58 @@ _move_sprite_left_done:				; Finish
 move_sprite_right:
 	cp 0					; Check if sprite 1 or 2 move
 	jp nz, _move_sprite_right_2		; If 1 then absolute jump to sprite 2 movement right code
-	ld a,(sprite_one_x_location)		; Else load sprite 1 x position into a register
+	ld a,(player_1_current_location)		; Else load sprite 1 x position into a register
 	cp 26					; Check if the sprite is already as far right as possible 
 	jp z,_move_sprite_right_done_edge	; If so then skip to the end and return 
 	;for smoother movement 
-	ld a, (sprite_one_x_bit_offset)		; Load the bit offsett to check to see where we are in the character cell 
+	ld a, (player_1_current_bit_offset)		; Load the bit offsett to check to see where we are in the character cell 
 	cp 4; 6					; Check if the bit offset is = 4 (after 4 moves to next character cell)
-	jp nz,move_right_bit_offset_normal	; If equal to 7 then increment sprite_one_x_location 
+	jp nz, move_right_bit_offset_normal	; If equal to 7 then increment player_1_current_bit_offset 
 	xor a 					; Clear the a register 
-	ld (sprite_one_x_bit_offset), a 	; Save 0 as the bit offset 
+	ld (player_1_current_bit_offset), a 	; Save 0 as the bit offset 
 	jp resume_move_sprite_right
 move_right_bit_offset_normal:
 	add a, 2 				; CAn be 0, 2, 4
-	ld (sprite_one_x_bit_offset), a 	; Save the new bit offset into memory 
+	ld (player_1_current_bit_offset), a 	; Save the new bit offset into memory 
 resume_move_sprite_right:
-	ld a, (sprite_one_x_location)		; For now always increment since we're doing single pixel movement
+	ld a, (player_1_current_location)		; For now always increment since we're doing single pixel movement
 	inc a					; Else increment a to move to the right of the screen
-	ld (sprite_one_x_location),a		; Save the updated x position in memory
+	ld (player_1_current_location),a		; Save the updated x position in memory
 	ld b,a
-	ld a,(sprite_one_y_location)		; Load the sprite 1 y location into the a register to be loaded into the c register
+	ld a,(8)				; Load the sprite 1 y location into the a register to be loaded into the c register
 	ld c,a					; Load the y position into the c register for calculate_color_cell_pixel_address
 	call check_sprite_overlap
 	cp 1					; Will set the Z flag if A == 1
 	jp z, _revert_move_right 		; a = 1 means overlapping now, will auto end and fail the method 
-	ld a, (sprite_one_x_bit_offset)		; 
+	ld a, (player_1_current_bit_offset)		; 
 	inc a 					; a will be 1, 3, 5, 7---- 0 is for failure 
 	ret  
 	
 _move_sprite_right_2:
-	ld a,(sprite_two_x_location)		; Load the old x position of sprite 2
+	ld a,(player_2_current_location)		; Load the old x position of sprite 2
 	cp 26					; Check if already to the farthest right of the screen 
 	jp z,_move_sprite_right_done_edge	; If so then skip to the end and return 
-	ld a, (sprite_two_x_bit_offset)		; Load the bit offsett to check to see where we are in the character cell 
+	ld a, (player_2_current_bit_offset)		; Load the bit offsett to check to see where we are in the character cell 
 	cp 4; 6					; Check if the bit offset is = 4 (after 4 moves to next character cell)
-	jp nz, move_right_bit_offset_normal_2	; If equal to 7 then increment sprite_one_x_location 
+	jp nz, move_right_bit_offset_normal_2	; If equal to 7 then increment player_1_current_bit_offset 
 	xor a 					; Clear the a register 
-	ld (sprite_two_x_bit_offset), a 	; Save 0 as the bit offset 
+	ld (player_2_current_bit_offset), a 	; Save 0 as the bit offset 
 	jp resume_move_sprite_right_2
 move_right_bit_offset_normal_2:
 	add a, 2 				; CAn be 0, 2, 4
-	ld (sprite_two_x_bit_offset), a 	; Save the new bit offset into memory 
+	ld (player_2_current_bit_offset), a 	; Save the new bit offset into memory 
 resume_move_sprite_right_2:
-	ld a, (sprite_two_x_location)		; For now always increment since we're doing single pixel movement
+	ld a, (player_2_current_location)		; For now always increment since we're doing single pixel movement
 	inc a					; Else increment a to move to the right of the screen
-	ld (sprite_two_x_location),a		; Save the updated x position in memory
+	ld (player_2_current_location),a		; Save the updated x position in memory
 	ld b,a
-	ld a,(sprite_two_y_location)		; Load the sprite 1 y location into the a register to be loaded into the c register
+	ld a,(8)					; Load the sprite 1 y location into the a register to be loaded into the c register
 	ld c,a					; Load the y position into the c register for calculate_color_cell_pixel_address
-
 	; we may never need this because second sprite moving right should never be reverted 
 ; 	call check_sprite_overlap
 ; 	cp 1					; Will set the Z flag if A == 1
 ; 	jp z, _revert_move_right_2 		; a = 1 means overlapping now, will auto end and fail the method 
-	ld a, (sprite_two_x_bit_offset)		; 
+	ld a, (player_2_current_bit_offset)		; 
 	inc a 					; a will be 1, 3, 5, 7---- 0 is for failure 
 	ret
 
@@ -900,20 +898,14 @@ _finish_move_sprite_right:
 	call calculate_color_cell_pixel_address	; Will set up HL 
 
 	ld c, 0 ; Blend always 
-	ld e, 0
 	; Check player one or player two 
 	pop af
-	cp 1					; Check if sprite 1 or 2
-	jp z, _continue_finish_move_sprite_right ; Set d to 6 for sprite 2 
-	ld a, (pre_calculate_offset_middle_for_e)
-	dec a
-	ld e, a					; Set the width of the sprite to be 
 _continue_finish_move_sprite_right:
 	call draw_sprite			; Actually draw the sprite in the new location 
 	ret 					; return to original call 
 
 _revert_move_right:
-	ld a, (sprite_one_x_bit_offset)		; 
+	ld a, (player_1_current_bit_offset)		; 
 	cp 0 					; 
 	jp nz, _revert_move_right_sub_offset	; 
 	xor a 
@@ -923,15 +915,16 @@ _revert_move_right_sub_offset:
 	dec a 
 	dec a 
 _resume_revert_move_right:
-	ld (sprite_one_x_bit_offset), a 	; Save the old offset back to memory 
-	ld a, (sprite_one_x_location)		; Load the new faulty x position into the register a 
+	ld (player_1_current_bit_offset), a 	; Save the old offset back to memory 
+	ld a, (player_1_current_location)		; Load the new faulty x position into the register a 
 	dec a					; Revert the change by decrementing the x position 
-	ld (sprite_one_x_location), a		; Save the position in memory
+	ld (player_1_current_location), a		; Save the position in memory
 	ld a, 0					; Failure 
 	jp _move_sprite_right_done		; Finish 
 
+; May never need this again 
 ; _revert_move_right_2:
-; 	ld a, (sprite_two_x_bit_offset)		; 
+; 	ld a, (player_2_current_bit_offset)		; 
 ; 	cp 0 					; 
 ; 	jp nz, _revert_move_right_sub_offset_2	; 
 ; 	xor a 
@@ -941,10 +934,10 @@ _resume_revert_move_right:
 ; 	dec a 
 ; 	dec a 
 ; _resume_revert_move_right_2:
-; 	ld (sprite_two_x_bit_offset), a 	; Save the old offset back to memory 
-; 	ld a, (sprite_two_x_location)		; Load the new faulty x position into the register a 
+; 	ld (player_2_current_bit_offset), a 	; Save the old offset back to memory 
+; 	ld a, (player_2_current_location)		; Load the new faulty x position into the register a 
 ; 	dec a					; Revert the change by decrementing the x position 
-; 	ld (sprite_two_x_location), a		; Save the position in memory
+; 	ld (player_2_current_location), a		; Save the position in memory
 ; 	ld a, 0					; Failure 
 ; 	jp _move_sprite_right_done		; Finish 
 
@@ -961,10 +954,10 @@ _move_sprite_right_done:
 ;	A - 1 for overlapping 0 for not overlapping
 ; ------------------------------------------------------------------------------
 check_sprite_overlap:
-	ld a, (sprite_one_x_location)
+	ld a, (player_1_current_location)
 ; 	call absA
 	ld d, a
-	ld a, (sprite_two_x_location)
+	ld a, (player_2_current_location)
 ; 	call absA
 	sub d 
 	push af  				; Save a on stack 
