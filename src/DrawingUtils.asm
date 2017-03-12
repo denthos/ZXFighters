@@ -960,14 +960,20 @@ check_sprite_overlap:
 	ld a, (player_2_current_location)
 ; 	call absA
 	sub d 
-	push af  				; Save a on stack 
-	ld a, (pre_calculate_offset_middle)	; Load pre_calculate_offset_middle into a to load to d  
-	out (254), a
+	push af  				; Save a (difference)(how close they are) on stack 
+	ld hl, (player_1_current_sprite)	; Load pre_calculate_offset_middle into a to load to d  
+	ld a, (hl) 				; Offset for the first one 
+	ld b, a 
+	ld hl, (player_2_current_sprite)
+	ld a, (hl)
+	add a, b 
+	ld b, a 
+	ld a, 6
+	sub b 
 	ld d, a 				; Load the pre_calculate_offset_middle into d for compare with a
 	pop af  				; Get back the difference into a 
 	cp d ;6 					; Compare d with a 
 	jp nc, return_sprite_overlap_false 	; If difference is greater than or equal to d(4) then return false
-
 	jp return_sprite_overlap_true
 
 return_sprite_overlap_false:
