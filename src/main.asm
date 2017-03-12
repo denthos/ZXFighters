@@ -1,13 +1,11 @@
         org 32768	; put code at first address in 3rd memory device (sorta)
 start:
 	;;; INITIALIZATION
-  ld hl,select_next_character_p1 ;816d (or something)
-  ld hl,interrupt_handler ;8e3a
 
-  ; set up interrupt handler
+  ; set up interrupt handler to be main game loop
   di
   ld hl,0xfdfd
-  ld bc,interrupt_handler
+  ld bc,main_game_loop
   ld (hl),0xc3          ; 0xc3 corresponds to the opcode of the jp instruction
   inc hl
   ld (hl),c             ; write lower byte of interrupt_handler address
@@ -25,7 +23,7 @@ start:
   im 2                  ; set interrupt mode to 2
 
   ;;; DRAW TITLE SCREEN AND START CHARACTER SELECT
-main_start:
+
 	; set border color
 	ld a,0                    ; black
 	out (0xfe),a              ; send to ula
@@ -59,7 +57,7 @@ main_start:
   ld a,3
   ld (player_1_last_location),a
   ld (player_1_current_location),a
-  ld hl,(player_1_sprite_idle)
+  ld hl,(player_1_sprite_idle_1)
   ld (player_1_current_sprite),hl
 
   ; initialize player 2 data
@@ -68,7 +66,7 @@ main_start:
   ld a,22
   ld (player_2_last_location),a
   ld (player_2_last_location),a
-  ld hl,(player_2_sprite_idle)
+  ld hl,(player_2_sprite_idle_1)
   ld (player_2_current_sprite),hl
 
   ; clear the screen
@@ -91,5 +89,5 @@ main_loop:
   include "src/PrintingUtils.asm"
   include "src/MathUtils.asm"
   include "src/CharacterMove.asm"
-  include "src/InterruptHandler.asm"
+  include "src/CharacterAttack.asm"
 

@@ -208,58 +208,69 @@ player_1_current_attack:
 player_1_name:
 	defw 0
 player_1_sprites:
-player_1_sprite_idle:
+player_1_sprite_idle_1:
 	defw 0 ; sprite for standing still animation
+player_1_sprite_idle_2:
+	defw 0 ; second sprite for standing still animation
 player_1_sprite_walk_forward_1:
 	defw 0 ; sprite for walking first 4 bits
 player_1_sprite_walk_forward_2:
 	defw 0 ; sprite for walking second 4 bits
-player_1_sprite_attack_1_1:
-	defw 0 ; wind up for attack 1
-player_1_sprite_attack_1_2:
-	defw 0 ; attack is out for attack 1
-player_1_sprite_attack_1_3:
-	defw 0 ; wind down for attack 1
-player_1_sprite_attack_2_1:
-	defw 0
-player_1_sprite_attack_2_2:
-	defw 0
-player_1_sprite_attack_2_3:
-	defw 0
-player_1_sprite_attack_3_1:
-	defw 0
-player_1_sprite_attack_3_2:
-	defw 0
-player_1_sprite_attack_3_3:
-	defw 0
 player_1_sprite_block:
 	defw 0 ; blocking animation
 player_1_sprite_hit:
 	defw 0 ; getting hit animation
-player_1_attack_1_active_frames:
-	defw 0
+player_1_attack_1:
+player_1_attack_1_starting_active_frame:
+	defb 0
+player_1_attack_1_ending_active_frame:
+	defb 0
 player_1_attack_1_total_frames:
-	defw 0
+	defb 0
+player_1_sprite_attack_1_1:
+	defw 0 ; attack windup
+player_1_sprite_attack_1_2:
+	defw 0 ; attack is out
 player_1_attack_1_execute:
+	defb 0xcd
 	defw 0
-player_1_attack_2_active_frames:
-	defw 0
+	ret
+player_1_attack_2:
+player_1_attack_2_starting_active_frame:
+	defb 0
+player_1_attack_2_ending_active_frame:
+	defb 0
 player_1_attack_2_total_frames:
-	defw 0
+	defb 0
+player_1_sprite_attack_2_1:
+	defw 0 ; attack windup
+player_1_sprite_attack_2_2:
+	defw 0 ; attack is out
 player_1_attack_2_execute:
+	defb 0xcd
 	defw 0
-player_1_attack_3_active_frames:
-	defw 0
+	ret
+player_1_attack_3:
+player_1_attack_3_starting_active_frame:
+	defb 0
+player_1_attack_3_ending_active_frame:
+	defb 0
 player_1_attack_3_total_frames:
-	defw 0
+	defb 0
+player_1_sprite_attack_3_1:
+	defw 0 ; attack windup
+player_1_sprite_attack_3_2:
+	defw 0 ; attack is out
 player_1_attack_3_execute:
+	defb 0xcd
 	defw 0
+	ret
 
 player_2:
 player_2_current_location:
-	defb 21
+	defb 4
 player_2_last_location:
-	defb 21
+	defb 4
 player_2_current_bit_offset:
 	defb 0
 player_2_current_sprite:
@@ -281,58 +292,65 @@ player_2_current_attack:
 player_2_name:
 	defw 0
 player_2_sprites:
-player_2_sprite_idle:
-	defw 0
+player_2_sprite_idle_1:
+	defw 0 ; sprite for standing still animation
+player_2_sprite_idle_2:
+	defw 0 ; second sprite for standing still animation
 player_2_sprite_walk_forward_1:
-	defw 0
+	defw 0 ; sprite for walking first 4 bits
 player_2_sprite_walk_forward_2:
-	defw 0
-player_2_sprite_attack_1_1:
-	defw 0
-player_2_sprite_attack_1_2:
-	defw 0
-player_2_sprite_attack_1_3:
-	defw 0
-player_2_sprite_attack_2_1:
-	defw 0
-player_2_sprite_attack_2_2:
-	defw 0
-player_2_sprite_attack_2_3:
-	defw 0
-player_2_sprite_attack_3_1:
-	defw 0
-player_2_sprite_attack_3_2:
-	defw 0
-player_2_sprite_attack_3_3:
-	defw 0
+	defw 0 ; sprite for walking second 4 bits
 player_2_sprite_block:
-	defw 0
+	defw 0 ; blocking animation
 player_2_sprite_hit:
-	defw 0
-player_2_attack_1_active_frames:
-	defw 0
+	defw 0 ; getting hit animation
+player_2_attack_1:
+player_2_attack_1_starting_active_frame:
+	defb 0
+player_2_attack_1_ending_active_frame:
+	defb 0
 player_2_attack_1_total_frames:
-	defw 0
+	defb 0
+player_2_sprite_attack_1_1:
+	defw 0 ; attack windup
+player_2_sprite_attack_1_2:
+	defw 0 ; attack is out
 player_2_attack_1_execute:
+	defb 0xcd
 	defw 0
-player_2_attack_2_active_frames:
-	defw 0
+	ret
+player_2_attack_2:
+player_2_attack_2_starting_active_frame:
+	defb 0
+player_2_attack_2_ending_active_frame:
+	defb 0
 player_2_attack_2_total_frames:
-	defw 0
+	defb 0
+player_2_sprite_attack_2_1:
+	defw 0 ; attack windup
+player_2_sprite_attack_2_2:
+	defw 0 ; attack is out
 player_2_attack_2_execute:
+	defb 0xcd
 	defw 0
-player_2_attack_3_active_frames:
-	defw 0
+	ret
+player_2_attack_3:
+player_2_attack_3_starting_active_frame:
+	defb 0
+player_2_attack_3_ending_active_frame:
+	defb 0
 player_2_attack_3_total_frames:
-	defw 0
+	defb 0
+player_2_sprite_attack_3_1:
+	defw 0 ; attack windup
+player_2_sprite_attack_3_2:
+	defw 0 ; attack is out
 player_2_attack_3_execute:
+	defb 0xcd
 	defw 0
+	ret
 
-; player_1 data looks like:
-; struct player_1 {
-;   <name>_name - 10 bytes
-;   <name>_sprite_data - 6x6 pixel bytes followed by corresponding attributes
-; }
+
 character_data:
 character_name:
 ; 10 bytes of name data
