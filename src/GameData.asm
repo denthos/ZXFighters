@@ -959,7 +959,6 @@ clear_loop_counter:
 jump_sprite_number:
 	defb 0
 
-
 jump_sprite_counter:
 	defb 0
 

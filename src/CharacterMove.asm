@@ -15,143 +15,89 @@
 ; 65278 V, C, X, Z, Caps Shift 
 ; ------------------------------------------------------------------------------
 
-play_loop: 
-      ld bc,65022                         ; read keys G,F,D,S,A
-      in a,(c)
+
+read_input: 
+read_input_check_a:
+      ld bc, 65022                        ; read keys G,F,D,S,A
+      in a, (c) 
       ld (character_select_input_store),a ; store input for later
-      and 0x1                             ; check key A
-      jp nz,__character_select_loop_a_done
-      ld ix, shoe_sprite_data
-      call halt_2                         ; make sure movement is constant and ensure no flickering
-;       halt
-      ld a, 0
-      call move_sprite_left
-      cp 0                                ; Check if movement is allowed 
-      jp z, __character_select_loop_a_done
-      cp 1
-      jp z, _draw_first_walking_sprite_left
-      cp 3
-      jp z, _draw_second_walking_sprite_left
-      ld ix, shoe_sprite_data_3
-      ld a, 0 
-      call _finish_move_sprite_left
-      jp __character_select_loop_a_done
-_draw_second_walking_sprite_left:
-      ld ix, shoe_sprite_data_2          ; Load second walking one 
-      ld a, 0
-      call _finish_move_sprite_left
-      jp __character_select_loop_a_done
-_draw_first_walking_sprite_left:
-      call _finish_move_sprite_left       ; Actually draw the sprite to the udpated location
-__character_select_loop_a_done:
-      ld a,(character_select_input_store)
-      and 0x4                             ; check key D
-      jp nz,__character_select_loop_d_done
-      ld ix, shoe_sprite_data
-      call halt_2                         ; make sure movement is constant and ensure no flickering
-      halt 
-      ld a, 0
-      call move_sprite_right
-      cp 0                                ; Check if movement is allowed 
-      jp z, __character_select_loop_d_done
-      cp 1
-      jp z, _draw_first_walking_sprite_right
-      cp 3
-      jp z, _draw_second_walking_sprite_right
-      ; must be 5, the last one in the sequence 
-      ld ix, shoe_sprite_data_3               ; Load second walking one 
-      ld a, 0                                   ; For finish_move_spritedd
+      and 0x1 
+      jp nz, read_input_check_d
+      ld (a_down), 1                      ; Note that a was pressed 
 
-      call _finish_move_sprite_right
-      jp __character_select_loop_d_done
-_draw_second_walking_sprite_right:
-      ld ix, shoe_sprite_data_2          ; Load second walking one 
-      ld a, 0
-      call _finish_move_sprite_right
-      jp __character_select_loop_d_done
-_draw_first_walking_sprite_right:
-      call _finish_move_sprite_right
-__character_select_loop_d_done:
-;       ld a,(character_select_input_store)
-;       and 0x2               ; check key S
-;       jp nz,__character_select_loop_s_done
-;       ld ix, shoe_sprite_data
-;       call halt_2             ; make sure movement is constant and ensure no flickering
-;       ld a, 0
-;       call move_sprite_down
+ read_input_check_d:
+      ld a, (character_select_input_store)
+      and 0x4 
+      jp nz, read_input_check_s 
+      ld (d_down), 1
+read_input_check_s:
+      ld a, (character_select_input_store)
+      and 0x2 
+      jp nz, read_input_check_q 
+      ld (s_down), 1
 
-__character_select_loop_s_done:
-;       ld bc,64510           ; read keys T, R, E, W, Q
-;       in a,(c)
-;       ld (character_select_input_store),a ; save input for later
-;       ld a,(character_select_input_store)
-;       and 0x2               ; check key W?????
-;       jp nz,__character_select_loop_w_done
-;       ld ix, shoe_sprite_data
-;       call halt_2             ; make sure movement is constant and ensure no flickering
-;       ld a, 0
-;       call move_sprite_jump
-       
-__character_select_loop_w_done:
+read_input_check_q:
+      ld bc, 64510                              ; T, R, E, W, Q
+      in a, (c)
+      ld (character_select_input_store), a 
+      and 0x1 
+      jp nz, read_input_check_w 
+      ld (q_down), 1
 
-; player 2 movement
-      ld bc,49150           ; H, J, K, L, Enter
-      in a,(c)
-      ld (character_select_input_store),a ; store input for later
-      and 0x8               ; check key J
-      jp nz,__character_select_loop_j_done
-      ld ix, sprite_sprite_data
-      call halt_2                         ; make sure movement is constant and ensure to flickering
-      ld a, 1                             ; Let method know that sprite is sprite 2 
-      call move_sprite_left               ; 
-      cp 0                                ; Check if movement is allowed 
-      jp z, __character_select_loop_j_done
-      ld a, 1 
-      call _finish_move_sprite_left       ; Actually draw the sprite to the updated location
-__character_select_loop_j_done:
-      ld a,(character_select_input_store)
-      and 0x2               ; check key L
-      jp nz,__character_select_loop_l_done
-      ld ix, sprite_sprite_data
-      call halt_2             ; make sure movement is constant and ensure to flickering
-      ld a, 1
-      call move_sprite_right
-      cp 0                                ; Check if movement is allowed 
-      jp z, __character_select_loop_l_done
-      ld a, 1
-      call _finish_move_sprite_right
-__character_select_loop_l_done:
-;       ld a,(character_select_input_store)
-;       and 0x4               ; check key K
-;       jp nz,__character_select_loop_k_done
-;       ld ix, sprite_sprite_data
-;       call halt_2             ; make sure movement is constant and ensure to flickering
-;       ld a, 1
-;       call move_sprite_down
-__character_select_loop_k_done:
-;       ld bc,57342           ; read keys Y, U, I, O, P
-;       in a,(c)
-;       ld (character_select_input_store),a ; save input for later
-;       ld a,(character_select_input_store)
-;       and 0x4               ; check key I
-;       jp nz,__character_select_loop_i_done
-;       ld ix, sprite_sprite_data
-;       call halt_2             ; make sure movement is constant and ensure to flickering
-;       ld a, 1
-;       call move_sprite_jump
-__character_select_loop_i_done:
-;       call halt_2
-;       call halt_2
-;       halt
-      jp play_loop
+read_input_check_w: 
+      ld a, (character_select_input_store)
+      and 0x2 
+      jp nz, read_input_check_e 
+      ld (w_down), 1
 
+read_input_check_e: 
+      ld a, (character_select_input_store)
+      and 0x4 
+      jp nz, read_input_check_j 
+      ld (e_down), 1
 
+read_input_check_j:
+      ld bc, 49150                              ; H, J, K, L, Enter
+      in a, (c)
+      ld (character_select_input_store), a 
+      and 0x8 
+      jp nz, read_input_check_l
+      ld (j_down), 1
 
+read_input_check_l:
+      ld a, (character_select_input_store)
+      and 0x2 
+      jp nz, read_input_check_k 
+      ld (l_down), 1
 
+read_input_check_k:
+      ld a, (character_select_input_store)
+      and 0x4 
+      jp nz, read_input_check_u 
+      ld (k_down), 1
 
+read_input_check_u:
+      ld bc, 57342                              ; Y, U, I, O, P
+      in a, (c)
+      ld (character_select_input_store), a 
+      and 0x8 
+      jp nz, read_input_check_i
+      ld (u_down), 1
 
-end: 
+read_input_check_i:
+      ld a, (character_select_input_store)
+      and 0x4 
+      jp nz, read_input_check_o 
+      ld (i_down), 1
+
+read_input_check_o:
+      ld a, (character_select_input_store)
+      and 0x2 
+      jp nz, read_input_end 
+      ld (o_down), 1
+read_input_end:
       ret 
+
 
 ; ------------------------------------------------------------------------------
 ; Routine that will check the last time an interrupt was handled by the ROM. 
@@ -184,3 +130,20 @@ last_update: defb 0
 ;       ld a,1
 ;       ld hl,a_down
 ;       ld (hl),a             ; d_down = 1
+
+
+
+; A, S , D , Q , W, E
+; J , K , L , U, I, O 
+clear_input: 
+      ld (a_down), 0 
+      ld (d_down), 0 
+      ld (j_down), 0 
+      ld (l_down), 0
+      ld (w_down), 0
+      ld (e_down), 0 
+      ld (k_down), 0
+      ld (u_down), 0
+      ld (i_down), 0
+      ld (o_down), 0 
+      ret 
