@@ -89,9 +89,9 @@ _character_select_loop_l_done:
   ; initialize player 2
   ld a,(selected_character_p2)
   ld hl,player_2_sprites
-  jp init_player
+  call init_player
 
-
+  ret
 
 select_next_character_p1:
 	ld hl,selected_character_p1

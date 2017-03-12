@@ -211,14 +211,33 @@ _clear_sprite_loop:
 	ld (hl),a
 	inc l
 	ld (hl),a
-	ld a,l
+	jp _clear_sprite_row_decrement
+_clear_sprite_row_decrement_return:
+	djnz _clear_sprite_loop
+	ret
+
+_clear_sprite_row_decrement:
+	ld a,l                 ; move to next pixel row down in cell <e> to left
 	sub 5
 	ld l,a
 	inc h
-	djnz _clear_sprite_loop
+	ld a,h                 ; check if we overflowed into y6
+	and 7
+	jr nz,_clear_sprite_row_decrement_return
+	ld a,h
+	sub 8                  ; decrement y6
+	ld h,a
+	ld a,l
+	add a,32               ; increment y3
+	ld l,a
+	and 224                ; check if we overflowed into y0
+	jr nz,_clear_sprite_row_decrement_return
+	ld a,h
+	add a,8                ; increment y6
+	ld h,a
+	jp _clear_sprite_row_decrement_return
 
-
-; ------------------------------------------------------------------------------
+; -----------------------------------------------------------------------
 ; Subroutine for drawing the base of the title screen
 ;
 ; Inputs:
@@ -291,11 +310,11 @@ draw_title_character_p1:
 	ld c,10                ; length of sprite name (always 10)
 	ld de,0x5040           ; color cell (0,18)
 	call print_string
-	ld d,0                 ; columns to skip
+	ld a,(selected_character_p1)
+	call ld_character_sprite_address
 	ld c,0                 ; overwrite mode
 	ld hl,0x4882           ; color cell (2,12)
 	jp draw_sprite
-	ret
 
 draw_title_character_p2:
 	ld a,(selected_character_p2)
@@ -303,11 +322,11 @@ draw_title_character_p2:
 	ld c,10               ; length of sprite name (always 10)
 	ld de,0x5056          ; color cell (22,18)
 	call print_string
-	ld d,0                ; columns to skip
+	ld a,(selected_character_p2)
+	call ld_character_sprite_address
 	ld c,0                ; overwrite mode
 	ld hl,0x4898          ; color cell (24,12)
 	jp draw_sprite
-	ret
 
 
 ; ------------------------------------------------------------------------------
@@ -332,6 +351,19 @@ _ld_character_data_address_char_0:
 _ld_character_data_address_char_1:
 	ld ix,sprite_data
 	ret
+
+ld_character_sprite_address:
+	cp 0
+	jp z,_ld_character_sprite_address_char_0
+	cp 1
+	jp z,_ld_character_sprite_address_char_1
+_ld_character_sprite_address_char_0:
+	ld ix,shoe_sprite_data
+	ret
+_ld_character_sprite_address_char_1:
+	ld ix,sprite_sprite_data
+	ret
+
 
 ; ------------------------------------------------------------------------------
 ; Subroutine for drawing a solid bar on screen, only takes care of pixels, not
@@ -374,7 +406,7 @@ _draw_bar_done_init:
 ; Uses: A, B, C, D, E, H, L
 ; ------------------------------------------------------------------------------
 update_health:
-        ld a,(player_one_damage_taken)
+        ld a,(player_1_damage_taken)
         ld c,a
         ld e,0                                  ; flag for player one
         ld h,01010000B                          ; upper byte of start address
@@ -382,7 +414,7 @@ update_health:
         ld l,a
         call individual_health
 
-        ld a,(player_two_damage_taken)
+        ld a,(player_2_damage_taken)
         ld c,a
         ld e,1                                  ; flag for player two
         ld h,01010000B                          ; upper byte of start address
@@ -439,7 +471,7 @@ _no_remainder:
         ld e,8                                  ; height of bar in pixel lines
         pop hl
         call draw_bar
-;         ld (player_two_damage_taken), a       ; TODO: reset damage taken value in memory
+;         ld (player_2_damage_taken), a       ; TODO: reset damage taken value in memory
         ret
 
 

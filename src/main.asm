@@ -1,6 +1,8 @@
         org 32768	; put code at first address in 3rd memory device (sorta)
 start:
 	;;; INITIALIZATION
+  ld hl,select_next_character_p1 ;816d (or something)
+  ld hl,interrupt_handler ;8e3a
 
   ; set up interrupt handler
   di
@@ -23,7 +25,7 @@ start:
   im 2                  ; set interrupt mode to 2
 
   ;;; DRAW TITLE SCREEN AND START CHARACTER SELECT
-
+main_start:
 	; set border color
 	ld a,0                    ; black
 	out (0xfe),a              ; send to ula
@@ -40,13 +42,38 @@ start:
   ; start character select loop
   ;   this will return once the player(s) push Enter to start the game
   call start_character_select
-  call init_status_bar
   ;call start_stage_select   ; if we intend to have standalone stage selection, will go here
 
-  ; INITIALIZE STARTING GAME DATA
+  ;;; INITIALIZE STARTING GAME DATA
+  
+  ; initialize player 1 data
+  ld a,0
+  ld (player_1_damage_taken),a
+  ld a,3
+  ld (player_1_last_location),a
+  ld (player_1_current_location),a
+  ld hl,(player_1_sprite_idle)
+  ld (player_1_current_sprite),hl
+
+  ; initialize player 2 data
+  ld a,0
+  ld (player_2_damage_taken),a
+  ld a,22
+  ld (player_2_last_location),a
+  ld (player_2_last_location),a
+  ld hl,(player_2_sprite_idle)
+  ld (player_2_current_sprite),hl
+
+  ; clear the screen
+  ld d,0x47             ; 0x47 = 0b01000111 (paper = black, ink = white)
+  call clear_screen
+  ; call draw_background
+  ;call init_status_bar
 
   ei
+main_loop:
   halt
+  jp main_loop
 
 
   include "src/ByteAddressUtils.asm"

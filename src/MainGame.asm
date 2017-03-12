@@ -1,5 +1,4 @@
 start_main_game:
-	call draw_background
 	ld b, 32
 	ld c, 80 
 	call calculate_pixel_byte_address

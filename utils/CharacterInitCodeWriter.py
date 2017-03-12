@@ -6,9 +6,9 @@ import sys
 # Example:        python ByteAddressUtils.py shoe
 
 def print_extra():
-	print "        ld (hl),b"
-	print "        inc hl"
 	print "        ld (hl),c"
+	print "        inc hl"
+	print "        ld (hl),b"
 	print "        inc hl"
 
 name = sys.argv[1]

@@ -189,6 +189,8 @@ player_1_last_location:
 	defb 4
 player_1_current_sprite:
 	defw 0
+player_1_damage_taken:
+	defb 0
 player_1_hit_stun:
 	defb 0
 player_1_attack_stun:
@@ -258,6 +260,8 @@ player_2_last_location:
 	defb 21
 player_2_current_sprite:
 	defw 0
+player_2_damage_taken:
+	defb 0
 player_2_hit_stun:
 	defb 0
 player_2_attack_stun:
@@ -379,8 +383,6 @@ character_attack_3_total_frames:
 character_attack_3_execute:
 ; code for handling the attack
 
->>>>>>> a9894f1fc465bfbf30dd9e734c5180553cc5d120
-
 ; Character data looks like:
 ; struct character {
 ;   <name>_name - 10 bytes
@@ -392,69 +394,69 @@ shoe_name:
 
 shoe_init:
         ld bc,shoe_sprite_idle
-        ld (hl),b
-        inc hl
         ld (hl),c
+        inc hl
+        ld (hl),b
         inc hl
         ld bc,shoe_sprite_walk_forward_1
-        ld (hl),b
-        inc hl
         ld (hl),c
+        inc hl
+        ld (hl),b
         inc hl
         ld bc,shoe_sprite_walk_forward_2
-        ld (hl),b
-        inc hl
         ld (hl),c
+        inc hl
+        ld (hl),b
         inc hl
         ld bc,shoe_sprite_attack_1_1
-        ld (hl),b
-        inc hl
         ld (hl),c
+        inc hl
+        ld (hl),b
         inc hl
         ld bc,shoe_sprite_attack_1_2
-        ld (hl),b
-        inc hl
         ld (hl),c
+        inc hl
+        ld (hl),b
         inc hl
         ld bc,shoe_sprite_attack_1_3
-        ld (hl),b
-        inc hl
         ld (hl),c
+        inc hl
+        ld (hl),b
         inc hl
         ld bc,shoe_sprite_attack_2_1
-        ld (hl),b
-        inc hl
         ld (hl),c
+        inc hl
+        ld (hl),b
         inc hl
         ld bc,shoe_sprite_attack_2_2
-        ld (hl),b
-        inc hl
         ld (hl),c
+        inc hl
+        ld (hl),b
         inc hl
         ld bc,shoe_sprite_attack_2_3
-        ld (hl),b
-        inc hl
         ld (hl),c
+        inc hl
+        ld (hl),b
         inc hl
         ld bc,shoe_sprite_attack_3_1
-        ld (hl),b
-        inc hl
         ld (hl),c
+        inc hl
+        ld (hl),b
         inc hl
         ld bc,shoe_sprite_attack_3_2
-        ld (hl),b
-        inc hl
         ld (hl),c
+        inc hl
+        ld (hl),b
         inc hl
         ld bc,shoe_sprite_attack_3_3
-        ld (hl),b
-        inc hl
         ld (hl),c
+        inc hl
+        ld (hl),b
         inc hl
         ld bc,shoe_sprite_block
-        ld (hl),b
-        inc hl
         ld (hl),c
+        inc hl
+        ld (hl),b
         inc hl
         ld bc,shoe_sprite_hit
         ld (hl),b
@@ -497,6 +499,7 @@ shoe_sprite_hit:
 ; sprite data
 
 shoe_sprite_data:
+	defb 0
 	defb 0,93
 	defb 31,1
 	defb 0,5
@@ -594,6 +597,7 @@ sprite_name:
 	defb '  Sprite  '
 
 sprite_sprite_data:
+	defb 0
 	defb 0,20
 	defb 7,1
 	defb 224,1
@@ -825,8 +829,10 @@ j_down:
 	defb 0
 l_down:
 	defb 0
-<<<<<<< HEAD
-
+w_down:
+	defb 0
+s_down:
+	defb 0
 
 ; stores the attribute bytes for the layout of the status bar, may need to
 ; "encode" if need to save space
@@ -865,13 +871,9 @@ status_bar_attrib_bytes:
 
 player_one_last_update_address:
 	defb 10001011B
-player_one_damage_taken:
-	defb 80
 
 player_two_last_update_address:
 	defb 10010101B
-player_two_damage_taken:
-	defb 80
 
 player_one_remainder_stuff:
 	defb 11111110B
@@ -1147,9 +1149,3 @@ player_two_remainder_stuff:
 ;         defb 00111111B
 ;         defb 10111111B
 ;         defb 01111111B
-=======
-w_down:
-	defb 0
-s_down:
-	defb 0
->>>>>>> a9894f1fc465bfbf30dd9e734c5180553cc5d120
