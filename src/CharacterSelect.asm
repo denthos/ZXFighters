@@ -167,7 +167,7 @@ _select_prev_character_p2_end:
 
 init_player:
   cp 0
-  jp z,shoe_init
+  jp z,punchy_init
   cp 1
   jp z,init_char_1
   cp 2

@@ -14,7 +14,7 @@ Z80ASMDIR = z80asm
 ASMFILE = $(SRCDIR)/$(NAME).asm
 BINFILE = $(BINDIR)/$(NAME).bin
 TAPEFILE = $(TAPEDIR)/$(NAME).tap
-ALLSRC = $(SRCDIR)/*.asm
+ALLSRC = $(SRCDIR)/*.asm $(SRCDIR)/characters/*.asm
 
 # ZXTAP Options
 REMS =

@@ -486,23 +486,3 @@ return_sprite_overlap_true:
 
 check_sprite_overlap_done:
       ret
-
-
-
-
-
-; A, S , D , Q , W, E
-; J , K , L , U, I, O 
-clear_input: 
-      ld a, 0 
-      ld (a_down), a
-      ld (d_down), a 
-      ld (j_down), a 
-      ld (l_down), a
-      ld (w_down), a
-      ld (e_down), a 
-      ld (k_down), a
-      ld (u_down), a
-      ld (i_down), a
-      ld (o_down), a 
-      ret 

@@ -8,6 +8,9 @@ main_game_loop:
 	;push ix
 	ld hl,23672            ; increment frame counter
 	inc (hl)
+	ld a,(hl)
+	bit 0,a
+	jp z,_main_game_loop_done
 _main_game_loop_start:
 
 	;;;;;;;;;; START MAIN GAME LOOP ;;;;;;;;;;
@@ -26,7 +29,7 @@ _main_game_loop_start:
 	ld b,a
 	ld c,10
 	call calculate_color_cell_pixel_address
-	call clear_sprite
+	;call clear_sprite
 
 	; draw new player 1 sprite
 	ld a,(player_1_current_location)
@@ -34,7 +37,7 @@ _main_game_loop_start:
 	ld c,10
 	call calculate_color_cell_pixel_address
 	ld ix,(player_1_current_sprite)
-	ld c,1
+	ld c,0
 	call draw_sprite
 
 	; draw new player 2 sprite
@@ -44,7 +47,7 @@ _main_game_loop_start:
 	call calculate_color_cell_pixel_address
 	ld ix,(player_2_current_sprite)
 	ld c,1
-	call draw_sprite
+	;call draw_sprite
 
 	; update player positions
 	ld a,(player_1_current_location)
@@ -318,6 +321,9 @@ _player_2_no_movement_stun:
 
 
 _player_2_done:
+
+	; clear inputs
+	call clear_input
 
 _main_game_loop_done:
 	; restore registers

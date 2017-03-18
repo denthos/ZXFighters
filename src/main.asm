@@ -78,6 +78,7 @@ start:
   ei
 main_loop:
   halt
+  halt
   jp main_loop
 
 
@@ -92,3 +93,4 @@ main_loop:
   include "src/CharacterAttack.asm"
   include "src/InputUtils.asm"
 
+  include "src/characters/Punchy.asm"

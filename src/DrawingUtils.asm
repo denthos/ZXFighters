@@ -282,18 +282,6 @@ draw_title_screen:
 
 	ret
 
-draw_title_background:
-	ld de, 124              ; title screen has 341 lines of encoded byte pairs
-	ld hl,title_screen_data ; get the location of the encoded data
-	ld ix,0x4000            ; start drawing at the beginning of the vram
-_draw_title_screen_loop_start:
-	call copy_encoded_bytes ; unpack first encoded byte pair
-	dec de                  ; decrement our byte pair counter
-	ld a,d                  ; check if counter is 0, we do it this way because
-	or e                    ;   our counter needs to work for a value above 255
-	jp nz,_draw_title_screen_loop_start
-	ret
-
 ; ------------------------------------------------------------------------------
 ; Subroutine for drawing the sprite and name of characters onto the character
 ;   select screen.
@@ -346,10 +334,10 @@ ld_character_data_address:
 	cp 1
 	jp z,_ld_character_data_address_char_1
 _ld_character_data_address_char_0:
-	ld ix,shoe_data
+	ld ix,punchy_data
 	ret
 _ld_character_data_address_char_1:
-	ld ix,sprite_data
+	ld ix,punchy_data
 	ret
 
 ld_character_sprite_address:
@@ -358,10 +346,10 @@ ld_character_sprite_address:
 	cp 1
 	jp z,_ld_character_sprite_address_char_1
 _ld_character_sprite_address_char_0:
-	ld ix,shoe_sprite_data
+	ld ix,punchy_sprites
 	ret
 _ld_character_sprite_address_char_1:
-	ld ix,sprite_sprite_data
+	ld ix,punchy_sprites
 	ret
 
 
