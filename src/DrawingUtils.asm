@@ -279,7 +279,7 @@ draw_title_screen:
 	call draw_number_of_rounds
 
 	ld de, 0x48cc 				; 12, 14
-	ld ix, best_of_label
+	ld ix, first_to_label
 	ld c, 9
 	call print_string
 
@@ -355,7 +355,7 @@ _ld_character_data_address_char_0:
 	ld ix,punchy_data
 	ret
 _ld_character_data_address_char_1:
-	ld ix,punchy_data
+	ld ix,punchy_2_data
 	ret
 
 ld_character_sprite_address:
@@ -367,7 +367,7 @@ _ld_character_sprite_address_char_0:
 	ld ix,punchy_sprites
 	ret
 _ld_character_sprite_address_char_1:
-	ld ix,punchy_sprites
+	ld ix,punchy_2_sprites
 	ret
 
 

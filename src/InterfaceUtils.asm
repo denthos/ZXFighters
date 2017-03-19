@@ -140,7 +140,7 @@ init_energy_bars:
         ld b, 1
         ld c, 22
         call calculate_color_cell_attr_address
-        ld a, 0x45
+        ld a, 0x68
         ld b, 10
 _init_energy_bars_1: 
         ld (hl), a
@@ -149,12 +149,31 @@ _init_energy_bars_1:
         ld b, 21
         ld c, 22
         call calculate_color_cell_attr_address
-        ld a, 0x45
+        ld a, 0x68
         ld b, 10
 _init_energy_bars_2:
         ld (hl), a
         inc hl
         djnz _init_energy_bars_2
+
+
+        ; draw empty energy bar for player 1
+        ld b,8
+        ld c,176
+        call calculate_pixel_byte_address
+        ex de, hl
+        ld b, 10
+        ld h, 8
+        call draw_bar_init
+        
+        ; draw empty bar for player 2
+        ld b,172
+        ld c,176
+        call calculate_pixel_byte_address
+        ex de, hl
+        ld b, 10
+        ld h, 8
+        call draw_bar_init
 
         ; init address variable for player 1
         ld b,8
@@ -227,11 +246,11 @@ individual_energy:
         cp e                                    ; check which player we are updating
         jp nz,_energy_player_two_remainder
 
-        ld hl,ltr_remainders_2        ; updating player one
+        ld hl,rtl_remainders
         jp _energy_remainder_stuff_loaded
 
 _energy_player_two_remainder:
-        ld hl,rtl_remainders_2        ; ld address of remainder lookup table  (20)
+        ld hl,ltr_remainders        ; ld address of remainder lookup table  (20)
 
 _energy_remainder_stuff_loaded:
         add hl,bc                               ; add offset (remainder) into LT address(11)

@@ -9,8 +9,6 @@ main_game_loop:
 	ld hl,frame_counter            ; increment frame counter
 	inc (hl)
 	ld a,(hl)
-	bit 0,a
-	jp z,_main_game_loop_done
 _main_game_loop_start:
 
 	;;;;;;;;;; START MAIN GAME LOOP ;;;;;;;;;;
@@ -25,13 +23,6 @@ _main_game_loop_start:
 	call calculate_color_cell_pixel_address
 	call clear_sprite
 
-	; clear old player 2 sprite
-	ld a,(player_2_last_location)
-	ld b,a
-	ld c,14
-	call calculate_color_cell_pixel_address
-	;call clear_sprite
-
 	; draw new player 1 sprite
 	ld a,(player_1_current_location)
 	ld b,a
@@ -41,6 +32,13 @@ _main_game_loop_start:
 	ld c,1
 	call draw_sprite
 
+	; clear old player 2 sprite
+	ld a,(player_2_last_location)
+	ld b,a
+	ld c,14
+	call calculate_color_cell_pixel_address
+	call clear_sprite
+
 	; draw new player 2 sprite
 	ld a,(player_2_current_location)
 	ld b,a
@@ -48,7 +46,7 @@ _main_game_loop_start:
 	call calculate_color_cell_pixel_address
 	ld ix,(player_2_current_sprite)
 	ld c,1
-	;call draw_sprite
+	call draw_sprite
 
 	; update player positions
 	ld a,(player_1_current_location)
@@ -61,10 +59,6 @@ _main_game_loop_start:
 	;;; UPDATE INTERFACE ;;;
 	
 	; update health bar
-
-	ld a, (player_2_damage_taken)
-	inc a 
-	ld (player_2_damage_taken), a 
 
 	call update_health_bars
 	call update_energy_bars
@@ -225,12 +219,13 @@ _player_1_done:
 
 
 
-	;;; PLAYER 2 LOGIC ;;;
+	;;; PLAYER 1 LOGIC ;;;
 
 	; check if player is in hit stun
 	ld a,(player_2_hit_stun)
 	or a
 	jp z,_player_2_no_hit_stun
+_player_2_hit_stun:
 	ld hl,(player_2_sprite_hit)
 	ld (player_2_current_sprite),hl
 	jp _player_2_done      ; if player is in hit stun, skip rest of input logic
@@ -247,13 +242,17 @@ _player_2_no_hit_stun:
 	jp z,_player_2_attacking_init_1
 	cp 2
 	jp z,_player_2_attacking_init_2
-	ld ix,player_2_attack_3
-	jp _player_2_attacking_1
+	cp 3
+	jp z,_player_2_attacking_init_3
 _player_2_attacking_init_1:
 	ld ix,player_2_attack_1
 	jp _player_2_attacking_1
 _player_2_attacking_init_2:
 	ld ix,player_2_attack_2
+	jp _player_2_attacking_1
+_player_2_attacking_init_3:
+	ld ix,player_2_attack_3
+	jp _player_2_attacking_1
 
 	; begin attack logic
 _player_2_attacking_1:
@@ -263,8 +262,8 @@ _player_2_attacking_1:
 	ld a,(player_2_current_attack_frame)
 	cp b
 	jp nc,_player_2_attacking_2
-	ld h,(ix+3)
-	ld l,(ix+4)
+	ld h,(ix+4)
+	ld l,(ix+3)
 	ld (player_2_current_sprite),hl
 	jp _player_2_attacking_done
 
@@ -276,8 +275,8 @@ _player_2_attacking_2:
 	ld a,(player_2_current_attack_frame)
 	cp b
 	jp nc,_player_2_attacking_3
-	ld h,(ix+5)
-	ld l,(ix+6)
+	ld h,(ix+6)
+	ld l,(ix+5)
 	ld (player_2_current_sprite),hl
 	call player_2_attack_1_execute
 	jp _player_2_attacking_done
@@ -289,8 +288,8 @@ _player_2_attacking_3:
 	ld a,(player_2_current_attack_frame)
 	cp b
 	jp nc,_player_2_attacking_4
-	ld h,(ix+3)
-	ld l,(ix+4)
+	ld h,(ix+4)
+	ld l,(ix+3)
 	ld (player_2_current_sprite),hl
 	jp _player_2_attacking_done
 
@@ -298,8 +297,9 @@ _player_2_attacking_4:
 	; attack has finished if we get here, clean up and process inputs like normal
 	ld hl,(player_2_sprite_idle_1)
 	ld (player_2_current_sprite),hl
-	ld bc,0
-	ld (player_2_current_attack),bc
+	xor a
+	ld (player_2_current_attack),a
+	ld (player_2_current_attack_frame),a
 	jp _player_2_not_attacking
 
 
@@ -309,6 +309,29 @@ _player_2_attacking_done:
 	jp _player_2_done
 
 _player_2_not_attacking:
+	ld a,(player_2_blocking)
+	or a
+	jp z,_player_2_not_blocking
+_player_2_blocking:
+	ld hl,(player_2_sprite_block)
+	ld (player_2_current_sprite),hl
+	ld hl,player_2_blocking_health
+	ld a,(hl)
+	or a
+	jp z,_player_2_blocking_expired
+	dec (hl)
+	ld a,5
+	ld (player_2_movement_stun),a
+	xor a
+	ld (player_2_blocking),a
+	jp _player_2_done
+_player_2_blocking_expired:
+	ld a,50
+	ld (player_2_hit_stun),a
+	xor a
+	ld (player_2_blocking),a
+
+_player_2_not_blocking:
 
 	; read player input
 	call read_player_2_input
@@ -350,22 +373,6 @@ _player_2_done:
 	call clear_input
 	call decrement_player_counters
 
-
-
-
-	ld a,(player_1_damage_taken)
-	inc a
-	ld (player_1_damage_taken),a
-
-
-	ld a,(player_2_damage_taken)
-	inc a
-	ld (player_2_damage_taken),a
-
-
-	ld a,(player_1_energy)
-	inc a
-	ld (player_1_energy),a
 
 
 	; check game end conditions
@@ -457,8 +464,9 @@ set_up_characters:
 
 	ld a,0
 	ld (player_1_damage_taken),a
+	ld (player_1_energy),a
 	ld a,3
-; 	ld (player_1_last_location),a
+ 	ld (player_1_last_location),a
 	ld (player_1_current_location),a
 	ld hl,(player_1_sprite_idle_1)
 	ld (player_1_current_sprite),hl
@@ -468,9 +476,10 @@ set_up_characters:
 	; initialize player 2 data
 	ld a,0
 	ld (player_2_damage_taken),a
-	ld a,0
+	ld (player_2_energy),a
+	ld a,18
 	ld (player_2_last_location),a
-; 	ld (player_2_current_location),a
+ 	ld (player_2_current_location),a
 	ld hl,(player_2_sprite_idle_1)
 	ld (player_2_current_sprite),hl
 	ld a, 1

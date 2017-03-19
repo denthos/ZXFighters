@@ -1,91 +1,63 @@
-punchy_data:
-punchy_name:
-    defb '  Punchy  '
-punchy_init:
-        ld bc,punchy_name
+punchy_2_data:
+punchy_2_name:
+    defb '  punchy_2  '
+punchy_2_init:
+        ld bc,punchy_2_name
         ld (hl),c
         inc hl
         ld (hl),b
         inc hl
-        ld bc,punchy_sprite_idle_1
+        ld bc,punchy_2_sprite_idle_1
         ld (hl),c
         inc hl
         ld (hl),b
         inc hl
-        ld bc,punchy_sprite_idle_2
+        ld bc,punchy_2_sprite_idle_2
         ld (hl),c
         inc hl
         ld (hl),b
         inc hl
-        ld bc,punchy_sprite_walk_forward_1
+        ld bc,punchy_2_sprite_walk_forward_1
         ld (hl),c
         inc hl
         ld (hl),b
         inc hl
-        ld bc,punchy_sprite_walk_forward_2
+        ld bc,punchy_2_sprite_walk_forward_2
         ld (hl),c
         inc hl
         ld (hl),b
         inc hl
-        ld bc,punchy_sprite_block
+        ld bc,punchy_2_sprite_block
         ld (hl),c
         inc hl
         ld (hl),b
         inc hl
-        ld bc,punchy_sprite_hit
+        ld bc,punchy_2_sprite_hit
         ld (hl),c
         inc hl
         ld (hl),b
         inc hl
-        ld a,(punchy_attack_1_starting_active_frame)
+        ld a,(punchy_2_attack_1_starting_active_frame)
         ld (hl),a
         inc hl
-        ld a,(punchy_attack_1_ending_active_frame)
+        ld a,(punchy_2_attack_1_ending_active_frame)
         ld (hl),a
         inc hl
-        ld a,(punchy_attack_1_total_frames)
+        ld a,(punchy_2_attack_1_total_frames)
         ld (hl),a
         inc hl
-        ld bc,punchy_sprite_attack_1_1
+        ld bc,punchy_2_sprite_attack_1_1
         ld (hl),c
         inc hl
         ld (hl),b
         inc hl
-        ld bc,punchy_sprite_attack_1_2
-        ld (hl),c
-        inc hl
-        ld (hl),b
-        inc hl
-        inc hl
-        ld bc,punchy_attack_1_execute
+        ld bc,punchy_2_sprite_attack_1_2
         ld (hl),c
         inc hl
         ld (hl),b
         inc hl
         inc hl
-        inc hl
-        inc hl
-        ld a,(punchy_attack_2_starting_active_frame)
-        ld (hl),a
-        inc hl
-        ld a,(punchy_attack_2_ending_active_frame)
-        ld (hl),a
-        inc hl
-        ld a,(punchy_attack_2_total_frames)
-        ld (hl),a
-        inc hl
-        ld bc,punchy_sprite_attack_2_1
-        ld (hl),c
-        inc hl
-        ld (hl),b
-        inc hl
-        ld bc,punchy_sprite_attack_2_2
-        ld (hl),c
-        inc hl
-        ld (hl),b
-        inc hl
-        inc hl
-        ld bc,punchy_attack_2_execute
+        ld bc,punchy_2_attack_1_execute
         ld (hl),c
         inc hl
         ld (hl),b
@@ -93,63 +65,91 @@ punchy_init:
         inc hl
         inc hl
         inc hl
-        ld a,(punchy_attack_3_starting_active_frame)
+        ld a,(punchy_2_attack_2_starting_active_frame)
         ld (hl),a
         inc hl
-        ld a,(punchy_attack_3_ending_active_frame)
+        ld a,(punchy_2_attack_2_ending_active_frame)
         ld (hl),a
         inc hl
-        ld a,(punchy_attack_3_total_frames)
+        ld a,(punchy_2_attack_2_total_frames)
         ld (hl),a
         inc hl
-        ld bc,punchy_sprite_attack_3_1
+        ld bc,punchy_2_sprite_attack_2_1
         ld (hl),c
         inc hl
         ld (hl),b
         inc hl
-        ld bc,punchy_sprite_attack_3_2
+        ld bc,punchy_2_sprite_attack_2_2
         ld (hl),c
         inc hl
         ld (hl),b
         inc hl
         inc hl
-        ld bc,punchy_attack_3_execute
+        ld bc,punchy_2_attack_2_execute
+        ld (hl),c
+        inc hl
+        ld (hl),b
+        inc hl
+        inc hl
+        inc hl
+        inc hl
+        ld a,(punchy_2_attack_3_starting_active_frame)
+        ld (hl),a
+        inc hl
+        ld a,(punchy_2_attack_3_ending_active_frame)
+        ld (hl),a
+        inc hl
+        ld a,(punchy_2_attack_3_total_frames)
+        ld (hl),a
+        inc hl
+        ld bc,punchy_2_sprite_attack_3_1
+        ld (hl),c
+        inc hl
+        ld (hl),b
+        inc hl
+        ld bc,punchy_2_sprite_attack_3_2
+        ld (hl),c
+        inc hl
+        ld (hl),b
+        inc hl
+        inc hl
+        ld bc,punchy_2_attack_3_execute
         ld (hl),c
         inc hl
         ld (hl),b
         inc hl
         ret
 
-punchy_flip:
-  ld ix,punchy_sprite_idle_1
+punchy_2_flip:
+  ld ix,punchy_2_sprite_idle_1
   call flip_sprite_init
-  ld ix,punchy_sprite_idle_2
+  ld ix,punchy_2_sprite_idle_2
   call flip_sprite_init
-  ld ix,punchy_sprite_walk_forward_1
+  ld ix,punchy_2_sprite_walk_forward_1
   call flip_sprite_init
-  ld ix,punchy_sprite_walk_forward_2
+  ld ix,punchy_2_sprite_walk_forward_2
   call flip_sprite_init
-  ld ix,punchy_sprite_block
+  ld ix,punchy_2_sprite_block
   call flip_sprite_init
-  ld ix,punchy_sprite_hit
+  ld ix,punchy_2_sprite_hit
   call flip_sprite_init
-  ld ix,punchy_sprite_attack_1_1
+  ld ix,punchy_2_sprite_attack_1_1
   call flip_sprite_init
-  ld ix,punchy_sprite_attack_1_2
+  ld ix,punchy_2_sprite_attack_1_2
   call flip_sprite_init
-  ld ix,punchy_sprite_attack_2_1
+  ld ix,punchy_2_sprite_attack_2_1
   call flip_sprite_init
-  ld ix,punchy_sprite_attack_2_2
+  ld ix,punchy_2_sprite_attack_2_2
   call flip_sprite_init
-  ld ix,punchy_sprite_attack_3_1
+  ld ix,punchy_2_sprite_attack_3_1
   call flip_sprite_init
-  ld ix,punchy_sprite_attack_3_2
+  ld ix,punchy_2_sprite_attack_3_2
   call flip_sprite_init
   ret
 
 
-punchy_sprites:
-punchy_sprite_idle_1:
+punchy_2_sprites:
+punchy_2_sprite_idle_1:
     defb 0
     defb 0,37
     defb 2,1
@@ -299,11 +299,12 @@ punchy_sprite_idle_1:
     defb 240,1
     defb 0,3
     defb 0,0
-punchy_sprite_idle_attr_bytes:
+punchy_2_sprite_idle_attr_bytes:
     defb 120,36
     defb 0,0
+    defs 200
 
-punchy_sprite_idle_2:
+punchy_2_sprite_idle_2:
     defb 0
     defb 0,49
     defb 2,1
@@ -447,11 +448,12 @@ punchy_sprite_idle_2:
     defb 240,1
     defb 0,3
     defb 0,0
-punchy_sprite_idle_2_attr_bytes:
+punchy_2_sprite_idle_2_attr_bytes:
     defb 120,36
     defb 0,0
+    defs 200
 
-punchy_sprite_walk_forward_1:
+punchy_2_sprite_walk_forward_1:
     defb 0
     defb 0,37
     defb 2,1
@@ -587,11 +589,12 @@ punchy_sprite_walk_forward_1:
     defb 62,1
     defb 0,4
     defb 0,0
-punchy_sprite_walk_forward_1_attr_bytes:
+punchy_2_sprite_walk_forward_1_attr_bytes:
     defb 120,36
     defb 0,0
+    defs 200
 
-punchy_sprite_walk_forward_2:
+punchy_2_sprite_walk_forward_2:
     defb 0
     defb 0,37
     defb 2,1
@@ -731,11 +734,12 @@ punchy_sprite_walk_forward_2:
     defb 240,1
     defb 0,4
     defb 0,0
-punchy_sprite_walk_forward_2_attr_bytes:
+punchy_2_sprite_walk_forward_2_attr_bytes:
     defb 120,36
     defb 0,0
+    defs 200
 
-punchy_sprite_block:
+punchy_2_sprite_block:
     defb 0
     defb 0,38
     defb 32,1
@@ -886,11 +890,12 @@ punchy_sprite_block:
     defb 224,1
     defb 0,3
     defb 0,0
-punchy_sprite_block_attr_bytes:
+punchy_2_sprite_block_attr_bytes:
     defb 120,36
     defb 0,0
+    defs 200
 
-punchy_sprite_hit:
+punchy_2_sprite_hit:
     defb 0
     defb 0,38
     defb 2,1
@@ -1047,18 +1052,19 @@ punchy_sprite_hit:
     defb 240,1
     defb 0,2
     defb 0,0
-punchy_sprite_hit_attr_bytes:
+punchy_2_sprite_hit_attr_bytes:
     defb 120,36
     defb 0,0
+    defs 200
 
-punchy_attack_1:
-punchy_attack_1_starting_active_frame:
+punchy_2_attack_1:
+punchy_2_attack_1_starting_active_frame:
     defb 3
-punchy_attack_1_ending_active_frame:
+punchy_2_attack_1_ending_active_frame:
     defb 8
-punchy_attack_1_total_frames:
+punchy_2_attack_1_total_frames:
     defb 11
-punchy_sprite_attack_1_1:
+punchy_2_sprite_attack_1_1:
     defb 0
     defb 0,39
     defb 128,1
@@ -1218,11 +1224,12 @@ punchy_sprite_attack_1_1:
     defb 124,1
     defb 0,2
     defb 0,0
-punchy_sprite_attack_1_1_attr_bytes:
+punchy_2_sprite_attack_1_1_attr_bytes:
     defb 120,36
     defb 0,0
+    defs 200
 
-punchy_sprite_attack_1_2:
+punchy_2_sprite_attack_1_2:
     defb 0
     defb 0,37
     defb 2,1
@@ -1374,21 +1381,22 @@ punchy_sprite_attack_1_2:
     defb 240,1
     defb 0,3
     defb 0,0
-punchy_sprite_attack_1_2_attr_bytes:
+punchy_2_sprite_attack_1_2_attr_bytes:
     defb 120,36
     defb 0,0
+    defs 200
 
-punchy_attack_1_execute:
+punchy_2_attack_1_execute:
     ret
 
-punchy_attack_2:
-punchy_attack_2_starting_active_frame:
+punchy_2_attack_2:
+punchy_2_attack_2_starting_active_frame:
     defb 4
-punchy_attack_2_ending_active_frame:
+punchy_2_attack_2_ending_active_frame:
     defb 18
-punchy_attack_2_total_frames:
+punchy_2_attack_2_total_frames:
     defb 22
-punchy_sprite_attack_2_1:
+punchy_2_sprite_attack_2_1:
     defb 0
     defb 0,25
     defb 2,1
@@ -1550,12 +1558,13 @@ punchy_sprite_attack_2_1:
     defb 224,1
     defb 0,4
     defb 0,0
-punchy_sprite_attack_2_1_attr_bytes:
+punchy_2_sprite_attack_2_1_attr_bytes:
     defb 120,36
     defb 0,0
+    defs 200
 
 
-punchy_sprite_attack_2_2:
+punchy_2_sprite_attack_2_2:
     defb 0
     defb 0,33
     defb 224,1
@@ -1748,21 +1757,22 @@ punchy_sprite_attack_2_2:
     defb 224,1
     defb 0,2
     defb 0,0
-punchy_sprite_attack_2_2_attr_bytes:
+punchy_2_sprite_attack_2_2_attr_bytes:
     defb 120,36
     defb 0,0
+    defs 200
 
-punchy_attack_2_execute:
+punchy_2_attack_2_execute:
     ret
 
-punchy_attack_3:
-punchy_attack_3_starting_active_frame:
+punchy_2_attack_3:
+punchy_2_attack_3_starting_active_frame:
     defb 2
-punchy_attack_3_ending_active_frame:
+punchy_2_attack_3_ending_active_frame:
     defb 10
-punchy_attack_3_total_frames:
+punchy_2_attack_3_total_frames:
     defb 10
-punchy_sprite_attack_3_1:
+punchy_2_sprite_attack_3_1:
     defb 0
     defb 0,38
     defb 8,1
@@ -1913,11 +1923,12 @@ punchy_sprite_attack_3_1:
     defb 15,1
     defb 0,4
     defb 0,0
-punchy_sprite_attack_3_1_attr_bytes:
+punchy_2_sprite_attack_3_1_attr_bytes:
     defb 120,36
     defb 0,0
+    defs 200
 
-punchy_sprite_attack_3_2:
+punchy_2_sprite_attack_3_2:
     defb 0
     defb 0,38
     defb 32,1
@@ -2068,9 +2079,10 @@ punchy_sprite_attack_3_2:
     defb 224,1
     defb 0,3
     defb 0,0
-punchy_sprite_attack_3_2_attr_bytes:
+punchy_2_sprite_attack_3_2_attr_bytes:
     defb 120,36
     defb 0,0
+    defs 200
 
-punchy_attack_3_execute:
+punchy_2_attack_3_execute:
     ret

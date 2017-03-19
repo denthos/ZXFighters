@@ -129,8 +129,10 @@ _character_select_loop_h_done:
   ; TODO: reverse sprites of player 2's selected character
   ; initialize player 2
   ld a,(selected_character_p2)
+  call flip_player
+  ld a,(selected_character_p2)
   ld hl,player_2_sprites
-  ;call init_player
+  call init_player
 
   ret
 
@@ -233,7 +235,7 @@ init_player:
   cp 0
   jp z,punchy_init
   cp 1
-  jp z,init_char_1
+  jp z,punchy_2_init
   cp 2
   jp z,init_char_2
   cp 3
@@ -242,7 +244,6 @@ init_player:
   jp z,init_char_4
   cp 5
   jp z,init_char_5
-  ; TODO: reverse sprites of player 2
 
 init_char_1:
   ret
@@ -254,3 +255,17 @@ init_char_4:
   ret
 init_char_5:
   ret
+
+flip_player:
+  cp 0
+  jp z,punchy_flip
+  cp 1
+  jp z,punchy_2_flip
+  cp 2
+  jp z,init_char_2
+  cp 3
+  jp z,init_char_3
+  cp 4
+  jp z,init_char_4
+  cp 5
+  jp z,init_char_5
