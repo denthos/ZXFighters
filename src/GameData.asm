@@ -1,5 +1,7 @@
 round_select_instructions:
 	defb 'G/H to change num rounds'
+best_of_label:
+	defb 'Best of: '
 ; number_of_rounds_string:
 ; 	defb '1'
 character_select_instructions_1:

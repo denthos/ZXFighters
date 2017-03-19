@@ -276,16 +276,17 @@ draw_title_screen:
 	ld c,29
 	call print_string
 
-	ld de,0x5064
+	call draw_number_of_rounds
+
+	ld de, 0x48cc 				; 12, 14
+	ld ix, best_of_label
+	ld c, 9
+	call print_string
+
+	ld de,0x50c4 				; 4, 22 
 	ld ix,round_select_instructions
 	ld c,24
 	call print_string
-
-	ld de,0x48d0
-	ld a, (number_of_rounds)
-	add a, 48
-	ld c,1
-	call print_char 
 
 	ld de,0x50e6
 	ld ix,character_select_instructions_2
@@ -724,10 +725,12 @@ _draw_status_panel_loop:
 	ret
 
 draw_number_of_rounds:
-	ld de,0x48d0
+	ld de, 0x5010; 0x48f0	;0x48d0			; 16, 15 (16)
 	ld a, (number_of_rounds)
 	add a, 48
 	ld c,1
 	call print_char 
-	ret
 
+
+
+	ret 
