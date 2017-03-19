@@ -28,6 +28,12 @@ player_1_idle_counter:
 
 player_1_damage_taken:
 	defb 0
+player_1_health_bar_address:
+	defw 0
+player_1_energy:
+	defb 0
+player_1_energy_bar_address:
+	defw 0
 player_1_hit_stun:
 	defb 0
 player_1_attack_stun:
@@ -121,6 +127,12 @@ player_2_idle_counter:
 	defb 0 ; To fine tune the speed of idling 
 player_2_damage_taken:
 	defb 0
+player_2_health_bar_address:
+	defw 0
+player_2_energy:
+	defb 0
+player_2_energy_bar_address:
+	defw 0
 player_2_hit_stun:
 	defb 0
 player_2_attack_stun:
@@ -239,12 +251,8 @@ i_down:
 o_down:
 	defb 0
 
-player_1_last_health:
-	defb 0
-player_2_last_health:
-	defb 0
-
-player_one_remainder_stuff:
+; right to left remainder data
+rtl_remainders:
 	defb 11111110B
 	defb 11111100B
 	defb 11111000B
@@ -252,7 +260,8 @@ player_one_remainder_stuff:
 	defb 11100000B
 	defb 11000000B
 	defb 10000000B
-player_two_remainder_stuff:
+; left to right remainder data
+ltr_remainders:
 	defb 01111111B
 	defb 00111111B
 	defb 00011111B

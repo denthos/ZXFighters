@@ -61,7 +61,8 @@ _main_game_loop_start:
 	;;; UPDATE INTERFACE ;;;
 	
 	; update health bar
-	call update_health
+	call update_health_bars
+	call update_energy_bars
 
 
 
@@ -343,6 +344,23 @@ _player_2_done:
 	; clear inputs
 	call clear_input
 	call decrement_player_counters
+
+
+
+
+	ld a,(player_1_damage_taken)
+	inc a
+	ld (player_1_damage_taken),a
+
+
+	ld a,(player_2_damage_taken)
+	inc a
+	ld (player_2_damage_taken),a
+
+
+	ld a,(player_1_energy)
+	inc a
+	ld (player_1_energy),a
 
 
 	; check game end conditions

@@ -49,6 +49,7 @@ main_game_init:
   ; initialize player 1 data
   ld a,0
   ld (player_1_damage_taken),a
+  ld (player_1_energy),a
   ld a,3
   ld (player_1_last_location),a
   ld (player_1_current_location),a
@@ -75,16 +76,15 @@ main_game_init:
   ; Draw the box for the thing to go into 
 
   call draw_status_panel
-  call draw_health_bars
-  call draw_energy_bar
+  call init_health_bars
+  call init_energy_bars
 
 
 
 
-
+main_loop_start:
   ei
 main_loop:
-  halt
   halt
   jp main_loop
 
