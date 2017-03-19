@@ -244,3 +244,10 @@ player_two_remainder_stuff:
 	defb 00000111B
 	defb 00000011B
 	defb 00000001B
+
+sprite_flip_original_addr:
+	defs 2
+temp_sprite_flip_data_1:
+	defs 324
+temp_sprite_flip_data_2:
+	defs 324
