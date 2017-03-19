@@ -63,7 +63,8 @@ start:
   ld (player_2_current_sprite),hl
 
   ; clear the screen
-  ld d,0x47             ; 0x47 = 0b01000111 (paper = black, ink = white)
+  ;ld d,0x47             ; 0x47 = 0b01000111 (paper = black, ink = white)
+  ld d,0x6f
   call clear_screen
   ; call draw_background
   ;call init_status_bar

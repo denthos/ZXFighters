@@ -38,7 +38,7 @@ _main_game_loop_start:
 	ld c,14
 	call calculate_color_cell_pixel_address
 	ld ix,(player_1_current_sprite)
-	ld c,0
+	ld c,1
 	call draw_sprite
 
 	; draw new player 2 sprite

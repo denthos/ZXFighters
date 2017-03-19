@@ -179,12 +179,13 @@ _draw_sprite_row_decrement:
 	jp _draw_sprite_row_decrement_return
 
 _draw_sprite_attributes_row_decrement:
+
+	ld a,e
+	ld d,0
+	ld e,26
+	add hl,de
+	ld e,a
 	ld d,6
-	ld c,26
-	ld a,b
-	ld b,0
-	add hl,bc
-	ld b,a
 	jp _draw_sprite_attributes_row_decrement_return
 
 
