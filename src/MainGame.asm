@@ -1,13 +1,12 @@
 main_game_loop:
 	di
-	ld hl,_player_1_attacking_4
 	; save registers
 	;push af
 	;push bc
 	;push hl
 	;push de
 	;push ix
-	ld hl,23672            ; increment frame counter
+	ld hl,frame_counter            ; increment frame counter
 	inc (hl)
 	ld a,(hl)
 	bit 0,a
@@ -73,6 +72,7 @@ _main_game_loop_start:
 	ld a,(player_1_hit_stun)
 	or a
 	jp z,_player_1_no_hit_stun
+_player_1_hit_stun:
 	ld hl,(player_1_sprite_hit)
 	ld (player_1_current_sprite),hl
 	jp _player_1_done      ; if player is in hit stun, skip rest of input logic
@@ -403,4 +403,18 @@ _decrement_player_counters_5:
 	dec a
 	ld (hl),a
 _decrement_player_counters_6:
+	ld hl,player_1_blocking_health
+	ld a,(hl)
+	cp 50
+	jp nc,_decrement_player_counters_7
+	inc a
+	ld (hl),a
+_decrement_player_counters_7:
+	ld hl,player_2_blocking_health
+	ld a,(hl)
+	cp 50
+	jp nc,_decrement_player_counters_8
+	inc a
+	ld (hl),a
+_decrement_player_counters_8:
 	ret

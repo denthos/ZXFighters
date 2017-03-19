@@ -43,13 +43,10 @@ start:
   ;call start_stage_select   ; if we intend to have standalone stage selection, will go here
 
   ;;; INITIALIZE STARTING GAME DATA
-  
+
   ; initialize frame counter
   ld a,0
-  ld hl,23672
-  ld (hl),a
-  inc hl
-  ld (hl),a
+  ld (frame_counter),a  ; initialize frame counter to 0
 
   ; initialize player 1 data
   ld a,0

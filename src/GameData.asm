@@ -6,6 +6,8 @@ left_arrow:
 	defb '<'
 right_arrow:
 	defb '>'
+frame_counter:
+	defb 0
 
 ; Player data for storing runtime game information
 player_1:
@@ -31,12 +33,12 @@ player_1_invincibility_frames:
 	defb 0
 player_1_current_attack_frame:
 	defb 0
+player_1_current_attack:
+	defw 0
 player_1_blocking:
 	defb 0
 player_1_blocking_health:
 	defb 30
-player_1_current_attack:
-	defw 0
 player_1_name:
 	defw 0
 player_1_sprites:
@@ -121,6 +123,10 @@ player_2_current_attack_frame:
 	defb 0
 player_2_current_attack:
 	defw 0
+player_2_blocking:
+	defb 0
+player_2_blocking_health:
+	defb 30
 player_2_name:
 	defw 0
 player_2_sprites:
