@@ -497,6 +497,7 @@ check_sprite_overlap:
 ;     call absA
       ld d, a
       ld a, (player_2_current_location)
+
 ;     call absA
       sub d 
       push af                             ; Save a (difference)(how close they are) on stack 
@@ -505,6 +506,9 @@ check_sprite_overlap:
       ld b, a 
       ld hl, (player_2_current_sprite)
       ld a, (hl)
+
+;       ld a, 0
+
       add a, b 
       ld b, a 
       ld a, 6

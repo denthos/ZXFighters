@@ -56,9 +56,9 @@ start:
   ; initialize player 2 data
   ld a,0
   ld (player_2_damage_taken),a
-  ld a,22
+  ld a,0
   ld (player_2_last_location),a
-  ld (player_2_last_location),a
+  ld (player_2_current_location),a
   ld hl,(player_2_sprite_idle_1)
   ld (player_2_current_sprite),hl
 
