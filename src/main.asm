@@ -22,6 +22,7 @@ start:
   ldir                  ; do the 256 byte copy
   im 2                  ; set interrupt mode to 2
 
+main_start:
   ;;; DRAW TITLE SCREEN AND START CHARACTER SELECT
 
 	; set border color
@@ -42,6 +43,7 @@ start:
   call start_character_select
   ;call start_stage_select   ; if we intend to have standalone stage selection, will go here
 
+main_game_init:
   ;;; INITIALIZE STARTING GAME DATA
 
   ; initialize player 1 data

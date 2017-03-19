@@ -344,7 +344,16 @@ _player_2_done:
 	call clear_input
 	call decrement_player_counters
 
-	ld bc,0
+
+	; check game end conditions
+	ld a,(player_1_damage_taken)
+	cp 80
+	jp nc,_player_2_victory
+	ld a,(player_2_damage_taken)
+	cp 80
+	jp nc,_player_1_victory
+
+
 _main_game_delay_loop:
 	
 
@@ -359,6 +368,14 @@ _main_game_loop_done:
 	reti
 
 
+_player_1_victory:
+	di
+	jp main_start
+
+
+_player_2_victory:
+	di
+	jp main_start
 
 
 decrement_player_counters:
