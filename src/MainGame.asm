@@ -1,5 +1,6 @@
 main_game_loop:
 	di
+	ld hl,_player_1_attacking_4
 	; save registers
 	;push af
 	;push bc
@@ -74,8 +75,6 @@ _main_game_loop_start:
 	jp z,_player_1_no_hit_stun
 	ld hl,(player_1_sprite_hit)
 	ld (player_1_current_sprite),hl
-	ld hl,player_1_hit_stun
-	dec (hl)               ; decrement hit stun counter
 	jp _player_1_done      ; if player is in hit stun, skip rest of input logic
 
 _player_1_no_hit_stun:
@@ -90,13 +89,17 @@ _player_1_no_hit_stun:
 	jp z,_player_1_attacking_init_1
 	cp 2
 	jp z,_player_1_attacking_init_2
-	ld ix,player_1_attack_3
-	jp _player_1_attacking_1
+	cp 3
+	jp z,_player_1_attacking_init_3
 _player_1_attacking_init_1:
 	ld ix,player_1_attack_1
 	jp _player_1_attacking_1
 _player_1_attacking_init_2:
 	ld ix,player_1_attack_2
+	jp _player_1_attacking_1
+_player_1_attacking_init_3:
+	ld ix,player_1_attack_3
+	jp _player_1_attacking_1
 
 	; begin attack logic
 _player_1_attacking_1:
@@ -106,8 +109,8 @@ _player_1_attacking_1:
 	ld a,(player_1_current_attack_frame)
 	cp b
 	jp nc,_player_1_attacking_2
-	ld h,(ix+3)
-	ld l,(ix+4)
+	ld h,(ix+4)
+	ld l,(ix+3)
 	ld (player_1_current_sprite),hl
 	jp _player_1_attacking_done
 
@@ -119,8 +122,8 @@ _player_1_attacking_2:
 	ld a,(player_1_current_attack_frame)
 	cp b
 	jp nc,_player_1_attacking_3
-	ld h,(ix+5)
-	ld l,(ix+6)
+	ld h,(ix+6)
+	ld l,(ix+5)
 	ld (player_1_current_sprite),hl
 	call player_1_attack_1_execute
 	jp _player_1_attacking_done
@@ -132,8 +135,8 @@ _player_1_attacking_3:
 	ld a,(player_1_current_attack_frame)
 	cp b
 	jp nc,_player_1_attacking_4
-	ld h,(ix+3)
-	ld l,(ix+4)
+	ld h,(ix+4)
+	ld l,(ix+3)
 	ld (player_1_current_sprite),hl
 	jp _player_1_attacking_done
 
@@ -141,8 +144,9 @@ _player_1_attacking_4:
 	; attack has finished if we get here, clean up and process inputs like normal
 	ld hl,(player_1_sprite_idle_1)
 	ld (player_1_current_sprite),hl
-	ld bc,0
-	ld (player_1_current_attack),bc
+	xor a
+	ld (player_1_current_attack),a
+	ld (player_1_current_attack_frame),a
 	jp _player_1_not_attacking
 
 
@@ -152,6 +156,29 @@ _player_1_attacking_done:
 	jp _player_1_done
 
 _player_1_not_attacking:
+	ld a,(player_1_blocking)
+	or a
+	jp z,_player_1_not_blocking
+_player_1_blocking:
+	ld hl,(player_1_sprite_block)
+	ld (player_1_current_sprite),hl
+	ld hl,player_1_blocking_health
+	ld a,(hl)
+	or a
+	jp z,_player_1_blocking_expired
+	dec (hl)
+	ld a,5
+	ld (player_1_movement_stun),a
+	xor a
+	ld (player_1_blocking),a
+	jp _player_1_done
+_player_1_blocking_expired:
+	ld a,50
+	ld (player_1_hit_stun),a
+	xor a
+	ld (player_1_blocking),a
+
+_player_1_not_blocking:
 
 	; read player input
 	call read_player_1_input
@@ -161,8 +188,6 @@ _player_1_not_attacking:
 	ld a,(player_1_attack_stun)
 	or a
 	jp z,_player_1_no_attack_stun
-	ld hl,player_1_attack_stun
-	dec (hl)
 	jp _player_1_movement_logic
 
 
@@ -181,8 +206,6 @@ _player_1_movement_logic:
 	ld a,(player_1_movement_stun)
 	or a
 	jp z,_player_1_no_movement_stun
-	ld hl,player_1_movement_stun
-	dec (hl)
 	jp _player_1_done
 
 
@@ -203,8 +226,6 @@ _player_1_done:
 	jp z,_player_2_no_hit_stun
 	ld hl,(player_2_sprite_hit)
 	ld (player_2_current_sprite),hl
-	ld hl,player_2_hit_stun
-	dec (hl)               ; decrement hit stun counter
 	jp _player_2_done      ; if player is in hit stun, skip rest of input logic
 
 _player_2_no_hit_stun:
@@ -290,8 +311,6 @@ _player_2_not_attacking:
 	ld a,(player_2_attack_stun)
 	or a
 	jp z,_player_2_no_attack_stun
-	ld hl,player_2_attack_stun
-	dec (hl)
 	jp _player_2_movement_logic
 
 
@@ -310,8 +329,6 @@ _player_2_movement_logic:
 	ld a,(player_2_movement_stun)
 	or a
 	jp z,_player_2_no_movement_stun
-	ld hl,player_2_movement_stun
-	dec (hl)
 	jp _player_2_done
 
 
@@ -324,6 +341,11 @@ _player_2_done:
 
 	; clear inputs
 	call clear_input
+	call decrement_player_counters
+
+	ld bc,0
+_main_game_delay_loop:
+	
 
 _main_game_loop_done:
 	; restore registers
@@ -334,3 +356,51 @@ _main_game_loop_done:
 	;pop af
 	ei
 	reti
+
+
+
+
+decrement_player_counters:
+	ld hl,player_1_hit_stun
+	ld a,(hl)
+	or a
+	jp z,_decrement_player_counters_1
+	dec a
+	ld (hl),a
+_decrement_player_counters_1:
+	ld hl,player_1_attack_stun
+	ld a,(hl)
+	or a
+	jp z,_decrement_player_counters_2
+	dec a
+	ld (hl),a
+_decrement_player_counters_2:
+	ld hl,player_1_movement_stun
+	ld a,(hl)
+	or a
+	jp z,_decrement_player_counters_3
+	dec a
+	ld (hl),a
+_decrement_player_counters_3:
+	ld hl,player_2_hit_stun
+	ld a,(hl)
+	or a
+	jp z,_decrement_player_counters_4
+	dec a
+	ld (hl),a
+_decrement_player_counters_4:
+	ld hl,player_2_hit_stun
+	ld a,(hl)
+	or a
+	jp z,_decrement_player_counters_5
+	dec a
+	ld (hl),a
+_decrement_player_counters_5:
+	ld hl,player_2_hit_stun
+	ld a,(hl)
+	or a
+	jp z,_decrement_player_counters_6
+	dec a
+	ld (hl),a
+_decrement_player_counters_6:
+	ret

@@ -119,9 +119,11 @@ read_input_end:
 clear_input: 
       ld a, 0 
       ld (a_down), a
+      ld (s_down), a
       ld (d_down), a 
       ld (j_down), a 
       ld (l_down), a
+      ld (q_down), a
       ld (w_down), a
       ld (e_down), a 
       ld (k_down), a

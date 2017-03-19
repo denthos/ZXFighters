@@ -31,6 +31,10 @@ player_1_invincibility_frames:
 	defb 0
 player_1_current_attack_frame:
 	defb 0
+player_1_blocking:
+	defb 0
+player_1_blocking_health:
+	defb 30
 player_1_current_attack:
 	defw 0
 player_1_name:

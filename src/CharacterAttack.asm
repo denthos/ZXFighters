@@ -15,10 +15,16 @@ update_player_check_w:
 update_player_check_e:
 	ld a, (e_down)
 	cp 1
-	jp nz, update_player_attack_end
+	jp nz, update_player_check_s
 	ld a, 3
 	ld (player_1_current_attack), a
 	ret 
+update_player_check_s:
+	ld a, (s_down)
+	cp 1
+	jp nz, update_player_attack_end
+	ld (player_1_blocking), a
+	ret
 
 
 

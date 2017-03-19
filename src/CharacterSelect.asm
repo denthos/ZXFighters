@@ -82,14 +82,14 @@ _character_select_loop_l_done:
   ;;;;; characters have been locked in, initialize player data
   ; initialize player 1
   ld a,(selected_character_p1)
-  ld hl,player_1_sprites
+  ld hl,player_1_name
   call init_player
 
   ; TODO: reverse sprites of player 2's selected character
   ; initialize player 2
   ld a,(selected_character_p2)
   ld hl,player_2_sprites
-  call init_player
+  ;call init_player
 
   ret
 

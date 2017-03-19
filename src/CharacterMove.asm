@@ -12,14 +12,12 @@ update_check_a:
       cp 1 
       jp nz, no_movement_player_1 
       ld a, (player_1_current_location)
-      out (254), a 
       ld a, 0
       call move_sprite_right
 ;       call halt_8
       ;Check result to know what the sprite is 
 ;       ld a , 2  
       ld a, (player_1_current_location)
-      out (254), a  
       cp 0 
       jp nz, update_movement_check_end
       jp no_movement_player_1
