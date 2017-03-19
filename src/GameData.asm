@@ -14,7 +14,7 @@ player_1:
 player_1_current_location:
 	defb 4
 player_1_last_location:
-	defb 4
+	defb 4			
 ; player_1_current_bit_offset:
 player_1_current_walking_sprite:
 	defb 0

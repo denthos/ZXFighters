@@ -238,7 +238,7 @@ resume_move_sprite_left:
       dec a                                     ; Else increment a to move to the right of the screen
       ld (player_1_current_location), a         ; Save the updated x position in memory
       ld b, a
-      ld a, (8); 10                             ; Load sprite one y location into a, in order to load c
+      ld a, 0 ;(8); 10                             ; Load sprite one y location into a, in order to load c
       ld c,a                                    ; Load c with the y location of sprite 1 from a 
       
       ld a, 0 
@@ -276,7 +276,7 @@ resume_move_sprite_left_2:
       dec a                                     ; Else increment a to move to the right of the screen
       ld (player_2_current_location),a          ; Save the updated x position in memory
       ld b,a
-      ld a,(8)                                  ; Load sprite one y location into a, in order to load c
+      ld a, 0;(8)                                  ; Load sprite one y location into a, in order to load c
       ld c,a                                    ; Load c with the y location of sprite 1 from a 
 
       call check_sprite_overlap
@@ -380,7 +380,7 @@ resume_move_sprite_right:
       inc a                                     ; Else increment a to move to the right of the screen
       ld (player_1_current_location),a          ; Save the updated x position in memory
       ld b,a
-      ld a,(8)                                  ; Load the sprite 1 y location into the a register to be loaded into the c register
+      ld a,0;(8)                                  ; Load the sprite 1 y location into the a register to be loaded into the c register
       ld c,a                                    ; Load the y position into the c register for calculate_color_cell_pixel_address
 ;       call check_sprite_overlap
 ;       out (254), a  
@@ -415,7 +415,7 @@ resume_move_sprite_right_2:
       inc a                                     ; Else increment a to move to the right of the screen
       ld (player_2_current_location),a          ; Save the updated x position in memory
       ld b,a
-      ld a,(8)                                  ; Load the sprite 1 y location into the a register to be loaded into the c register
+      ld a,0; (8)                                  ; Load the sprite 1 y location into the a register to be loaded into the c register
       ld c,a                                    ; Load the y position into the c register for calculate_color_cell_pixel_address
       ; we may never need this because second sprite moving right should never be reverted 
 ;     call check_sprite_overlap
