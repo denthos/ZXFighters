@@ -722,7 +722,7 @@ draw_health_bars:
 	ld a, 21
 	ld c, a 
 	call calculate_color_cell_attr_address
-	ld a, 100 
+	ld a, 0x54 
 	ld b, 10 
 _draw_health_bars_color_1: 
 	ld (hl), a
@@ -745,7 +745,7 @@ _draw_health_bars_color_1:
 	ld a, 21
 	ld c, a 
 	call calculate_color_cell_attr_address
-	ld a, 100 
+	ld a, 0x54
 	ld b, 10 
 _draw_health_bars_color_2: 
 	ld (hl), a
