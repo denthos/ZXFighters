@@ -15,7 +15,8 @@ player_1_current_location:
 	defb 4
 player_1_last_location:
 	defb 4
-player_1_current_bit_offset:
+; player_1_current_bit_offset:
+player_1_current_walking_sprite:
 	defb 0
 player_1_current_sprite:
 	defw 0
@@ -105,7 +106,8 @@ player_2_current_location:
 	defb 4
 player_2_last_location:
 	defb 4
-player_2_current_bit_offset:
+; player_2_current_bit_offset:
+player_2_current_walking_sprite:
 	defb 0
 player_2_current_sprite:
 	defw 0
