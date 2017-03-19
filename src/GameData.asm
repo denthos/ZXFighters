@@ -269,6 +269,24 @@ ltr_remainders:
 	defb 00000111B
 	defb 00000011B
 	defb 00000001B
+; right to left remainder data
+rtl_remainders_2:
+	defb 10000000B
+	defb 11000000B
+	defb 11100000B
+	defb 11110000B
+	defb 11111000B
+	defb 11111100B
+	defb 11111110B
+; left to right remainder data
+ltr_remainders_2:
+	defb 00000001B
+	defb 00000011B
+	defb 00000111B
+	defb 00001111B
+	defb 00011111B
+	defb 00111111B
+	defb 01111111B
 
 sprite_flip_original_addr:
 	defs 2

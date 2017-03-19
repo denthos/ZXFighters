@@ -157,15 +157,15 @@ _init_energy_bars_2:
         djnz _init_energy_bars_2
 
         ; init address variable for player 1
-        ld b,1
-        ld c,23
-        call calculate_color_cell_pixel_address
+        ld b,8
+        ld c,178
+        call calculate_pixel_byte_address
         ld (player_1_energy_bar_address),hl
 
         ; init address variable for player 2
-        ld b,31
-        ld c,23
-        call calculate_color_cell_pixel_address
+        ld b,248
+        ld c,178
+        call calculate_pixel_byte_address
         ld (player_2_energy_bar_address),hl
 
         ret
@@ -184,13 +184,13 @@ _init_energy_bars_2:
 update_energy_bars:
         ld a,(player_1_energy)
         ld c,a
-        ld e,0                                  ; flag for player one
+        ld e,1                                  ; flag for player one
         ld hl,(player_1_energy_bar_address)
         call individual_energy
 
         ld a,(player_2_energy)
         ld c,a
-        ld e,1                                  ; flag for player two
+        ld e,0                                  ; flag for player two
         ld hl,(player_2_energy_bar_address)
         call individual_energy
         ret
@@ -227,11 +227,11 @@ individual_energy:
         cp e                                    ; check which player we are updating
         jp nz,_energy_player_two_remainder
 
-        ld hl,ltr_remainders        ; updating player one
+        ld hl,ltr_remainders_2        ; updating player one
         jp _energy_remainder_stuff_loaded
 
 _energy_player_two_remainder:
-        ld hl,rtl_remainders        ; ld address of remainder lookup table  (20)
+        ld hl,rtl_remainders_2        ; ld address of remainder lookup table  (20)
 
 _energy_remainder_stuff_loaded:
         add hl,bc                               ; add offset (remainder) into LT address(11)
@@ -240,7 +240,7 @@ _energy_remainder_stuff_loaded:
 
 _energy_no_remainder:
         ld a,e                                  ; set player flag
-        ld e,8                                  ; height of bar in pixel lines
+        ld e,4                                  ; height of bar in pixel lines
         pop hl
         call draw_bar
 ;         ld (player_2_damage_taken), a       ; TODO: reset damage taken value in memory
