@@ -62,10 +62,9 @@ _main_game_loop_start:
 	
 	; update health bar
 
-; 	ld a, (player_2_damage_taken)
-; 	inc a 
-; 	ld (player_2_damage_taken), a 
-; 	call update_health
+	ld a, (player_2_damage_taken)
+	inc a 
+	ld (player_2_damage_taken), a 
 
 	call update_health_bars
 	call update_energy_bars
@@ -424,9 +423,14 @@ _player_2_victory:
 	;jp main_loop_start
 
 _show_player_1_victory_screen:
+	ld a, 0 
+	ld (player_1_rounds_won), a 
+	ld (player_2_rounds_won), a 
 	jp main_start
 
 _show_player_2_victory_screen:
+	ld (player_1_rounds_won), a 
+	ld (player_2_rounds_won), a 
 	jp main_start
 
 set_up_characters:
@@ -454,7 +458,7 @@ set_up_characters:
 	ld a,0
 	ld (player_1_damage_taken),a
 	ld a,3
-	ld (player_1_last_location),a
+; 	ld (player_1_last_location),a
 	ld (player_1_current_location),a
 	ld hl,(player_1_sprite_idle_1)
 	ld (player_1_current_sprite),hl
@@ -466,7 +470,7 @@ set_up_characters:
 	ld (player_2_damage_taken),a
 	ld a,0
 	ld (player_2_last_location),a
-	ld (player_2_current_location),a
+; 	ld (player_2_current_location),a
 	ld hl,(player_2_sprite_idle_1)
 	ld (player_2_current_sprite),hl
 	ld a, 1
