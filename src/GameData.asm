@@ -22,6 +22,10 @@ player_1_current_sprite:
 	defw 0
 player_1_current_idle_sprite:
 	defb 0 ; 0 means not idle, 1 means idle 1 2 means idle 2 
+
+player_1_idle_counter: 
+	defb 0 ; To fine tune the speed of idling 
+
 player_1_damage_taken:
 	defb 0
 player_1_hit_stun:
@@ -111,6 +115,10 @@ player_2_current_walking_sprite:
 	defb 0
 player_2_current_sprite:
 	defw 0
+player_2_current_idle_sprite:
+	defb 0 ; 0 means not idle, 1 means idle_1, 2 means idle_2 
+player_2_idle_counter: 
+	defb 0 ; To fine tune the speed of idling 
 player_2_damage_taken:
 	defb 0
 player_2_hit_stun:
@@ -136,9 +144,6 @@ player_2_sprite_idle_1:
 	defw 0 ; sprite for standing still animation
 player_2_sprite_idle_2:
 	defw 0 ; second sprite for standing still animation
-
-player_2_current_idle_sprite:
-	defb 0 ; 0 means not idle, 1 means idle_1, 2 means idle_2 
 
 player_2_sprite_walk_forward_1:
 	defw 0 ; sprite for walking first 4 bits

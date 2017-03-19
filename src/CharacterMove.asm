@@ -49,6 +49,13 @@ update_check_d_a_pressed:
 
 ; Can be optimized to only use two numbers 
 no_movement_player_1:
+      ld a, (player_1_idle_counter)
+      inc a 
+      ld (player_1_idle_counter), a 
+      cp 10 
+      jp c, update_movement_check_end           ; If no movement for less than 25 frames then wait 
+      ld a, 0                                   ; Reset the counter 
+      ld (player_1_idle_counter), a             ; Reset the counter 
       ld a, (player_1_current_idle_sprite)      ; Load the number of the idle sprite being used (0 -> not idle, 1 -> idle1, 2 -> idle2)
       cp 0                                      ; Check if it's 0 (not idle)
       jp z, set_player_1_idle_sprite            ; If it's not the idle sprite then set to idle 1 
@@ -86,6 +93,13 @@ update_check_j_l_pressed:
       ret 
 
 no_movement_player_2:
+      ld a, (player_2_idle_counter)
+      inc a 
+      ld (player_2_idle_counter), a 
+      cp 10 
+      jp c, update_movement_check_end           ; If no movement for less than 25 frames then wait 
+      ld a, 0                                   ; Reset the counter 
+      ld (player_2_idle_counter), a             ; Reset the counter 
       ld a, (player_2_current_idle_sprite)      ; Load the number of the current idle sprite (0 -> not idle, 1 -> idle1, 2 -> idle2)
       cp 0                                      ; Check if not idle already 
       jp z, set_player_2_idle_sprite            ; If it's not the idle sprite then set to idle 1 
@@ -226,6 +240,10 @@ resume_move_sprite_left:
       ld b, a
       ld a, (8); 10                             ; Load sprite one y location into a, in order to load c
       ld c,a                                    ; Load c with the y location of sprite 1 from a 
+      
+      ld a, 0 
+      ld (player_1_current_idle_sprite), a      ; Not idle
+
       ld a, (player_1_current_walking_sprite)   ; Load that into a 
       inc a                                     ; To differentiate from failure 
       cp 1
@@ -265,6 +283,9 @@ resume_move_sprite_left_2:
       cp 1                                      ; Will set the Z flag if A == 1
       jp z, _revert_move_left_2                 ; a = 1 means overlapping now
 
+      ld a, 0 
+      ld (player_2_current_idle_sprite), a      ; Not idle 
+
       ld a, (player_2_current_walking_sprite)   ; a will be 1, 3, 5 ---- 0 is for failure 
       inc a 
       cp 1
@@ -302,7 +323,7 @@ resume_move_sprite_left_2:
 
 _revert_move_left_2:
       ld a, (player_2_current_walking_sprite)    
-      cp 4                           
+      cp 6 ;4                           
       jp nz, _revert_move_left_sub_offset_2     ; 
       xor a                                     ; Now onto the next thing  
       jp _resume_revert_move_left_2
@@ -314,7 +335,9 @@ _resume_revert_move_left_2:
       inc a                                     ; Revert the change by decrementing the x position 
       ld (player_2_current_location), a         ; Save the position in memory
       ; Load the idle sprite 
-      jp set_player_2_idle_sprite               ; Finish 
+      ; sjp set_player_2_idle_sprite               ; Finish 
+      ld a, 0 
+      ret 
 _move_sprite_left_done_edge:                    ; Finish
       ld a, 0                                   ; Output a = 0 so no need to draw anything 
       ret
@@ -338,9 +361,9 @@ _move_sprite_left_done:                         ; Finish
 move_sprite_right:
       cp 0                                      ; Check if sprite 1 or 2 move
       jp nz, _move_sprite_right_2               ; If 1 then absolute jump to sprite 2 movement right code
-      ld a,(player_1_current_location)          ; Else load sprite 1 x position into a register
+      ld a, (player_1_current_location)          ; Else load sprite 1 x position into a register
       cp 26                                     ; Check if the sprite is already as far right as possible 
-      jp z,_move_sprite_right_done_edge         ; If so then skip to the end and return 
+      jp z, _move_sprite_right_done_edge         ; If so then skip to the end and return 
       ;for smoother movement 
       ld a, (player_1_current_walking_sprite)   ; Load the bit offsett to check to see where we are in the character cell 
       cp 6; 6                                   ; Check if the bit offset is = 4 (after 4 moves to next character cell)
@@ -364,10 +387,10 @@ resume_move_sprite_right:
 ;       cp 1                                     ; Will set the Z flag if A == 1
 ;       jp z, _revert_move_right                 ; a = 1 means overlapping now, will auto end and fail the method
       ld a, (player_1_current_walking_sprite)    ; 
-      inc a 
+      inc a                                     ; 
 
       cp 1
-      jp z, set_player_1_idle_sprite
+      jp z, set_player_1_idle_sprite              
       cp 3
       jp z, set_player_1_first_walking_sprite
       cp 5
@@ -409,34 +432,35 @@ resume_move_sprite_right_2:
       jp set_player_2_first_walking_sprite     ; Must be 5, jp automatically , should return 
 
 ; Input: A - Which sprite , IX, 
-_finish_move_sprite_right:
-      push af 
-      call calculate_color_cell_pixel_address   ; Will set up HL 
+; _finish_move_sprite_right:
+;       push af 
+;       call calculate_color_cell_pixel_address   ; Will set up HL 
 
-      ld c, 0 ; Blend always 
-      ; Check player one or player two 
-      pop af
-_continue_finish_move_sprite_right:
-      call draw_sprite                          ; Actually draw the sprite in the new location 
-      ret                                       ; return to original call 
+;       ld c, 0 ; Blend always 
+;       ; Check player one or player two 
+;       pop af
+; _continue_finish_move_sprite_right:
+;       call draw_sprite                          ; Actually draw the sprite in the new location 
+;       ret                                       ; return to original call 
 
 _revert_move_right:
       ld a, (player_1_current_walking_sprite)       ; 
       cp 0                          ; 
       jp nz, _revert_move_right_sub_offset      ; 
       xor a 
-      ld a, 4                             ; 
+      ld a, 6;4                             ; 
       jp _resume_revert_move_right
 _revert_move_right_sub_offset: 
       dec a 
       dec a 
 _resume_revert_move_right:
-      ld (player_1_current_walking_sprite), a       ; Save the old offset back to memory 
+      ld (player_1_current_walking_sprite), a   ; Save the old offset back to memory 
       ld a, (player_1_current_location)         ; Load the new faulty x position into the register a 
       dec a                                     ; Revert the change by decrementing the x position 
       ld (player_1_current_location), a         ; Save the position in memory
-      jp set_player_1_idle_sprite 
-
+      ;jp set_player_1_idle_sprite 
+      ld a, 0 
+      ret 
 ; May never need this again 
 ; _revert_move_right_2:
 ;     ld a, (player_2_current_walking_sprite)       ; 
