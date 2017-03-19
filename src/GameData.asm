@@ -73,7 +73,7 @@ player_1_sprite_attack_1_2:
 player_1_attack_1_execute:
 	defb 0xcd
 	defw 0
-	ret
+	jp hit_player_2
 player_1_attack_2:
 player_1_attack_2_starting_active_frame:
 	defb 0
@@ -88,7 +88,7 @@ player_1_sprite_attack_2_2:
 player_1_attack_2_execute:
 	defb 0xcd
 	defw 0
-	ret
+	jp hit_player_2
 player_1_attack_3:
 player_1_attack_3_starting_active_frame:
 	defb 0
@@ -103,7 +103,7 @@ player_1_sprite_attack_3_2:
 player_1_attack_3_execute:
 	defb 0xcd
 	defw 0
-	ret
+	jp hit_player_2
 
 player_2:
 player_2_current_location:
@@ -167,7 +167,7 @@ player_2_sprite_attack_1_2:
 player_2_attack_1_execute:
 	defb 0xcd
 	defw 0
-	ret
+	jp hit_player_1
 player_2_attack_2:
 player_2_attack_2_starting_active_frame:
 	defb 0
@@ -182,7 +182,7 @@ player_2_sprite_attack_2_2:
 player_2_attack_2_execute:
 	defb 0xcd
 	defw 0
-	ret
+	jp hit_player_1
 player_2_attack_3:
 player_2_attack_3_starting_active_frame:
 	defb 0
@@ -197,7 +197,7 @@ player_2_sprite_attack_3_2:
 player_2_attack_3_execute:
 	defb 0xcd
 	defw 0
-	ret
+	jp hit_player_1
 
 
 ; 2 bytes of memory reserved for storing screen addresses in draw routines

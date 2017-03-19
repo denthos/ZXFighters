@@ -44,10 +44,6 @@ start:
 
   ;;; INITIALIZE STARTING GAME DATA
 
-  ; initialize frame counter
-  ld a,0
-  ld (frame_counter),a  ; initialize frame counter to 0
-
   ; initialize player 1 data
   ld a,0
   ld (player_1_damage_taken),a

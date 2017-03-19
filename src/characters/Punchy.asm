@@ -68,6 +68,8 @@ punchy_init:
     ld (hl),b
     inc hl
     inc hl
+    inc hl
+    inc hl
 
     ld a,(punchy_attack_2_starting_active_frame)
     ld (hl),a
@@ -97,6 +99,8 @@ punchy_init:
     ld (hl),c
     inc hl
     ld (hl),b
+    inc hl
+    inc hl
     inc hl
     inc hl
 
