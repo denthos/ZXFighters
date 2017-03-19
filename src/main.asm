@@ -76,6 +76,7 @@ main_game_init:
 
   call draw_status_panel
   call draw_health_bars
+  call draw_energy_bar
 
 
 

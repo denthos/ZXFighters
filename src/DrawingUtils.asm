@@ -658,3 +658,21 @@ _draw_health_bars_color_2:
 
 
 	ret 
+
+
+; ------------------------------------------------------------------------------------
+; Draws the health bars and sets the background color of them to green for each sprite 
+; ------------------------------------------------------------------------------------
+draw_energy_bar:
+	ld a, 9
+	ld b, a 	
+	ld a, 178
+	ld c, a 
+	call calculate_pixel_byte_address			;calculate_color_cell_pixel_address
+
+	ex de, hl
+	ld a, 10 		
+  	ld b, a
+  	ld a, 1					; Height  
+  	ld h, a					; Load into h fo draw_bar_init
+	call draw_bar_init
