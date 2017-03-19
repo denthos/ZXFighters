@@ -239,10 +239,9 @@ i_down:
 o_down:
 	defb 0
 
-player_one_last_update_address:
+player_1_last_health:
 	defb 0
-
-player_two_last_update_address:
+player_2_last_health:
 	defb 0
 
 player_one_remainder_stuff:

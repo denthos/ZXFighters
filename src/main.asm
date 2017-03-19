@@ -98,5 +98,6 @@ main_loop:
   include "src/CharacterMove.asm"
   include "src/CharacterAttack.asm"
   include "src/InputUtils.asm"
+  include "src/InterfaceUtils.asm"
 
   include "src/characters/Punchy.asm"
