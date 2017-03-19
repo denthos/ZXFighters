@@ -71,6 +71,16 @@ main_game_init:
   ; call draw_background
   ;call init_status_bar
 
+  ; Load interface both full health 
+  ; Draw the box for the thing to go into 
+
+  call draw_status_panel
+  call draw_health_bars
+
+
+
+
+
   ei
 main_loop:
   halt

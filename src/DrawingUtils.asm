@@ -362,13 +362,12 @@ _ld_character_sprite_address_char_1:
 ;       B = length of bar in color cells
 ;       H = height of bar
 ;       DE = address of top-left pixel byte of bar
-;
 ; Outputs: N/A
 ;
 ; Uses: A, B, C, DE, H
 ; ------------------------------------------------------------------------------
 draw_bar_init:
-        ld a,255
+        ld a, 255
         ld c,e
 _draw_bar_loop_init:
         ld (de),a
@@ -682,5 +681,77 @@ _compress_sprite_same:
         jp _compress_sprite_end_exx_stuff
 	
 	
+; ------------------------------------------------------------------------------
+; This draws the panel with background colors and whatever color is in a 
+;
+; Inputs:
+;   A = color of the panel (to do )
+; ------------------------------------------------------------------------------
 	
+draw_status_panel:
+	ld a, 0					; Load 1 into a for b 
+	ld b, a 				; Load 1 for b (x coord)
+	ld a, 20 				; Load 20 into a for c (y coord)
+	ld c, a 				; 
+	call calculate_color_cell_attr_address	; Load the address for this color cell attr in hl 
+	ld b, 160				; 160 attr bytes to set 
+_draw_status_panel_loop:			
+	ld (hl), 0x47				; Set black color 
+	inc hl 					; increment the pointer 
+	djnz _draw_status_panel_loop		; Loop 
+	ret 					; Done 
+
+; ------------------------------------------------------------------------------
+; Draws the health bars and sets the background color of them to green for each sprite 
+; ------------------------------------------------------------------------------
+draw_health_bars:
+	ld a, 1
+	ld b, a 	
+	ld a, 21
+	ld c, a 
+	call calculate_color_cell_pixel_address
+	ex de, hl
+	ld a, 10 
+  	ld b, a
+  	ld a, 8 
+  	ld h, a
+	call draw_bar_init
 	
+	ld a, 1
+	ld b, a 	
+	ld a, 21
+	ld c, a 
+	call calculate_color_cell_attr_address
+	ld a, 100 
+	ld b, 10 
+_draw_health_bars_color_1: 
+	ld (hl), a
+	inc hl 
+	djnz _draw_health_bars_color_1
+	ld a, 21
+	ld b, a
+	ld a, 21 
+	ld c, a 
+	call calculate_color_cell_pixel_address
+	ex de, hl 
+	ld a, 10 
+	ld b, a 
+	ld a, 8 
+	ld h, a 
+	call draw_bar_init
+
+	ld a, 21
+	ld b, a 	
+	ld a, 21
+	ld c, a 
+	call calculate_color_cell_attr_address
+	ld a, 100 
+	ld b, 10 
+_draw_health_bars_color_2: 
+	ld (hl), a
+	inc hl 
+	djnz _draw_health_bars_color_2
+
+
+
+	ret 
