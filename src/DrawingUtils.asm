@@ -73,6 +73,7 @@ fill_byte_fast:
 ; Subroutine for drawing a sprite onto the screen
 ;
 ; Inputs:
+;   B  = 0 for player 1, 1 for player 2
 ;   C  = 0 for overwrite mode, 1 for blending mode
 ;   HL = Address of vram to write to
 ;   IX = Address of sprite pixel data
@@ -80,7 +81,14 @@ fill_byte_fast:
 ;
 ; ------------------------------------------------------------------------------
 draw_sprite:
+	ld a,b
+	or a
+	jp nz,_draw_sprite_load_offset_skip
 	ld e,(ix+0)            ; get the number of columns to cut off at rightside of sprite
+	jp _draw_sprite_load_offset_skip_2
+_draw_sprite_load_offset_skip:
+	ld e,0
+_draw_sprite_load_offset_skip_2:
 	ld d,6                 ; number of columns (not variable)
 	ld (draw_memory_store),hl
 	dec ix                 ; decrement ix so double increment at start of unpack gets us to the data

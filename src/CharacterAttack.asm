@@ -73,6 +73,7 @@ update_player_attack_end:
 ;
 ; ------------------------------------------------------------------------------
 hit_player_1:
+	ret
 	ld a,c
 	or a
 	jp nz,_hit_player_1_no_block
@@ -93,7 +94,7 @@ _hit_player_1_done:
 	ret
 
 hit_player_2:
-	ret ; remove this once we add player 2 in for real
+	ret
 	ld a,c
 	or a
 	jp nz,_hit_player_2_no_block

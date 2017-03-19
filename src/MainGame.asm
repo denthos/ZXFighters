@@ -8,7 +8,6 @@ main_game_loop:
 	;push ix
 	ld hl,frame_counter            ; increment frame counter
 	inc (hl)
-	ld a,(hl)
 _main_game_loop_start:
 
 	;;;;;;;;;; START MAIN GAME LOOP ;;;;;;;;;;
@@ -22,15 +21,6 @@ _main_game_loop_start:
 	ld c,14
 	call calculate_color_cell_pixel_address
 	call clear_sprite
-
-	; draw new player 1 sprite
-	ld a,(player_1_current_location)
-	ld b,a
-	ld c,14
-	call calculate_color_cell_pixel_address
-	ld ix,(player_1_current_sprite)
-	ld c,1
-	call draw_sprite
 
 	; clear old player 2 sprite
 	ld a,(player_2_last_location)
@@ -46,6 +36,17 @@ _main_game_loop_start:
 	call calculate_color_cell_pixel_address
 	ld ix,(player_2_current_sprite)
 	ld c,1
+	ld b,1
+	call draw_sprite
+
+	; draw new player 1 sprite
+	ld a,(player_1_current_location)
+	ld b,a
+	ld c,14
+	call calculate_color_cell_pixel_address
+	ld ix,(player_1_current_sprite)
+	ld c,1
+	ld b,0
 	call draw_sprite
 
 	; update player positions
@@ -219,7 +220,7 @@ _player_1_done:
 
 
 
-	;;; PLAYER 1 LOGIC ;;;
+	;;; PLAYER 2 LOGIC ;;;
 
 	; check if player is in hit stun
 	ld a,(player_2_hit_stun)
@@ -411,8 +412,8 @@ _player_1_victory:
 	jp z, _show_player_1_victory_screen 
 
 	call set_up_characters
-	;jp main_loop_start 
-	jp main_game_loop
+	jp main_loop_start 
+	;jp main_game_loop
 
 
 
@@ -426,8 +427,8 @@ _player_2_victory:
 	cp b 
 	jp z, _show_player_2_victory_screen 
 	call set_up_characters 
-	jp main_game_loop
-	;jp main_loop_start
+	;jp main_game_loop
+	jp main_loop_start
 
 _show_player_1_victory_screen:
 	ld a, 0 
@@ -477,7 +478,7 @@ set_up_characters:
 	ld a,0
 	ld (player_2_damage_taken),a
 	ld (player_2_energy),a
-	ld a,18
+	ld a,8
 	ld (player_2_last_location),a
  	ld (player_2_current_location),a
 	ld hl,(player_2_sprite_idle_1)
@@ -510,11 +511,11 @@ _decrement_player_counters_2:
 	dec a
 	ld (hl),a
 _decrement_player_counters_3:
-	ld hl,player_2_hit_stun
+	ld hl,player_1_blocking_health
 	ld a,(hl)
-	or a
-	jp z,_decrement_player_counters_4
-	dec a
+	cp 50
+	jp nc,_decrement_player_counters_4
+	inc a
 	ld (hl),a
 _decrement_player_counters_4:
 	ld hl,player_2_hit_stun
@@ -531,11 +532,11 @@ _decrement_player_counters_5:
 	dec a
 	ld (hl),a
 _decrement_player_counters_6:
-	ld hl,player_1_blocking_health
+	ld hl,player_2_hit_stun
 	ld a,(hl)
-	cp 50
-	jp nc,_decrement_player_counters_7
-	inc a
+	or a
+	jp z,_decrement_player_counters_7
+	dec a
 	ld (hl),a
 _decrement_player_counters_7:
 	ld hl,player_2_blocking_health

@@ -131,7 +131,7 @@ _character_select_loop_h_done:
   ld a,(selected_character_p2)
   call flip_player
   ld a,(selected_character_p2)
-  ld hl,player_2_sprites
+  ld hl,player_2_name
   call init_player
 
   ret

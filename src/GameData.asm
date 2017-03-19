@@ -121,21 +121,24 @@ player_1_attack_3_execute:
 	jp hit_player_2
 
 player_2:
+
 player_2_rounds_won:
 	defb 0 
 player_2_current_location:
-	defb 0
+	defb 4
 player_2_last_location:
-	defb 0
+	defb 4			
 ; player_2_current_bit_offset:
 player_2_current_walking_sprite:
 	defb 0
 player_2_current_sprite:
 	defw 0
 player_2_current_idle_sprite:
-	defb 0 ; 0 means not idle, 1 means idle_1, 2 means idle_2 
+	defb 0 ; 0 means not idle, 1 means idle 1 2 means idle 2 
+
 player_2_idle_counter: 
 	defb 0 ; To fine tune the speed of idling 
+
 player_2_damage_taken:
 	defb 0
 player_2_health_bar_address:
