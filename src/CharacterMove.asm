@@ -382,10 +382,10 @@ resume_move_sprite_right:
       ld b,a
       ld a,0;(8)                                  ; Load the sprite 1 y location into the a register to be loaded into the c register
       ld c,a                                    ; Load the y position into the c register for calculate_color_cell_pixel_address
-;       call check_sprite_overlap
-;       out (254), a  
-;       cp 1                                     ; Will set the Z flag if A == 1
-;       jp z, _revert_move_right                 ; a = 1 means overlapping now, will auto end and fail the method
+      call check_sprite_overlap
+      ;out (254), a  
+      cp 1                                     ; Will set the Z flag if A == 1, A == 1 if there was overlap 
+      jp z, _revert_move_right                 ; a = 1 means overlapping now, will auto end and fail the method
       ld a, (player_1_current_walking_sprite)    ; 
       inc a                                     ; 
 

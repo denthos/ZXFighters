@@ -107,9 +107,9 @@ player_1_attack_3_execute:
 
 player_2:
 player_2_current_location:
-	defb 4
+	defb 24
 player_2_last_location:
-	defb 4
+	defb 24
 ; player_2_current_bit_offset:
 player_2_current_walking_sprite:
 	defb 0
