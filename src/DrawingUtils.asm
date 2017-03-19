@@ -490,64 +490,162 @@ _flip_sprite_draw_loop:
         inc e
         djnz _flip_sprite_draw_loop
         ret
+; ix - source addr - modified
+flip_sprite_init:
+        inc ix
+        ld (sprite_flip_original_addr),ix       ; store original address
+        xor a                                   ; decompress needs a=0
+        ld hl, temp_sprite_flip_data_1
+        call decompress_sprite                  ; decompress sprite pixel data (leaves both addrs inc by one, should be able to call again to decomp attribs)
+        call decompress_sprite                  ; decompress sprite attrib data
 
-; TODO: make sure l,e dont overflow when increased
-; need:
-;       sprite address                   hl
-;       sprite destination               de
-;       sprite width                     b
-;       sprite height(?)                 c
+        ld b,6                                  ; sprite width
+        ld c,48                                 ; sprite height
+        ld de,temp_sprite_flip_data_2           ; sprite destination
+        ld hl,temp_sprite_flip_data_1           ; sprite source
+        call flip_sprite                        ; flip sprite ;)
+        ld b,6
+        ld c,6
+        call flip_attribs
+
+        ld b,32                                 ; for pixel data, 288-256
+        ld c,2                                  ; 288/256
+        ld de,(sprite_flip_original_addr)       ; dest addr
+        ld hl,temp_sprite_flip_data_2           ; source addr
+        call compress_sprite                    ; compress pixel data
+        ld b,36
+        ld c,1
+        inc de
+        inc hl
+        call compress_sprite                    ; compress attrib data
+        ret;
+
+
+flip_attribs:
+        ld ixl,b                                ; store width
+_flip_attribs_begining:
+        ld a,e                                  ; load lower byte of dest addr
+        add a,b                                 ; add width to it (storing to dest starting from right side)
+        jp nc,_flip_attribs_begining_no_carry   ; check if there is a carry
+        inc d                                   ; carry was set, so need to inc d
+_flip_attribs_begining_no_carry:
+        ld e,a                                  ; load e with new lower addr byte
+_flip_attribs_loop:
+        dec de                                  ; adding width overshoots addr by one, need to start with dec
+        ld a,(hl)                               ; ld first byte of sprite
+        ld (de),a                               ; write byte back
+        inc hl                                  ; inc addr of source
+        djnz _flip_attribs_loop                 ; done with curr row of bytes?
+        ld b,ixl                                ; reset width
+        ld a,e                                  ; need to move to next row
+        add a,b
+        jp nc,_flip_attribs_begining_no_carry2  ; check if there is a carry
+        inc d                                   ; carry was set, so need to inc d
+_flip_attribs_begining_no_carry2:
+        ld e,a                                  ; load e with new lower addr byte
+        dec c                                   ; dec height counter
+        jp nz,_flip_attribs_begining            ; jp to beginning to if not 0
+        ret
+
+
+; ------------------------------------------------------------------------------------
+; Subroutine for flipping uncompressed sprite
+;
+;
+; Inputs:
+;       A = n/a
+;       B = sprite width
+;       C = sprite height
+;       DE = destination addr - will be in
+;       HL = source addr - will be inc
+;
+; Outputs: N/A
+;
+; Uses: A, B, C, D, E, H, L, exx
+; -------------------------------------------------------------------------------------
 flip_sprite:
-        ld ixl,b
-        ld ixh,e
+        ld ixl,b                                ; store width
 _flip_sprite_begining:
-        ld a,e
-        add a,b
-        ld e,a
-;         dec e
+        ld a,e                                  ; load lower byte of dest addr
+        add a,b                                 ; add width to it (storing to dest starting from right side)
+        jp nc,_flip_sprite_begining_no_carry    ; check if there is a carry
+        inc d                                   ; carry was set, so need to inc d
+_flip_sprite_begining_no_carry:
+        ld e,a                                  ; load e with new lower addr byte
 _flip_sprite_loop:
-        dec e
-        ld a,(hl)
+        dec de                                  ; adding width overshoots addr by one, need to start with dec
+        ld a,(hl)                               ; ld first byte of sprite
         call _flip_a
-        ld (de),a
-        inc l
-        djnz _flip_sprite_loop
-        ld b,ixl
-;         inc l
-        ld a,e
+        ld (de),a                               ; write byte back
+        inc hl                                  ; inc addr of source
+        djnz _flip_sprite_loop                  ; done with curr row of bytes?
+        ld b,ixl                                ; reset width
+        ld a,e                                  ; need to move to next row
         add a,b
-        ld e,a
-        dec c
-        xor a
-        cp c
-        jp nz,_flip_sprite_begining
+        jp nc,_flip_sprite_begining_no_carry2   ; check if there is a carry
+        inc d                                   ; carry was set, so need to inc d
+_flip_sprite_begining_no_carry2:
+        ld e,a                                  ; load e with new lower addr byte
+        dec c                                   ; dec height counter
+        jp nz,_flip_sprite_begining             ; jp to beginning to if not 0
         ret
 
 _flip_a:
         exx                     ; 4
-        ld b,8                  ; 8
-        ld c,a                  ; 4
-        xor a                   ; 4
+        ld b,8                  ; 8             ; 8 bits per byte ;)
+        ld c,a                  ; 4             ; ld byte to c
+        xor a                   ; 4             ; clear a
+        rra
+        xor a
 _flip_a_loop:
-        rl c                    ; 8
-        rra                     ; 4
-        djnz _flip_a_loop       ; 8(b=0), 13(b!=0)
-        exx
+        rl c                    ; 8             ; rotate byte left, left bit goes into carry
+        rra                     ; 4             ; rotate A right, carry bit is pushed in
+        djnz _flip_a_loop       ; 8(b=0),13(b!=0) ; need to do this 8 times
+        exx                                     ; done flipping sprite, switch registers back
         ret
 
-; need: //assumes that there will never be a sprite (288B) that has 255 of the same consecutive bytes
-;       source addr             hl
-;       dest addr               de
-;       num bytes               b,c
+; hl - addr to write to
+; ix - source addr
+; a - needs 0
+decompress_sprite:
+        ld d,(ix+0)                             ; load sprite byte
+        inc ix                                  ; move to next addr
+        ld b,(ix+0)                              ; load num times
+        cp b                                    ; check if is 0
+        jr z,_decompress_sprite_zero            ; if b is 0 weve reached the end
+        call fill_byte_fast
+        inc ix
+        jp decompress_sprite
+_decompress_sprite_zero:
+        inc ix
+        ret
+
+
+; ------------------------------------------------------------------------------------
+; Subroutine for compressing sprite, assumes that there will never be a sprite (288B)
+; that has 255 of the same consecutive bytes
+;
+; *****disables interrupts*******
+;
+; Inputs:
+;       A = n/a
+;       B = num bytes (0-255)
+;       C = num bytes overflow (ie. 288 bytes will be c=(288/256), b=(288-256))
+;       DE = destination addr
+;       HL = source addr
+;
+; Outputs: N/A
+;
+; Uses: A, B, C, D, E, H, L, exx
+; -------------------------------------------------------------------------------------
 compress_sprite:
-        di
-        ld a,(hl)
+        ld a,(hl)                               ; load first byte
 
         exx
         ld b,a                                  ; initialize oldByte, otherwise a random byte gets written to dest
         ld c,1                                  ; initialize counter
         exx
-        dec b
+        dec b                                   ; dec num bytes left
 
 _compress_sprite_loop:
         inc hl
@@ -574,24 +672,29 @@ _compress_sprite_loop:
         inc de                                  ; move to next dest addr
 
 _compress_sprite_end_exx_stuff:
-        djnz _compress_sprite_loop
-        dec c
-        jp nz,_compress_sprite_loop
-        exx
-        ld a,b
-        exx
-        ld (de),a
-        exx
-        ld a,c
-        exx
-        inc de
-        ld (de),a
+        djnz _compress_sprite_loop              ; check if there are bytes left
+        dec c                                   ; dec msb counter
         xor a
+        cp c
+        jp nz,_compress_sprite_loop             ; keep processing bytes
+
+        exx                                     ; need to store last byte
+        ld a,b                                  ; move last byte to a
+        exx
+
+        ld (de),a                               ; write last byte
+
+        exx
+        ld a,c                                  ; move last counter
+        exx
+
+        inc de                                  ; move to next addr
+        ld (de),a                               ; write last counter
+        xor a                                   ; clear a to write 0,0 terminator
         inc de
         ld (de),a
         inc de
         ld (de),a
-        ei
         ret
 
 _compress_sprite_same:
@@ -618,6 +721,7 @@ _draw_status_panel_loop:
 	ld (hl), 0x47				; Set black color 
 	inc hl 					; increment the pointer 
 	djnz _draw_status_panel_loop		; Loop 
+<<<<<<< HEAD
 	ret 					; Done 
 
 ; ------------------------------------------------------------------------------

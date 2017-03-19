@@ -47,6 +47,7 @@ main_game_init:
   ;;; INITIALIZE STARTING GAME DATA
 
   ; initialize player 1 data
+
 ;   ld a,0
 ;   ld (player_1_damage_taken),a
 ;   ld a,3
@@ -65,6 +66,7 @@ main_game_init:
 ;   ld (player_2_current_sprite),hl
   call set_up_characters
 
+
   ; clear the screen
   ;ld d,0x47             ; 0x47 = 0b01000111 (paper = black, ink = white)
   ld d,0x6f
@@ -76,16 +78,15 @@ main_game_init:
   ; Draw the box for the thing to go into 
 
   call draw_status_panel
-  call draw_health_bars
-  call draw_energy_bar
+  call init_health_bars
+  call init_energy_bars
 
 
 
 
-
+main_loop_start:
   ei
 main_loop:
-  halt
   halt
   jp main_loop
 
