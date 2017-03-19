@@ -1,3 +1,7 @@
+round_select_instructions:
+	defb 'G/H to change num rounds'
+; number_of_rounds_string:
+; 	defb '1'
 character_select_instructions_1:
 	defb 'A/D & J/L to select character'
 character_select_instructions_2:
@@ -11,6 +15,9 @@ frame_counter:
 
 ; Player data for storing runtime game information
 player_1:
+
+player_1_rounds_won:
+	defb 0 
 player_1_current_location:
 	defb 4
 player_1_last_location:
@@ -106,6 +113,8 @@ player_1_attack_3_execute:
 	jp hit_player_2
 
 player_2:
+player_2_rounds_won:
+	defb 0 
 player_2_current_location:
 	defb 0
 player_2_last_location:
@@ -208,6 +217,12 @@ draw_memory_store:
 character_select_input_store:
 	defb 0
 
+number_of_rounds: 
+	defb 1 
+default_player_1_location: 
+	defb 4
+default_player_2_location:
+	defb 22
 selected_character_p1:
 	defb 0
 selected_character_p2:
@@ -237,6 +252,10 @@ u_down:
 i_down:
 	defb 0
 o_down:
+	defb 0
+g_down: 
+	defb 0 
+h_down: 
 	defb 0
 
 player_1_last_health:

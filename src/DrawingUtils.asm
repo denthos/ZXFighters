@@ -276,10 +276,26 @@ draw_title_screen:
 	ld c,29
 	call print_string
 
+	ld de,0x5064
+	ld ix,round_select_instructions
+	ld c,24
+	call print_string
+
+	ld de,0x48d0
+	ld a, (number_of_rounds)
+	add a, 48
+	ld c,1
+	call print_char 
+
 	ld de,0x50e6
 	ld ix,character_select_instructions_2
 	ld c,20
 	call print_string
+
+
+
+
+; 	ld de, 
 
 	ret
 
@@ -676,3 +692,13 @@ draw_energy_bar:
   	ld a, 1					; Height  
   	ld h, a					; Load into h fo draw_bar_init
 	call draw_bar_init
+	ret 
+
+
+draw_number_of_rounds:
+	ld de,0x48d0
+	ld a, (number_of_rounds)
+	add a, 48
+	ld c,1
+	call print_char 
+	ret

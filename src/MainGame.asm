@@ -61,6 +61,9 @@ _main_game_loop_start:
 	;;; UPDATE INTERFACE ;;;
 	
 	; update health bar
+	ld a, (player_2_damage_taken)
+	inc a 
+	ld (player_2_damage_taken), a 
 	call update_health
 
 
@@ -368,14 +371,87 @@ _main_game_loop_done:
 	reti
 
 
+
+
 _player_1_victory:
-	di
-	jp main_start
+	di 
+	ld a, (player_1_rounds_won) 
+	inc a 
+	ld (player_1_rounds_won), a
+	ld b, a 
+	ld a, (number_of_rounds) 
+	cp b 
+	jp z, _show_player_1_victory_screen 
+
+	call set_up_characters
+	;jp main_loop_start 
+	jp main_game_loop
+
 
 
 _player_2_victory:
 	di
+	ld a, (player_2_rounds_won)
+	dec a 
+	ld (player_1_rounds_won), a
+	ld b, a
+	ld a, (number_of_rounds)
+	cp b 
+	jp z, _show_player_2_victory_screen 
+	call set_up_characters 
+	jp main_game_loop
+	;jp main_loop_start
+
+_show_player_1_victory_screen:
 	jp main_start
+
+_show_player_2_victory_screen:
+	jp main_start
+
+set_up_characters:
+	; Player 1 logic first 
+; 	ld a, (default_player_1_location)	; Get the default starting position of player 1 
+; 	ld (player_1_current_location), a 	; Reset the current location 
+; 	ld (player_1_last_location), a 		; Reset the last location 
+; 	ld a,0
+; 	ld (player_1_damage_taken),a
+; 	ld hl,(player_1_sprite_idle_1)
+; 	ld (player_1_current_sprite),hl
+; 	ld a, 1
+; 	ld (player_1_current_idle_sprite), a
+
+; 	ld a, (default_player_2_location)	; Get the default starting position of player 1 
+; 	ld (player_2_current_location), a 	; Reset the current location 
+; 	ld (player_2_last_location), a 		; Reset the last location 
+; 	ld a,0
+; 	ld (player_2_damage_taken),a
+; 	ld hl,(player_2_sprite_idle_1)
+; 	ld (player_2_current_sprite),hl
+; 	ld a, 1
+; 	ld (player_2_current_idle_sprite), a
+
+	ld a,0
+	ld (player_1_damage_taken),a
+	ld a,3
+	ld (player_1_last_location),a
+	ld (player_1_current_location),a
+	ld hl,(player_1_sprite_idle_1)
+	ld (player_1_current_sprite),hl
+	ld a, 1
+	ld (player_1_current_idle_sprite), a
+
+	; initialize player 2 data
+	ld a,0
+	ld (player_2_damage_taken),a
+	ld a,0
+	ld (player_2_last_location),a
+	ld (player_2_current_location),a
+	ld hl,(player_2_sprite_idle_1)
+	ld (player_2_current_sprite),hl
+	ld a, 1
+	ld (player_2_current_idle_sprite), a
+	ret 
+					
 
 
 decrement_player_counters:

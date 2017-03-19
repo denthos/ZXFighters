@@ -47,22 +47,23 @@ main_game_init:
   ;;; INITIALIZE STARTING GAME DATA
 
   ; initialize player 1 data
-  ld a,0
-  ld (player_1_damage_taken),a
-  ld a,3
-  ld (player_1_last_location),a
-  ld (player_1_current_location),a
-  ld hl,(player_1_sprite_idle_1)
-  ld (player_1_current_sprite),hl
+;   ld a,0
+;   ld (player_1_damage_taken),a
+;   ld a,3
+;   ld (player_1_last_location),a
+;   ld (player_1_current_location),a
+;   ld hl,(player_1_sprite_idle_1)
+;   ld (player_1_current_sprite),hl
 
-  ; initialize player 2 data
-  ld a,0
-  ld (player_2_damage_taken),a
-  ld a,0
-  ld (player_2_last_location),a
-  ld (player_2_current_location),a
-  ld hl,(player_2_sprite_idle_1)
-  ld (player_2_current_sprite),hl
+;   ; initialize player 2 data
+;   ld a,0
+;   ld (player_2_damage_taken),a
+;   ld a,0
+;   ld (player_2_last_location),a
+;   ld (player_2_current_location),a
+;   ld hl,(player_2_sprite_idle_1)
+;   ld (player_2_current_sprite),hl
+  call set_up_characters
 
   ; clear the screen
   ;ld d,0x47             ; 0x47 = 0b01000111 (paper = black, ink = white)

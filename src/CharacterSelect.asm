@@ -37,6 +37,29 @@ _character_select_loop_d_release:
   ld (hl),a             ; d_down = 0
 _character_select_loop_d_done:
 
+
+
+  ld a,(character_select_input_store)
+  and 0x10               ; check key G
+  jp nz, _character_select_loop_g_release 
+  ld a, 1
+  ld hl, g_down
+  ld (hl), a 
+  jp _character_select_loop_g_done
+_character_select_loop_g_release:
+  ld hl,g_down
+  ld a,(hl)
+  or a                  ; if d_down was 1 (key release), select next character
+  call nz, decrease_number_of_rounds
+  ld hl, g_down
+  ld a,0 
+  ld (hl), a 
+_character_select_loop_g_done:
+
+
+
+
+
   ; player 2
   ld bc,49150           ; read keys H,J,K,L,Enter
   in a,(c)
@@ -73,6 +96,24 @@ _character_select_loop_l_release:
   ld a,0
   ld (hl),a             ; l_down = 0
 _character_select_loop_l_done:
+
+  ld a,(character_select_input_store)
+  and 0x10               ; check key H
+  jp nz, _character_select_loop_h_release 
+  ld a, 1
+  ld hl, h_down 
+  ld (hl), a 
+  jp _character_select_loop_h_done
+_character_select_loop_h_release:
+  ld hl,h_down
+  ld a,(hl)
+  or a                  ; if d_down was 1 (key release), select next character
+  call nz, increase_number_of_rounds
+  out (254), a
+  ld hl, h_down
+  ld a,0 
+  ld (hl), a 
+_character_select_loop_h_done:  
 
   ; check for Enter
 	ld a,(character_select_input_store)
@@ -164,6 +205,29 @@ _select_prev_character_p2_end:
   cp b
   jp z,select_prev_character_p2
   jp draw_title_character_p2
+
+
+increase_number_of_rounds:
+  ld a, (number_of_rounds)
+  out (254), a
+  cp 9 
+  jp z, _increase_number_rounds_end
+  inc a 
+  ld (number_of_rounds), a
+  call draw_number_of_rounds
+_increase_number_rounds_end:
+  ret
+
+decrease_number_of_rounds:
+  ld a, (number_of_rounds)
+  cp 1 
+  jp z, _decrease_number_rounds_end
+  dec a 
+  ld (number_of_rounds), a
+  call draw_number_of_rounds
+_decrease_number_rounds_end:
+  ret 
+
 
 init_player:
   cp 0

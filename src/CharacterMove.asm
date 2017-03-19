@@ -402,7 +402,7 @@ _move_sprite_right_2:
       cp 26                                     ; Check if already to the farthest right of the screen 
       jp z,_move_sprite_right_done_edge         ; If so then skip to the end and return 
       ld a, (player_2_current_walking_sprite)       ; Load the bit offsett to check to see where we are in the character cell 
-      cp 4; 6                                   ; Check if the bit offset is = 4 (after 4 moves to next character cell)
+      cp 6 ;4; 6                                   ; Check if the bit offset is = 4 (after 4 moves to next character cell)
       jp nz, move_right_current_player_sprite_2     ; If equal to 7 then increment player_1_current_walking_sprite 
       xor a                                     ; Clear the a register 
       ld (player_2_current_walking_sprite), a       ; Save 0 as the bit offset 
