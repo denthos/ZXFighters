@@ -500,6 +500,7 @@ check_sprite_overlap:
 
 ;     call absA
       sub d 
+      add a, 6
       push af                             ; Save a (difference)(how close they are) on stack 
       ld hl, (player_1_current_sprite)    ; Load pre_calculate_offset_middle into a to load to d  
       ld a, (hl)                          ; Offset for the first one 
@@ -513,6 +514,7 @@ check_sprite_overlap:
       ld b, a 
       ld a, 6
       sub b 
+      add a ,6
       ld d, a                             ; Load the pre_calculate_offset_middle into d for compare with a
       pop af                              ; Get back the difference into a 
       cp d ;6                             ; Compare d with a 
