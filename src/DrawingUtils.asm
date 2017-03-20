@@ -85,6 +85,7 @@ draw_sprite:
 	or a
 	jp nz,_draw_sprite_load_offset_skip
 	ld e,(ix+0)            ; get the number of columns to cut off at rightside of sprite
+	ld e,0
 	jp _draw_sprite_load_offset_skip_2
 _draw_sprite_load_offset_skip:
 	ld e,0

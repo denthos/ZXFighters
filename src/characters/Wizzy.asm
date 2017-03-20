@@ -62,9 +62,6 @@ wizzy_init:
   inc hl
   ld (hl),b
   inc hl
-  inc hl
-  inc hl
-  inc hl
   ld a,(wizzy_attack_2_starting_active_frame)
   ld (hl),a
   inc hl
@@ -89,9 +86,6 @@ wizzy_init:
   ld (hl),c
   inc hl
   ld (hl),b
-  inc hl
-  inc hl
-  inc hl
   inc hl
   ld a,(wizzy_attack_3_starting_active_frame)
   ld (hl),a
@@ -1150,11 +1144,11 @@ wizzy_sprite_hit_attr_bytes:
   defb 0,0
 wizzy_attack_1:
 wizzy_attack_1_starting_active_frame:
-  defb 3
+  defb 6
 wizzy_attack_1_ending_active_frame:
-  defb 10
+  defb 12
 wizzy_attack_1_total_frames:
-  defb 15
+  defb 13
 wizzy_sprite_attack_1_1:
   defb 3
   defb 0,45
@@ -1495,14 +1489,43 @@ wizzy_sprite_attack_1_2_attr_bytes:
   defb 120,36
   defb 0,0
 wizzy_attack_1_execute:
+  or a
+  jp nz,wizzy_attack_1_execute_player_2
+
+wizzy_attack_1_execute_player_1:
+  ld a,d
+  add 2
+  ld d,a
+  ld a,e
+  cp d
+  jp nc,wizzy_attack_1_execute_hit
+  jp wizzy_attack_1_execute_miss
+wizzy_attack_1_execute_player_2:
+  ld a,d
+  sub 1
+  ld d,a
+  ld a,e
+  cp d
+  jp nc,wizzy_attack_1_execute_hit
+wizzy_attack_1_execute_miss:
+  ld b,0
+  ld c,0
+  ld d,0
+  ld e,0
+  ret
+wizzy_attack_1_execute_hit:
+  ld b,0
+  ld c,0
+  ld d,1
+  ld e,3
   ret
 wizzy_attack_2:
 wizzy_attack_2_starting_active_frame:
-  defb 10
+  defb 15
 wizzy_attack_2_ending_active_frame:
-  defb 25
+  defb 35
 wizzy_attack_2_total_frames:
-  defb 27
+  defb 38
 wizzy_sprite_attack_2_1:
   defb 3
   defb 0,45
@@ -1915,14 +1938,43 @@ wizzy_sprite_attack_2_2_attr_bytes:
   defb 120,36
   defb 0,0
 wizzy_attack_2_execute:
+  or a
+  jp nz,wizzy_attack_2_execute_player_2
+
+wizzy_attack_2_execute_player_1:
+  ld a,d
+  add 3
+  ld d,a
+  ld a,e
+  cp d
+  jp nc,wizzy_attack_2_execute_hit
+  jp wizzy_attack_2_execute_miss
+wizzy_attack_2_execute_player_2:
+  ld a,d
+  sub 2
+  ld d,a
+  ld a,e
+  cp d
+  jp nc,wizzy_attack_2_execute_hit
+wizzy_attack_2_execute_miss:
+  ld b,0
+  ld c,0
+  ld d,0
+  ld e,0
+  ret
+wizzy_attack_2_execute_hit:
+  ld b,0
+  ld c,1
+  ld d,1
+  ld e,5
   ret
 wizzy_attack_3:
 wizzy_attack_3_starting_active_frame:
   defb 3
 wizzy_attack_3_ending_active_frame:
-  defb 25
+  defb 8
 wizzy_attack_3_total_frames:
-  defb 27
+  defb 20
 wizzy_sprite_attack_3_1:
   defb 3
   defb 0,30
@@ -2368,4 +2420,33 @@ wizzy_sprite_attack_3_2_attr_bytes:
   defb 120,36
   defb 0,0
 wizzy_attack_3_execute:
+  or a
+  jp nz,wizzy_attack_3_execute_player_2
+
+wizzy_attack_3_execute_player_1:
+  ld a,d
+  add 3
+  ld d,a
+  ld a,e
+  cp d
+  jp nc,wizzy_attack_3_execute_hit
+  jp wizzy_attack_3_execute_miss
+wizzy_attack_3_execute_player_2:
+  ld a,d
+  sub 2
+  ld d,a
+  ld a,e
+  cp d
+  jp nc,wizzy_attack_3_execute_hit
+wizzy_attack_3_execute_miss:
+  ld b,0
+  ld c,0
+  ld d,0
+  ld e,0
+  ret
+wizzy_attack_3_execute_hit:
+  ld b,3
+  ld c,0
+  ld d,6
+  ld e,10
   ret

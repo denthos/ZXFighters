@@ -52,7 +52,6 @@ print_extra()
 print "  inc hl"
 print "  ld bc," + name + "_attack_1_execute"
 print_extra()
-attack_skip()
 print "  ld a,(" + name + "_attack_2_starting_active_frame)"
 print_extra2()
 print "  ld a,(" + name + "_attack_2_ending_active_frame)"
@@ -66,7 +65,6 @@ print_extra()
 print "  inc hl"
 print "  ld bc," + name + "_attack_2_execute"
 print_extra()
-attack_skip()
 print "  ld a,(" + name + "_attack_3_starting_active_frame)"
 print_extra2()
 print "  ld a,(" + name + "_attack_3_ending_active_frame)"

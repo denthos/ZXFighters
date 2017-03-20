@@ -75,6 +75,8 @@ _main_game_loop_start:
 	or a
 	jp z,_player_1_no_hit_stun
 _player_1_hit_stun:
+	ld a,0
+	ld (player_1_current_attack),a
 	ld hl,(player_1_sprite_hit)
 	ld (player_1_current_sprite),hl
 	jp _player_1_done      ; if player is in hit stun, skip rest of input logic
@@ -127,7 +129,7 @@ _player_1_attacking_2:
 	ld h,(ix+6)
 	ld l,(ix+5)
 	ld (player_1_current_sprite),hl
-	call player_1_attack_1_execute
+	call player_1_attack
 	jp _player_1_attacking_done
 
 _player_1_attacking_3:
@@ -229,6 +231,8 @@ _player_1_done:
 	or a
 	jp z,_player_2_no_hit_stun
 _player_2_hit_stun:
+	ld a,0
+	ld (player_2_current_attack),a
 	ld hl,(player_2_sprite_hit)
 	ld (player_2_current_sprite),hl
 	jp _player_2_done      ; if player is in hit stun, skip rest of input logic
@@ -281,7 +285,7 @@ _player_2_attacking_2:
 	ld h,(ix+6)
 	ld l,(ix+5)
 	ld (player_2_current_sprite),hl
-	call player_2_attack_1_execute
+	call player_2_attack
 	jp _player_2_attacking_done
 
 _player_2_attacking_3:
@@ -482,13 +486,26 @@ set_up_characters:
 	ld a,0
 	ld (player_2_damage_taken),a
 	ld (player_2_energy),a
-	ld a,8
+	ld a,23
 	ld (player_2_last_location),a
  	ld (player_2_current_location),a
 	ld hl,(player_2_sprite_idle_1)
 	ld (player_2_current_sprite),hl
 	ld a, 1
 	ld (player_2_current_idle_sprite), a
+
+
+	; clear the screen
+	;ld d,0x47             ; 0x47 = 0b01000111 (paper = black, ink = white)
+	ld d,0x6f
+	call clear_screen
+
+	; draw starting interface
+	call draw_status_panel
+	call init_health_bars
+	call init_energy_bars
+
+
 	ret 
 					
 

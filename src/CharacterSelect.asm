@@ -235,9 +235,9 @@ init_player:
   cp 0
   jp z,punchy_init
   cp 1
-  jp z,punchy_2_init
-  cp 2
   jp z,wizzy_init
+  cp 2
+  jp z,init_char_2
   cp 3
   jp z,init_char_3
   cp 4
@@ -260,9 +260,9 @@ flip_player:
   cp 0
   jp z,punchy_flip
   cp 1
-  jp z,punchy_2_flip
-  cp 2
   jp z,wizzy_flip
+  cp 2
+  jp z,init_char_2
   cp 3
   jp z,init_char_3
   cp 4
@@ -287,15 +287,10 @@ ld_character_data_address:
   jp z,_ld_character_data_address_char_0
   cp 1
   jp z,_ld_character_data_address_char_1
-  cp 2
-  jp z,_ld_character_data_address_char_2
 _ld_character_data_address_char_0:
   ld ix,punchy_data
   ret
 _ld_character_data_address_char_1:
-  ld ix,punchy_2_data
-  ret
-_ld_character_data_address_char_2:
   ld ix,wizzy_data
   ret
 
@@ -304,14 +299,9 @@ ld_character_sprite_address:
   jp z,_ld_character_sprite_address_char_0
   cp 1
   jp z,_ld_character_sprite_address_char_1
-  cp 2
-  jp z,_ld_character_sprite_address_char_2
 _ld_character_sprite_address_char_0:
   ld ix,punchy_sprites
   ret
 _ld_character_sprite_address_char_1:
-  ld ix,punchy_2_sprites
-  ret
-_ld_character_sprite_address_char_2:
   ld ix,wizzy_sprites
   ret
