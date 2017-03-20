@@ -141,7 +141,8 @@ wizzy_flip:
   ret
 wizzy_sprites:
 wizzy_sprite_idle_1:
-  defb 3
+  defb 2
+  defb 2
   defb 0,38
   defb 16,1
   defb 0,5
@@ -311,7 +312,8 @@ wizzy_sprite_idle_1_attr_bytes:
   defb 120,36
   defb 0,0
 wizzy_sprite_idle_2:
-  defb 3
+  defb 2
+  defb 2
   defb 0,31
   defb 8,1
   defb 0,4
@@ -487,7 +489,8 @@ wizzy_sprite_idle_2_attr_bytes:
   defb 120,36
   defb 0,0
 wizzy_sprite_walk_forward_1:
-  defb 3
+  defb 2
+  defb 2
   defb 0,45
   defb 16,1
   defb 0,4
@@ -649,7 +652,8 @@ wizzy_sprite_walk_forward_1_attr_bytes:
   defb 120,36
   defb 0,0
 wizzy_sprite_walk_forward_2:
-  defb 3
+  defb 2
+  defb 2
   defb 0,33
   defb 16,1
   defb 0,5
@@ -697,17 +701,13 @@ wizzy_sprite_walk_forward_2:
   defb 127,1
   defb 248,1
   defb 8,1
-  defb 32,1
-  defb 0,2
+  defb 0,3
   defb 32,2
-  defb 0,1
-  defb 80,1
-  defb 0,2
+  defb 0,4
   defb 36,1
   defb 160,1
   defb 1,1
-  defb 32,1
-  defb 0,2
+  defb 0,3
   defb 32,2
   defb 3,1
   defb 0,2
@@ -740,24 +740,25 @@ wizzy_sprite_walk_forward_2:
   defb 0,3
   defb 193,1
   defb 0,1
-  defb 65,1
+  defb 64,1
   defb 0,3
   defb 192,1
   defb 32,1
-  defb 130,1
   defb 128,1
-  defb 0,2
+  defb 0,3
   defb 222,1
   defb 63,1
-  defb 1,1
   defb 0,3
+  defb 16,1
   defb 193,1
   defb 32,1
-  defb 0,4
+  defb 0,3
+  defb 40,1
   defb 194,1
   defb 32,1
   defb 64,1
-  defb 0,3
+  defb 0,2
+  defb 16,1
   defb 126,1
   defb 32,1
   defb 160,1
@@ -816,7 +817,8 @@ wizzy_sprite_walk_forward_2_attr_bytes:
   defb 120,36
   defb 0,0
 wizzy_sprite_block:
-  defb 3
+  defb 1 ; 3
+  defb 1
   defb 0,45
   defb 17,1
   defb 0,5
@@ -997,6 +999,7 @@ wizzy_sprite_block_attr_bytes:
   defb 0,0
 wizzy_sprite_hit:
   defb 3
+  defb 3
   defb 0,43
   defb 192,1
   defb 0,4
@@ -1143,6 +1146,7 @@ wizzy_attack_1_total_frames:
   defb 13
 wizzy_sprite_attack_1_1:
   defb 3
+  defb 2
   defb 0,45
   defb 16,1
   defb 0,4
@@ -1312,6 +1316,7 @@ wizzy_sprite_attack_1_1_attr_bytes:
   defb 0,0
 wizzy_sprite_attack_1_2:
   defb 3
+  defb 0
   defb 0,45
   defb 16,1
   defb 0,4
@@ -1520,6 +1525,7 @@ wizzy_attack_2_total_frames:
   defb 38
 wizzy_sprite_attack_2_1:
   defb 3
+  defb 2
   defb 0,45
   defb 16,1
   defb 0,4
@@ -1969,6 +1975,7 @@ wizzy_attack_3_total_frames:
   defb 20
 wizzy_sprite_attack_3_1:
   defb 3
+  defb 3
   defb 0,30
   defb 16,1
   defb 0,1
@@ -2052,45 +2059,38 @@ wizzy_sprite_attack_3_1:
   defb 0,4
   defb 113,1
   defb 2,1
-  defb 1,1
-  defb 0,3
+  defb 0,4
   defb 226,1
   defb 140,1
-  defb 2,1
-  defb 128,1
-  defb 0,1
+  defb 0,3
   defb 32,1
   defb 193,1
   defb 8,1
-  defb 1,1
-  defb 0,2
+  defb 0,3
   defb 80,1
   defb 192,1
-  defb 50,1
+  defb 48,1
   defb 0,3
   defb 32,1
   defb 222,1
   defb 32,1
-  defb 0,4
+  defb 64,1
+  defb 0,3
   defb 193,1
   defb 32,1
-  defb 0,4
+  defb 160,1
+  defb 0,3
   defb 194,1
   defb 32,1
-  defb 0,1
-  defb 128,1
-  defb 0,2
+  defb 64,1
+  defb 0,3
   defb 126,1
   defb 32,1
-  defb 1,1
-  defb 64,1
-  defb 0,1
+  defb 0,3
   defb 16,1
   defb 96,1
   defb 32,1
-  defb 0,1
-  defb 128,1
-  defb 0,1
+  defb 0,3
   defb 40,1
   defb 224,1
   defb 56,1
@@ -2133,26 +2133,21 @@ wizzy_sprite_attack_3_1:
   defb 2,1
   defb 48,1
   defb 124,1
-  defb 0,1
-  defb 16,1
-  defb 0,1
+  defb 0,3
   defb 1,1
   defb 240,1
   defb 124,1
-  defb 0,1
-  defb 40,1
-  defb 0,1
+  defb 0,3
   defb 1,1
   defb 240,1
-  defb 0,2
-  defb 16,1
-  defb 0,1
+  defb 0,4
   defb 0,0
 wizzy_sprite_attack_3_1_attr_bytes:
   defb 120,36
   defb 0,0
 wizzy_sprite_attack_3_2:
   defb 3
+  defb 0
   defb 0,14
   defb 8,1
   defb 0,3
