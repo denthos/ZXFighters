@@ -1,11 +1,41 @@
 ; ------------------------------------------------------------------------------
+; This draws the panel with background colors and whatever color is in a 
+;
+; Inputs:
+;   A = color of the panel (to do )
+; ------------------------------------------------------------------------------
+        
+draw_status_panel:
+        ld b, 0                                 ; Load 1 for b (x coord)
+        ld c, 0                                 ; 
+        call calculate_color_cell_attr_address  ; Load the address for this color cell attr in hl 
+        ld b, 160                               ; 160 attr bytes to set 
+_draw_status_panel_loop:                        
+        ld (hl), 0x47                           ; Set black color 
+        inc hl                                  ; increment the pointer 
+        djnz _draw_status_panel_loop            ; Loop 
+        ret
+
+draw_number_of_rounds:
+        ld de, 0x5010; 0x48f0   ;0x48d0                 ; 16, 15 (16)
+        ld a, (number_of_rounds)
+        add a, 48
+        ld c,1
+        call print_char 
+
+
+
+        ret
+
+
+; ------------------------------------------------------------------------------
 ; Draws the health bars and sets the attribute bytes for them
 ; ------------------------------------------------------------------------------
 init_health_bars:
 
         ; set attribute bytes for player 1 health bar
         ld b, 1
-        ld c, 21
+        ld c, 1
         call calculate_color_cell_attr_address
         ld a, 0x54
         ld b, 10
@@ -16,7 +46,7 @@ _init_health_bars_1:
 
         ; set attribute bytes for player 2 health bar
         ld b, 21
-        ld c, 21
+        ld c, 1
         call calculate_color_cell_attr_address
         ld a, 0x54
         ld b, 10
@@ -27,7 +57,7 @@ _init_health_bars_2:
 
         ; draw full health bar for player 1
         ld b, 1
-        ld c, 21
+        ld c, 1
         call calculate_color_cell_pixel_address
         ex de, hl
         ld b, 10
@@ -36,7 +66,7 @@ _init_health_bars_2:
         
         ; draw full health bar for player 2
         ld b, 21
-        ld c, 21
+        ld c, 1
         call calculate_color_cell_pixel_address
         ex de, hl
         ld b, 10
@@ -45,13 +75,13 @@ _init_health_bars_2:
 
         ; init address variable for player 1
         ld b,11
-        ld c,21
+        ld c,1
         call calculate_color_cell_pixel_address
         ld (player_1_health_bar_address),hl
 
         ; init address variable for player 2
         ld b,21
-        ld c,21
+        ld c,1
         call calculate_color_cell_pixel_address
         ld (player_2_health_bar_address),hl
 
@@ -138,7 +168,7 @@ _health_no_remainder:
 ; ------------------------------------------------------------------------------------
 init_energy_bars:
         ld b, 1
-        ld c, 22
+        ld c, 2
         call calculate_color_cell_attr_address
         ld a, 0x68
         ld b, 10
@@ -147,7 +177,7 @@ _init_energy_bars_1:
         inc hl
         djnz _init_energy_bars_1
         ld b, 21
-        ld c, 22
+        ld c, 2
         call calculate_color_cell_attr_address
         ld a, 0x68
         ld b, 10
@@ -159,7 +189,7 @@ _init_energy_bars_2:
 
         ; draw empty energy bar for player 1
         ld b,8
-        ld c,176
+        ld c,16
         call calculate_pixel_byte_address
         ex de, hl
         ld b, 10
@@ -168,7 +198,7 @@ _init_energy_bars_2:
         
         ; draw empty bar for player 2
         ld b,172
-        ld c,176
+        ld c,16
         call calculate_pixel_byte_address
         ex de, hl
         ld b, 10
@@ -177,13 +207,13 @@ _init_energy_bars_2:
 
         ; init address variable for player 1
         ld b,8
-        ld c,178
+        ld c,18
         call calculate_pixel_byte_address
         ld (player_1_energy_bar_address),hl
 
         ; init address variable for player 2
         ld b,248
-        ld c,178
+        ld c,18
         call calculate_pixel_byte_address
         ld (player_2_energy_bar_address),hl
 

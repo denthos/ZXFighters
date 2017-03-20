@@ -92,7 +92,6 @@ _draw_sprite_load_offset_skip:
 _draw_sprite_load_offset_skip_2:
 	ld d,6                 ; number of columns (not variable)
 	ld (draw_memory_store),hl
-	dec ix                 ; decrement ix so double increment at start of unpack gets us to the data
 _draw_sprite_unpack:
 	inc ix
 	inc ix
@@ -206,34 +205,38 @@ _draw_sprite_attributes_row_decrement:
 ; Outputs:
 ;
 ; ------------------------------------------------------------------------------
-clear_sprite:
-	ld b,48
-_clear_sprite_loop:
+clear_sprite_p1:
+	ld e,(ix+1)
+	ld a,6
+	sub e
+	ld c,a
+	ld d,48
+_clear_sprite_p1_loop:
+	ld b,c
 	ld a,0
+_clear_sprite_p1_loop_1:
 	ld (hl),a
 	inc l
-	ld (hl),a
+	djnz _clear_sprite_p1_loop_1
+	ld b,e
+_clear_sprite_p1_loop_2:
 	inc l
-	ld (hl),a
-	inc l
-	ld (hl),a
-	inc l
-	ld (hl),a
-	inc l
-	ld (hl),a
-	jp _clear_sprite_row_decrement
-_clear_sprite_row_decrement_return:
-	djnz _clear_sprite_loop
+	djnz _clear_sprite_p1_loop_2
+	dec l
+	jp _clear_sprite_p1_row_decrement
+_clear_sprite_p1_row_decrement_return:
+	dec d
+	jp nz,_clear_sprite_p1_loop
 	ret
 
-_clear_sprite_row_decrement:
+_clear_sprite_p1_row_decrement:
 	ld a,l                 ; move to next pixel row down in cell <e> to left
 	sub 5
 	ld l,a
 	inc h
 	ld a,h                 ; check if we overflowed into y6
 	and 7
-	jr nz,_clear_sprite_row_decrement_return
+	jr nz,_clear_sprite_p1_row_decrement_return
 	ld a,h
 	sub 8                  ; decrement y6
 	ld h,a
@@ -241,11 +244,64 @@ _clear_sprite_row_decrement:
 	add a,32               ; increment y3
 	ld l,a
 	and 224                ; check if we overflowed into y0
-	jr nz,_clear_sprite_row_decrement_return
+	jr nz,_clear_sprite_p1_row_decrement_return
 	ld a,h
 	add a,8                ; increment y6
 	ld h,a
-	jp _clear_sprite_row_decrement_return
+	jp _clear_sprite_p1_row_decrement_return
+
+; ------------------------------------------------------------------------------
+; Subroutine for clearing a sprite sized block of the screen
+;
+; Inputs:
+;   HL = Address of vram to start clearing
+; Outputs:
+;
+; ------------------------------------------------------------------------------
+clear_sprite_p2:
+	ld e,(ix+1)
+	ld a,6
+	sub e
+	ld c,a
+	ld d,48
+_clear_sprite_p2_loop:
+	ld b,c
+	ld a,0
+_clear_sprite_p2_loop_1:
+	inc l
+	djnz _clear_sprite_p2_loop_1
+	ld b,e
+_clear_sprite_p2_loop_2:
+	ld (hl),a
+	inc l
+	djnz _clear_sprite_p2_loop_2
+	dec l
+	jp _clear_sprite_p2_row_decrement
+_clear_sprite_p2_row_decrement_return:
+	dec d
+	jp nz,_clear_sprite_p2_loop
+	ret
+
+_clear_sprite_p2_row_decrement:
+	ld a,l                 ; move to next pixel row down in cell <e> to left
+	sub 5
+	ld l,a
+	inc h
+	ld a,h                 ; check if we overflowed into y6
+	and 7
+	jr nz,_clear_sprite_p2_row_decrement_return
+	ld a,h
+	sub 8                  ; decrement y6
+	ld h,a
+	ld a,l
+	add a,32               ; increment y3
+	ld l,a
+	and 224                ; check if we overflowed into y0
+	jr nz,_clear_sprite_p2_row_decrement_return
+	ld a,h
+	add a,8                ; increment y6
+	ld h,a
+	jp _clear_sprite_p2_row_decrement_return
 
 ; -----------------------------------------------------------------------
 ; Subroutine for drawing the base of the title screen
@@ -677,33 +733,3 @@ _compress_sprite_same:
         jp _compress_sprite_end_exx_stuff
 	
 	
-; ------------------------------------------------------------------------------
-; This draws the panel with background colors and whatever color is in a 
-;
-; Inputs:
-;   A = color of the panel (to do )
-; ------------------------------------------------------------------------------
-	
-draw_status_panel:
-	ld a, 0					; Load 1 into a for b 
-	ld b, a 				; Load 1 for b (x coord)
-	ld a, 20 				; Load 20 into a for c (y coord)
-	ld c, a 				; 
-	call calculate_color_cell_attr_address	; Load the address for this color cell attr in hl 
-	ld b, 160				; 160 attr bytes to set 
-_draw_status_panel_loop:			
-	ld (hl), 0x47				; Set black color 
-	inc hl 					; increment the pointer 
-	djnz _draw_status_panel_loop		; Loop 
-	ret
-
-draw_number_of_rounds:
-	ld de, 0x5010; 0x48f0	;0x48d0			; 16, 15 (16)
-	ld a, (number_of_rounds)
-	add a, 48
-	ld c,1
-	call print_char 
-
-
-
-	ret 

@@ -48,7 +48,7 @@ main_game_init:
   ;;; INITIALIZE STARTING GAME DATA
 
   ; initialize player data
-  call set_up_characters
+  call initialize_game
 
 
 

@@ -8,52 +8,69 @@ main_game_loop:
 	;push ix
 	ld hl,frame_counter            ; increment frame counter
 	inc (hl)
+	ld a,(hl)
+	bit 0,a
+	jp z,_main_game_draw_p2
 _main_game_loop_start:
 
 	;;;;;;;;;; START MAIN GAME LOOP ;;;;;;;;;;
 
 	;;; CLEAR OLD SPRITES, DRAW NEW ONES ;;;
 
-
 	; clear old player 1 sprite
 	ld a,(player_1_last_location)
 	ld b,a
-	ld c,14
+	ld c,18
 	call calculate_color_cell_pixel_address
-	call clear_sprite
+	ld ix,(player_1_last_sprite)
+	call clear_sprite_p1
 
-	; clear old player 2 sprite
-	ld a,(player_2_last_location)
-	ld b,a
-	ld c,14
-	call calculate_color_cell_pixel_address
-	call clear_sprite
-
-	; draw new player 2 sprite
-	ld a,(player_2_current_location)
-	ld b,a
-	ld c,14
-	call calculate_color_cell_pixel_address
-	ld ix,(player_2_current_sprite)
-	ld c,1
-	ld b,1
-	call draw_sprite
 
 	; draw new player 1 sprite
 	ld a,(player_1_current_location)
 	ld b,a
-	ld c,14
+	ld c,18
 	call calculate_color_cell_pixel_address
 	ld ix,(player_1_current_sprite)
 	ld c,1
 	ld b,0
 	call draw_sprite
 
+	jp _main_game_draw_p2_done
+_main_game_draw_p2:
+
+	; clear old player 2 sprite
+	ld a,(player_2_last_location)
+	ld b,a
+	ld c,18
+	call calculate_color_cell_pixel_address
+	ld ix,(player_2_last_sprite)
+	call clear_sprite_p2
+
+	; draw new player 2 sprite
+	ld a,(player_2_current_location)
+	ld b,a
+	ld c,18
+	call calculate_color_cell_pixel_address
+	ld ix,(player_2_current_sprite)
+	ld c,1
+	ld b,1
+	call draw_sprite
+
+	jp _main_game_loop_done
+_main_game_draw_p2_done:
+
 	; update player positions
 	ld a,(player_1_current_location)
 	ld (player_1_last_location),a
 	ld a,(player_2_current_location)
 	ld (player_2_last_location),a
+
+	; update last sprite for players
+	ld hl,(player_1_current_sprite)
+	ld (player_1_last_sprite),hl
+	ld hl,(player_2_current_sprite)
+	ld (player_2_last_sprite),hl
 
 
 
@@ -395,8 +412,7 @@ _player_2_done:
 	jp nc,_player_1_victory
 
 
-_main_game_delay_loop:
-	
+
 
 _main_game_loop_done:
 	; restore registers
@@ -421,7 +437,7 @@ _player_1_victory:
 	cp b 
 	jp z, _show_player_1_victory_screen 
 
-	call set_up_characters
+	call initialize_game
 	jp main_loop_start 
 	;jp main_game_loop
 
@@ -436,7 +452,7 @@ _player_2_victory:
 	ld a, (number_of_rounds)
 	cp b 
 	jp z, _show_player_2_victory_screen 
-	call set_up_characters 
+	call initialize_game 
 	;jp main_game_loop
 	jp main_loop_start
 
@@ -451,7 +467,7 @@ _show_player_2_victory_screen:
 	ld (player_2_rounds_won), a 
 	jp main_start
 
-set_up_characters:
+initialize_game:
 	; Player 1 logic first 
 ; 	ld a, (default_player_1_location)	; Get the default starting position of player 1 
 ; 	ld (player_1_current_location), a 	; Reset the current location 
@@ -481,6 +497,7 @@ set_up_characters:
 	ld (player_1_current_location),a
 	ld hl,(player_1_sprite_idle_1)
 	ld (player_1_current_sprite),hl
+	ld (player_1_last_sprite),hl
 	ld a, 1
 	ld (player_1_current_idle_sprite), a
 
@@ -493,6 +510,7 @@ set_up_characters:
  	ld (player_2_current_location),a
 	ld hl,(player_2_sprite_idle_1)
 	ld (player_2_current_sprite),hl
+	ld (player_2_last_sprite),hl
 	ld a, 1
 	ld (player_2_current_idle_sprite), a
 
