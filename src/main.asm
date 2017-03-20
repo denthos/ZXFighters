@@ -45,9 +45,6 @@ main_start:
   ;call start_stage_select   ; if we intend to have standalone stage selection, will go here
 
 main_game_init:
-  ;;; INITIALIZE STARTING GAME DATA
-
-  ; initialize player data
   call initialize_game
 
 

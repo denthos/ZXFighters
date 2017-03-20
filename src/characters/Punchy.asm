@@ -1802,7 +1802,7 @@ punchy_attack_2_execute_hit:
   ld a,1
   ld b,1
   ld c,0
-  ld d,2
+  ld d,3
   ld e,6
   ret
 

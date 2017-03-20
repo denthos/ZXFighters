@@ -492,59 +492,64 @@ _show_player_1_victory_screen:
 	ld a, 0 
 	ld (player_1_rounds_won), a 
 	ld (player_2_rounds_won), a 
-	jp main_start
+	jp _show_player_victory_screen_end
 
 _show_player_2_victory_screen:
 	ld (player_1_rounds_won), a 
 	ld (player_2_rounds_won), a 
-	jp main_start
+	jp _show_player_victory_screen_end
+
+_show_player_victory_screen_end:
+  	ld a,(selected_character_p2)
+  	call flip_player
+  	jp main_start
+
 
 initialize_game:
-	; Player 1 logic first 
-; 	ld a, (default_player_1_location)	; Get the default starting position of player 1 
-; 	ld (player_1_current_location), a 	; Reset the current location 
-; 	ld (player_1_last_location), a 		; Reset the last location 
-; 	ld a,0
-; 	ld (player_1_damage_taken),a
-; 	ld hl,(player_1_sprite_idle_1)
-; 	ld (player_1_current_sprite),hl
-; 	ld a, 1
-; 	ld (player_1_current_idle_sprite), a
 
-; 	ld a, (default_player_2_location)	; Get the default starting position of player 1 
-; 	ld (player_2_current_location), a 	; Reset the current location 
-; 	ld (player_2_last_location), a 		; Reset the last location 
-; 	ld a,0
-; 	ld (player_2_damage_taken),a
-; 	ld hl,(player_2_sprite_idle_1)
-; 	ld (player_2_current_sprite),hl
-; 	ld a, 1
-; 	ld (player_2_current_idle_sprite), a
-
-	ld a,0
-	ld (player_1_damage_taken),a
-	ld (player_1_energy),a
 	ld a,3
- 	ld (player_1_last_location),a
 	ld (player_1_current_location),a
+	ld (player_1_last_location),a
+	ld a,0
+	ld (player_1_current_walking_sprite),a
 	ld hl,(player_1_sprite_idle_1)
 	ld (player_1_current_sprite),hl
 	ld (player_1_last_sprite),hl
-	ld a, 1
-	ld (player_1_current_idle_sprite), a
-
-	; initialize player 2 data
+	ld a,1
+	ld (player_1_current_idle_sprite),a
 	ld a,0
-	ld (player_2_damage_taken),a
-	ld (player_2_energy),a
+	ld (player_1_idle_counter),a
+	ld (player_1_damage_taken),a
+	ld (player_1_energy),a
+	ld (player_1_hit_stun),a
+	ld (player_1_attack_stun),a
+	ld (player_1_movement_stun),a
+	ld (player_1_invincibility_frames),a
+	ld (player_1_current_attack),a
+	ld (player_1_blocking),a
+	ld (player_1_blocking_damage_taken),a
+
 	ld a,23
+	ld (player_2_current_location),a
 	ld (player_2_last_location),a
- 	ld (player_2_current_location),a
+	ld a,0
+	ld (player_2_current_walking_sprite),a
 	ld hl,(player_2_sprite_idle_1)
 	ld (player_2_current_sprite),hl
 	ld (player_2_last_sprite),hl
-	ld a, 1
-	ld (player_2_current_idle_sprite), a
+	ld a,1
+	ld (player_2_current_idle_sprite),a
+	ld a,0
+	ld (player_2_idle_counter),a
+	ld (player_2_damage_taken),a
+	ld (player_2_energy),a
+	ld (player_2_hit_stun),a
+	ld (player_2_attack_stun),a
+	ld (player_2_movement_stun),a
+	ld (player_2_invincibility_frames),a
+	ld (player_2_current_attack),a
+	ld (player_2_blocking),a
+	ld (player_2_blocking_damage_taken),a
 
 
 	; clear the screen
