@@ -145,6 +145,7 @@ punchy_flip:
 punchy_sprites:
 punchy_sprite_idle_1:
     defb 3
+    defb 3
     defb 0,37
     defb 2,1
     defb 0,4
@@ -299,6 +300,7 @@ punchy_sprite_idle_attr_bytes:
 
 punchy_sprite_idle_2:
     defb 3
+    defb 3
     defb 0,49
     defb 2,1
     defb 0,4
@@ -447,6 +449,7 @@ punchy_sprite_idle_2_attr_bytes:
 
 punchy_sprite_walk_forward_1:
     defb 3
+    defb 3
     defb 0,37
     defb 2,1
     defb 0,4
@@ -586,6 +589,7 @@ punchy_sprite_walk_forward_1_attr_bytes:
     defb 0,0
 
 punchy_sprite_walk_forward_2:
+    defb 3
     defb 3
     defb 0,37
     defb 2,1
@@ -730,6 +734,7 @@ punchy_sprite_walk_forward_2_attr_bytes:
     defb 0,0
 
 punchy_sprite_block:
+    defb 3
     defb 3
     defb 0,38
     defb 32,1
@@ -885,6 +890,7 @@ punchy_sprite_block_attr_bytes:
     defb 0,0
 
 punchy_sprite_hit:
+    defb 3
     defb 3
     defb 0,38
     defb 2,1
@@ -1054,6 +1060,7 @@ punchy_attack_1_total_frames:
     defb 7
 punchy_sprite_attack_1_1:
     defb 3
+    defb 3
     defb 0,37
     defb 2,1
     defb 0,4
@@ -1211,6 +1218,7 @@ punchy_sprite_attack_1_1_attr_bytes:
 
 punchy_sprite_attack_1_2:
     defb 3
+    defb 2
     defb 0,37
     defb 2,1
     defb 0,4
@@ -1404,6 +1412,7 @@ punchy_attack_2_total_frames:
     defb 17
 punchy_sprite_attack_2_1:
     defb 3
+    defb 3
     defb 0,25
     defb 2,1
     defb 0,4
@@ -1571,6 +1580,7 @@ punchy_sprite_attack_2_1_attr_bytes:
 
 punchy_sprite_attack_2_2:
     defb 2
+    defb 0
     defb 0,33
     defb 224,1
     defb 0,3
@@ -1805,6 +1815,7 @@ punchy_attack_3_total_frames:
     defb 25
 punchy_sprite_attack_3_1:
     defb 3
+    defb 3
     defb 0,38
     defb 8,1
     defb 0,4
@@ -1960,6 +1971,7 @@ punchy_sprite_attack_3_1_attr_bytes:
 
 punchy_sprite_attack_3_2:
     defb 3
+    defb 0
     defb 0,38
     defb 32,1
     defb 0,4

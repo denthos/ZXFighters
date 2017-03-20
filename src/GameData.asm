@@ -29,6 +29,8 @@ player_1_current_walking_sprite:
 	defb 0
 player_1_current_sprite:
 	defw 0
+player_1_last_sprite:
+	defw 0
 player_1_current_idle_sprite:
 	defb 0 ; 0 means not idle, 1 means idle 1 2 means idle 2 
 
@@ -129,6 +131,8 @@ player_2_last_location:
 player_2_current_walking_sprite:
 	defb 0
 player_2_current_sprite:
+	defw 0
+player_2_last_sprite:
 	defw 0
 player_2_current_idle_sprite:
 	defb 0 ; 0 means not idle, 1 means idle 1 2 means idle 2 
