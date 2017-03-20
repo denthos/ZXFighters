@@ -265,12 +265,12 @@ clear_sprite_p2:
 	ld c,a
 	ld d,48
 _clear_sprite_p2_loop:
-	ld b,c
+	ld b,e
 	ld a,0
 _clear_sprite_p2_loop_1:
 	inc l
 	djnz _clear_sprite_p2_loop_1
-	ld b,e
+	ld b,c
 _clear_sprite_p2_loop_2:
 	ld (hl),a
 	inc l
@@ -522,6 +522,7 @@ _flip_sprite_draw_loop:
         ret
 ; ix - source addr - modified
 flip_sprite_init:
+        inc ix
         inc ix
         ld (sprite_flip_original_addr),ix       ; store original address
         xor a                                   ; decompress needs a=0

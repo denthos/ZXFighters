@@ -313,7 +313,7 @@ wizzy_sprite_idle_1_attr_bytes:
   defb 0,0
 wizzy_sprite_idle_2:
   defb 2
-  defb 2
+  defb 1
   defb 0,31
   defb 8,1
   defb 0,4
@@ -999,7 +999,7 @@ wizzy_sprite_block_attr_bytes:
   defb 0,0
 wizzy_sprite_hit:
   defb 3
-  defb 3
+  defb 2
   defb 0,43
   defb 192,1
   defb 0,4
@@ -1146,7 +1146,7 @@ wizzy_attack_1_total_frames:
   defb 13
 wizzy_sprite_attack_1_1:
   defb 3
-  defb 2
+  defb 1
   defb 0,45
   defb 16,1
   defb 0,4
@@ -1516,11 +1516,11 @@ wizzy_attack_1_execute_hit:
   ret
 wizzy_attack_2:
 wizzy_attack_2_starting_active_frame:
-  defb 15
+  defb 8
 wizzy_attack_2_ending_active_frame:
-  defb 35
+  defb 18
 wizzy_attack_2_total_frames:
-  defb 38
+  defb 20
 wizzy_sprite_attack_2_1:
   defb 3
   defb 2
@@ -1688,6 +1688,7 @@ wizzy_sprite_attack_2_1_attr_bytes:
   defb 0,0
 wizzy_sprite_attack_2_2:
   defb 3
+  defb 0
   defb 0,19
   defb 1,1
   defb 0,4
@@ -1971,7 +1972,7 @@ wizzy_attack_3_total_frames:
   defb 20
 wizzy_sprite_attack_3_1:
   defb 3
-  defb 3
+  defb 2
   defb 0,30
   defb 16,1
   defb 0,1

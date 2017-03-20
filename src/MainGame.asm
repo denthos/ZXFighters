@@ -36,6 +36,10 @@ _main_game_loop_start:
 	ld b,0
 	call draw_sprite
 
+	; update last sprite for players
+	ld hl,(player_1_current_sprite)
+	ld (player_1_last_sprite),hl
+
 	jp _main_game_draw_p2_done
 _main_game_draw_p2:
 
@@ -57,6 +61,11 @@ _main_game_draw_p2:
 	ld b,1
 	call draw_sprite
 
+	
+	ld hl,(player_2_current_sprite)
+	ld (player_2_last_sprite),hl
+
+
 	jp _main_game_loop_done
 _main_game_draw_p2_done:
 
@@ -65,13 +74,6 @@ _main_game_draw_p2_done:
 	ld (player_1_last_location),a
 	ld a,(player_2_current_location)
 	ld (player_2_last_location),a
-
-	; update last sprite for players
-	ld hl,(player_1_current_sprite)
-	ld (player_1_last_sprite),hl
-	ld hl,(player_2_current_sprite)
-	ld (player_2_last_sprite),hl
-
 
 
 	;;; UPDATE INTERFACE ;;;
