@@ -817,7 +817,7 @@ wizzy_sprite_walk_forward_2_attr_bytes:
   defb 120,36
   defb 0,0
 wizzy_sprite_block:
-  defb 1 ; 3
+  defb 2
   defb 1
   defb 0,45
   defb 17,1

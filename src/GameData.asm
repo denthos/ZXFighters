@@ -59,6 +59,8 @@ player_1_current_attack:
 	defw 0
 player_1_blocking:
 	defb 0
+player_1_blocking_active:
+	defb 0
 player_1_blocking_damage_taken:
 	defb 0
 player_1_name:
@@ -161,6 +163,8 @@ player_2_current_attack_frame:
 player_2_current_attack:
 	defw 0
 player_2_blocking:
+	defb 0
+player_2_blocking_active:
 	defb 0
 player_2_blocking_damage_taken:
 	defb 0

@@ -204,17 +204,19 @@ _player_1_blocking:
 	ld hl,player_1_blocking_damage_taken
 	inc (hl)
 	ld a,(hl)
-	cp 40
+	cp 30
 	jp nc,_player_1_blocking_expired
+	ld a,1
+	ld (player_1_blocking_active),a
 	ld a,5
 	ld (player_1_movement_stun),a
 	xor a
 	ld (player_1_blocking),a
 	jp _player_1_done
 _player_1_blocking_expired:
-	ld a,0
+	ld a,29
 	ld (player_1_blocking_damage_taken),a
-	ld a,50
+	ld a,200
 	ld (player_1_hit_stun),a
 	xor a
 	ld (player_1_blocking),a
@@ -256,6 +258,8 @@ _player_1_no_movement_stun:
 
 
 _player_1_done:
+	xor a
+	ld (player_2_blocking_active),a
 
 
 
@@ -374,19 +378,21 @@ _player_2_blocking:
 	ld hl,(player_2_sprite_block)
 	ld (player_2_current_sprite),hl
 	ld hl,player_2_blocking_damage_taken
-	ld a,(hl)
-	cp 40
-	jp nc,_player_2_blocking_expired
 	inc (hl)
+	ld a,(hl)
+	cp 30
+	jp nc,_player_2_blocking_expired
+	ld a,1
+	ld (player_2_blocking_active),a
 	ld a,5
 	ld (player_2_movement_stun),a
 	xor a
 	ld (player_2_blocking),a
 	jp _player_2_done
 _player_2_blocking_expired:
-	ld a,0
+	ld a,29
 	ld (player_2_blocking_damage_taken),a
-	ld a,50
+	ld a,200
 	ld (player_2_hit_stun),a
 	xor a
 	ld (player_2_blocking),a
@@ -428,6 +434,8 @@ _player_2_no_movement_stun:
 
 
 _player_2_done:
+	xor a
+	ld (player_1_blocking_active),a
 
 	; clear inputs
 	call clear_input
@@ -485,7 +493,6 @@ _player_2_victory:
 	cp b 
 	jp z, _show_player_2_victory_screen 
 	call initialize_game 
-	;jp main_game_loop
 	jp main_loop_start
 
 _show_player_1_victory_screen:
@@ -527,6 +534,7 @@ initialize_game:
 	ld (player_1_invincibility_frames),a
 	ld (player_1_current_attack),a
 	ld (player_1_blocking),a
+	ld (player_1_blocking_active),a
 	ld (player_1_blocking_damage_taken),a
 
 	ld a,23
@@ -549,12 +557,24 @@ initialize_game:
 	ld (player_2_invincibility_frames),a
 	ld (player_2_current_attack),a
 	ld (player_2_blocking),a
+	ld (player_2_blocking_active),a
 	ld (player_2_blocking_damage_taken),a
 
 
 	; clear the screen
-	;ld d,0x47             ; 0x47 = 0b01000111 (paper = black, ink = white)
-	ld d,0x6f
+_initialize_game_set_screen_color:
+	; load random value into a
+	ld a,r
+	ld l,a
+	and 0x3f
+	ld h,a
+	ld a,(hl)
+
+	and 0x78               ; clear flash bit and foreground color
+	or 0x40                ; set highlight bit
+	ld d,a
+	and 0x38               ; make sure background isn't black
+	jp z,_initialize_game_set_screen_color
 	call clear_screen
 
 	; draw starting interface
@@ -591,6 +611,9 @@ _decrement_player_counters_3:
 	ld a,(hl)
 	or a
 	jp z,_decrement_player_counters_4
+	ld a,(frame_counter)
+	bit 0,a
+	jp z,_decrement_player_counters_4
 	dec (hl)
 _decrement_player_counters_4:
 	ld hl,player_1_energy
@@ -625,6 +648,9 @@ _decrement_player_counters_8:
 	ld hl,player_2_blocking_damage_taken
 	ld a,(hl)
 	or a
+	jp z,_decrement_player_counters_9
+	ld a,(frame_counter)
+	bit 0,a
 	jp z,_decrement_player_counters_9
 	dec (hl)
 _decrement_player_counters_9:

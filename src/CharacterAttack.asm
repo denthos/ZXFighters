@@ -24,6 +24,7 @@ update_player_check_s:
 	cp 1
 	jp nz, update_player_attack_end
 	ld (player_1_blocking), a
+	ld (player_1_blocking_active),a
 	ret
 
 
@@ -54,6 +55,7 @@ update_player_check_k:
 	cp 1
 	jp nz, update_player_attack_end
 	ld (player_2_blocking), a
+	ld (player_2_blocking_active),a
 	ret
 
 update_player_attack_end:
@@ -80,7 +82,7 @@ hit_player_1:
 	ld a,c
 	or a
 	jp nz,_hit_player_1_no_block
-	ld a,(player_1_blocking)
+	ld a,(player_1_blocking_active)
 	or a
 	jp z,_hit_player_1_no_block
 	ld a,(player_1_blocking_damage_taken)
@@ -96,13 +98,14 @@ _hit_player_1_no_block:
 _hit_player_1_done:
 	ret
 
+	
 hit_player_2:
 	or a
 	jp z,_hit_player_2_done
 	ld a,c
 	or a
 	jp nz,_hit_player_2_no_block
-	ld a,(player_2_blocking)
+	ld a,(player_2_blocking_active)
 	or a
 	jp z,_hit_player_2_no_block
 	ld a,(player_2_blocking_damage_taken)

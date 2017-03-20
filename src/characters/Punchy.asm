@@ -1399,7 +1399,7 @@ punchy_attack_1_execute_hit:
   ld a,1
   ld b,0
   ld c,0
-  ld d,1
+  ld d,2
   ld e,2
   ret
 
