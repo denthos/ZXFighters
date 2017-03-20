@@ -86,9 +86,8 @@ player_1_sprite_attack_1_1:
 player_1_sprite_attack_1_2:
 	defw 0 ; attack is out
 player_1_attack_1_execute:
-	defb 0xcd
+	defb 0xc3
 	defw 0
-	jp hit_player_2
 player_1_attack_2:
 player_1_attack_2_starting_active_frame:
 	defb 0
@@ -101,9 +100,8 @@ player_1_sprite_attack_2_1:
 player_1_sprite_attack_2_2:
 	defw 0 ; attack is out
 player_1_attack_2_execute:
-	defb 0xcd
+	defb 0xc3
 	defw 0
-	jp hit_player_2
 player_1_attack_3:
 player_1_attack_3_starting_active_frame:
 	defb 0
@@ -116,9 +114,8 @@ player_1_sprite_attack_3_1:
 player_1_sprite_attack_3_2:
 	defw 0 ; attack is out
 player_1_attack_3_execute:
-	defb 0xcd
+	defb 0xc3
 	defw 0
-	jp hit_player_2
 
 player_2:
 
@@ -191,9 +188,8 @@ player_2_sprite_attack_1_1:
 player_2_sprite_attack_1_2:
 	defw 0 ; attack is out
 player_2_attack_1_execute:
-	defb 0xcd
+	defb 0xc3
 	defw 0
-	jp hit_player_1
 player_2_attack_2:
 player_2_attack_2_starting_active_frame:
 	defb 0
@@ -206,9 +202,8 @@ player_2_sprite_attack_2_1:
 player_2_sprite_attack_2_2:
 	defw 0 ; attack is out
 player_2_attack_2_execute:
-	defb 0xcd
+	defb 0xc3
 	defw 0
-	jp hit_player_1
 player_2_attack_3:
 player_2_attack_3_starting_active_frame:
 	defb 0
@@ -221,9 +216,8 @@ player_2_sprite_attack_3_1:
 player_2_sprite_attack_3_2:
 	defw 0 ; attack is out
 player_2_attack_3_execute:
-	defb 0xcd
+	defb 0xc3
 	defw 0
-	jp hit_player_1
 
 
 ; 2 bytes of memory reserved for storing screen addresses in draw routines
@@ -243,9 +237,9 @@ default_player_2_location:
 selected_character_p1:
 	defb 0
 selected_character_p2:
-	defb 2
+	defb 1
 selected_character_max:
-	defb 2
+	defb 1
 a_down:
 	defb 0
 s_down:

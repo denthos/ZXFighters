@@ -1,6 +1,6 @@
         org 32768	; put code at first address in 3rd memory device (sorta)
 start:
-  ld hl,player_1_blocking_damage_taken
+  ld e,0
 	;;; INITIALIZATION
 
   ; set up interrupt handler to be main game loop
@@ -50,20 +50,6 @@ main_game_init:
   ; initialize player data
   call set_up_characters
 
-  ; clear the screen
-  ;ld d,0x47             ; 0x47 = 0b01000111 (paper = black, ink = white)
-  ld d,0x6f
-  call clear_screen
-  ; call draw_background
-  ;call init_status_bar
-
-  ; Load interface both full health 
-  ; Draw the box for the thing to go into 
-
-  call draw_status_panel
-  call init_health_bars
-  call init_energy_bars
-
 
 
 
@@ -87,5 +73,4 @@ main_loop:
   include "src/InterfaceUtils.asm"
 
   include "src/characters/Punchy.asm"
-  include "src/characters/Punchy2.asm"
   include "src/characters/Wizzy.asm"
