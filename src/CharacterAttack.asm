@@ -80,9 +80,9 @@ hit_player_1:
 	ld a,(player_1_blocking)
 	or a
 	jp z,_hit_player_1_no_block
-	ld a,(player_1_blocking_health)
-	sub h
-	ld (player_1_blocking_health),a
+	ld a,(player_1_blocking_damage_taken)
+	add h
+	ld (player_1_blocking_damage_taken),a
 	jp _hit_player_1_done
 _hit_player_1_no_block:
 	ld a,(player_1_damage_taken)
@@ -101,9 +101,9 @@ hit_player_2:
 	ld a,(player_2_blocking)
 	or a
 	jp z,_hit_player_2_no_block
-	ld a,(player_2_blocking_health)
-	sub h
-	ld (player_2_blocking_health),a
+	ld a,(player_2_blocking_damage_taken)
+	add h
+	ld (player_2_blocking_damage_taken),a
 	jp _hit_player_2_done
 _hit_player_2_no_block:
 	ld a,(player_2_damage_taken)

@@ -164,17 +164,19 @@ _player_1_not_attacking:
 _player_1_blocking:
 	ld hl,(player_1_sprite_block)
 	ld (player_1_current_sprite),hl
-	ld hl,player_1_blocking_health
+	ld hl,player_1_blocking_damage_taken
+	inc (hl)
 	ld a,(hl)
-	or a
-	jp z,_player_1_blocking_expired
-	dec (hl)
+	cp 40
+	jp nc,_player_1_blocking_expired
 	ld a,5
 	ld (player_1_movement_stun),a
 	xor a
 	ld (player_1_blocking),a
 	jp _player_1_done
 _player_1_blocking_expired:
+	ld a,0
+	ld (player_1_blocking_damage_taken),a
 	ld a,50
 	ld (player_1_hit_stun),a
 	xor a
@@ -316,17 +318,19 @@ _player_2_not_attacking:
 _player_2_blocking:
 	ld hl,(player_2_sprite_block)
 	ld (player_2_current_sprite),hl
-	ld hl,player_2_blocking_health
+	ld hl,player_2_blocking_damage_taken
 	ld a,(hl)
-	or a
-	jp z,_player_2_blocking_expired
-	dec (hl)
+	cp 40
+	jp nc,_player_2_blocking_expired
+	inc (hl)
 	ld a,5
 	ld (player_2_movement_stun),a
 	xor a
 	ld (player_2_blocking),a
 	jp _player_2_done
 _player_2_blocking_expired:
+	ld a,0
+	ld (player_2_blocking_damage_taken),a
 	ld a,50
 	ld (player_2_hit_stun),a
 	xor a
@@ -494,43 +498,37 @@ decrement_player_counters:
 	ld a,(hl)
 	or a
 	jp z,_decrement_player_counters_1
-	dec a
-	ld (hl),a
+	dec (hl)
 _decrement_player_counters_1:
 	ld hl,player_1_attack_stun
 	ld a,(hl)
 	or a
 	jp z,_decrement_player_counters_2
-	dec a
-	ld (hl),a
+	dec (hl)
 _decrement_player_counters_2:
 	ld hl,player_1_movement_stun
 	ld a,(hl)
 	or a
 	jp z,_decrement_player_counters_3
-	dec a
-	ld (hl),a
+	dec (hl)
 _decrement_player_counters_3:
-	ld hl,player_1_blocking_health
+	ld hl,player_1_blocking_damage_taken
 	ld a,(hl)
-	cp 50
-	jp nc,_decrement_player_counters_4
-	inc a
-	ld (hl),a
+	or a
+	jp z,_decrement_player_counters_4
+	dec (hl)
 _decrement_player_counters_4:
 	ld hl,player_2_hit_stun
 	ld a,(hl)
 	or a
 	jp z,_decrement_player_counters_5
-	dec a
-	ld (hl),a
+	dec (hl)
 _decrement_player_counters_5:
 	ld hl,player_2_attack_stun
 	ld a,(hl)
 	or a
 	jp z,_decrement_player_counters_6
-	dec a
-	ld (hl),a
+	dec (hl)
 _decrement_player_counters_6:
 	ld hl,player_2_movement_stun
 	ld a,(hl)
@@ -539,11 +537,10 @@ _decrement_player_counters_6:
 	dec a
 	ld (hl),a
 _decrement_player_counters_7:
-	ld hl,player_2_blocking_health
+	ld hl,player_2_blocking_damage_taken
 	ld a,(hl)
-	cp 50
-	jp nc,_decrement_player_counters_8
-	inc a
-	ld (hl),a
+	or a
+	jp z,_decrement_player_counters_8
+	dec (hl)
 _decrement_player_counters_8:
 	ret

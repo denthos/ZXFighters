@@ -344,52 +344,6 @@ draw_title_character_p2:
 
 
 ; ------------------------------------------------------------------------------
-; This routine is basically a switch statement for determining which character
-; is selected based on the character index passed in through A, and loading
-; the address of that character's data into IX. This can't be done by storing
-; pointers to the data in memory, because IX can only be loaded with constants
-;
-; Inputs:
-;   A  = Index of the character whose data address should be loaded
-; Outputs:
-;   IX = Address of the data of the character
-; ------------------------------------------------------------------------------
-ld_character_data_address:
-	cp 0
-	jp z,_ld_character_data_address_char_0
-	cp 1
-	jp z,_ld_character_data_address_char_1
-	cp 2
-	jp z,_ld_character_data_address_char_2
-_ld_character_data_address_char_0:
-	ld ix,punchy_data
-	ret
-_ld_character_data_address_char_1:
-	ld ix,punchy_2_data
-	ret
-_ld_character_data_address_char_2:
-	ld ix,wizzy_data
-	ret
-
-ld_character_sprite_address:
-	cp 0
-	jp z,_ld_character_sprite_address_char_0
-	cp 1
-	jp z,_ld_character_sprite_address_char_1
-	cp 2
-	jp z,_ld_character_sprite_address_char_2
-_ld_character_sprite_address_char_0:
-	ld ix,punchy_sprites
-	ret
-_ld_character_sprite_address_char_1:
-	ld ix,punchy_2_sprites
-	ret
-_ld_character_sprite_address_char_2:
-	ld ix,wizzy_sprites
-	ret
-
-
-; ------------------------------------------------------------------------------
 ; Subroutine for drawing a solid bar on screen, only takes care of pixels, not
 ; attributes. Only tested when drawing within a single row of color cells.
 ;

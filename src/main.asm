@@ -1,5 +1,6 @@
         org 32768	; put code at first address in 3rd memory device (sorta)
 start:
+  ld hl,player_1_blocking_damage_taken
 	;;; INITIALIZATION
 
   ; set up interrupt handler to be main game loop
