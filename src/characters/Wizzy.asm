@@ -488,9 +488,7 @@ wizzy_sprite_idle_2_attr_bytes:
   defb 0,0
 wizzy_sprite_walk_forward_1:
   defb 3
-  defb 0,36
-  defb 16,1
-  defb 0,8
+  defb 0,45
   defb 16,1
   defb 0,4
   defb 2,1
@@ -652,13 +650,7 @@ wizzy_sprite_walk_forward_1_attr_bytes:
   defb 0,0
 wizzy_sprite_walk_forward_2:
   defb 3
-  defb 0,18
-  defb 4,1
-  defb 0,5
-  defb 10,1
-  defb 0,5
-  defb 4,1
-  defb 0,2
+  defb 0,33
   defb 16,1
   defb 0,5
   defb 40,1
