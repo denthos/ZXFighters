@@ -65,6 +65,7 @@ update_player_attack_end:
 ; Subroutine for dealing damage to player 1
 ;
 ; Inputs:
+;   A  = 0 if attack missed, 1 otherwise
 ;   B  = amount of knockback
 ;   C  = 0 for blockable abilities, 1+ for block breakers
 ;   D  = amount of damage to deal
@@ -74,6 +75,8 @@ update_player_attack_end:
 ;
 ; ------------------------------------------------------------------------------
 hit_player_1:
+	or a
+	jp z,_hit_player_1_done
 	ld a,c
 	or a
 	jp nz,_hit_player_1_no_block
@@ -94,6 +97,8 @@ _hit_player_1_done:
 	ret
 
 hit_player_2:
+	or a
+	jp z,_hit_player_2_done
 	ld a,c
 	or a
 	jp nz,_hit_player_2_no_block

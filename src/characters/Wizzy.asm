@@ -1491,7 +1491,7 @@ wizzy_attack_1_execute:
 
 wizzy_attack_1_execute_player_1:
   ld a,d
-  add 2
+  add 3
   ld d,a
   ld a,e
   cp d
@@ -1499,18 +1499,16 @@ wizzy_attack_1_execute_player_1:
   jp wizzy_attack_1_execute_miss
 wizzy_attack_1_execute_player_2:
   ld a,d
-  sub 1
+  sub 2
   ld d,a
   ld a,e
   cp d
   jp nc,wizzy_attack_1_execute_hit
 wizzy_attack_1_execute_miss:
-  ld b,0
-  ld c,0
-  ld d,0
-  ld e,0
+  ld a,0
   ret
 wizzy_attack_1_execute_hit:
+  ld a,1
   ld b,0
   ld c,0
   ld d,1
@@ -1955,12 +1953,10 @@ wizzy_attack_2_execute_player_2:
   cp d
   jp nc,wizzy_attack_2_execute_hit
 wizzy_attack_2_execute_miss:
-  ld b,0
-  ld c,0
-  ld d,0
-  ld e,0
+  ld a,0
   ret
 wizzy_attack_2_execute_hit:
+  ld a,1
   ld b,0
   ld c,1
   ld d,1
@@ -2426,12 +2422,10 @@ wizzy_attack_3_execute_player_2:
   cp d
   jp nc,wizzy_attack_3_execute_hit
 wizzy_attack_3_execute_miss:
-  ld b,0
-  ld c,0
-  ld d,0
-  ld e,0
+  ld a,0
   ret
 wizzy_attack_3_execute_hit:
+  ld a,1
   ld b,3
   ld c,0
   ld d,6
