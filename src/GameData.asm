@@ -243,9 +243,9 @@ default_player_2_location:
 selected_character_p1:
 	defb 0
 selected_character_p2:
-	defb 1
+	defb 2
 selected_character_max:
-	defb 1
+	defb 2
 a_down:
 	defb 0
 s_down:

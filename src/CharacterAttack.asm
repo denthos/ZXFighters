@@ -53,7 +53,7 @@ update_player_check_k:
 	ld a, (k_down)
 	cp 1
 	jp nz, update_player_attack_end
-	ld (player_1_blocking), a
+	ld (player_2_blocking), a
 	ret
 
 update_player_attack_end:

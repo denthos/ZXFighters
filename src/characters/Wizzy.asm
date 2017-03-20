@@ -1,6 +1,6 @@
 wizzy_data:
 wizzy_name:
-  defb 'wizzy'
+  defb '  Wizzy   '
 wizzy_init:
   ld bc,wizzy_name
   ld (hl),c
@@ -1132,8 +1132,11 @@ wizzy_sprite_hit_attr_bytes:
   defb 0,0
 wizzy_attack_1:
 wizzy_attack_1_starting_active_frame:
+  defb 3
 wizzy_attack_1_ending_active_frame:
+  defb 10
 wizzy_attack_1_total_frames:
+  defb 15
 wizzy_sprite_attack_1_1:
   defb 1
   defb 0,45
@@ -1474,10 +1477,14 @@ wizzy_sprite_attack_1_2_attr_bytes:
   defb 120,36
   defb 0,0
 wizzy_attack_1_execute:
+  ret
 wizzy_attack_2:
 wizzy_attack_2_starting_active_frame:
+  defb 10
 wizzy_attack_2_ending_active_frame:
+  defb 25
 wizzy_attack_2_total_frames:
+  defb 27
 wizzy_sprite_attack_2_1:
   defb 1
   defb 0,45
@@ -1897,10 +1904,14 @@ wizzy_sprite_attack_2_2_attr_bytes:
   defb 120,36
   defb 0,0
 wizzy_attack_2_execute:
+  ret
 wizzy_attack_3:
 wizzy_attack_3_starting_active_frame:
+  defb 3
 wizzy_attack_3_ending_active_frame:
+  defb 25
 wizzy_attack_3_total_frames:
+  defb 27
 wizzy_sprite_attack_3_1:
   defb 1
   defb 0,30
@@ -2333,3 +2344,4 @@ wizzy_sprite_attack_3_2_attr_bytes:
   defb 120,36
   defb 0,0
 wizzy_attack_3_execute:
+  ret

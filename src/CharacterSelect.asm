@@ -237,7 +237,7 @@ init_player:
   cp 1
   jp z,punchy_2_init
   cp 2
-  jp z,init_char_2
+  jp z,wizzy_init
   cp 3
   jp z,init_char_3
   cp 4
@@ -262,7 +262,7 @@ flip_player:
   cp 1
   jp z,punchy_2_flip
   cp 2
-  jp z,init_char_2
+  jp z,wizzy_flip
   cp 3
   jp z,init_char_3
   cp 4

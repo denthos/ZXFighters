@@ -87,3 +87,4 @@ main_loop:
 
   include "src/characters/Punchy.asm"
   include "src/characters/Punchy2.asm"
+  include "src/characters/Wizzy.asm"

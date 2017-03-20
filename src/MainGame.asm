@@ -525,14 +525,14 @@ _decrement_player_counters_4:
 	dec a
 	ld (hl),a
 _decrement_player_counters_5:
-	ld hl,player_2_hit_stun
+	ld hl,player_2_attack_stun
 	ld a,(hl)
 	or a
 	jp z,_decrement_player_counters_6
 	dec a
 	ld (hl),a
 _decrement_player_counters_6:
-	ld hl,player_2_hit_stun
+	ld hl,player_2_movement_stun
 	ld a,(hl)
 	or a
 	jp z,_decrement_player_counters_7
