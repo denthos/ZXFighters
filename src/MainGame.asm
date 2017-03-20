@@ -61,7 +61,7 @@ _main_game_draw_p2:
 	ld b,1
 	call draw_sprite
 
-	
+
 	ld hl,(player_2_current_sprite)
 	ld (player_2_last_sprite),hl
 
@@ -122,6 +122,13 @@ _player_1_attacking_init_2:
 	ld ix,player_1_attack_2
 	jp _player_1_attacking_1
 _player_1_attacking_init_3:
+	ld a,(player_1_energy)
+	cp 80
+	jp nc,_player_1_attacking_init_3_continue
+	ld a,0
+	ld (player_1_current_attack),a
+	jp _player_1_not_attacking
+_player_1_attacking_init_3_continue:
 	ld ix,player_1_attack_3
 	jp _player_1_attacking_1
 
@@ -168,6 +175,14 @@ _player_1_attacking_4:
 	; attack has finished if we get here, clean up and process inputs like normal
 	ld hl,(player_1_sprite_idle_1)
 	ld (player_1_current_sprite),hl
+	ld a,(player_1_current_attack)
+	cp 3
+	jp nz,_player_1_attacking_4_continue
+	ld a,0
+	ld (player_1_energy),a
+	; draw over old energy bar
+	call init_energy_bar_p1
+_player_1_attacking_4_continue:
 	xor a
 	ld (player_1_current_attack),a
 	ld (player_1_current_attack_frame),a
@@ -279,6 +294,13 @@ _player_2_attacking_init_2:
 	ld ix,player_2_attack_2
 	jp _player_2_attacking_1
 _player_2_attacking_init_3:
+	ld a,(player_2_energy)
+	cp 80
+	jp nc,_player_2_attacking_init_3_continue
+	ld a,0
+	ld (player_2_current_attack),a
+	jp _player_2_not_attacking
+_player_2_attacking_init_3_continue:
 	ld ix,player_2_attack_3
 	jp _player_2_attacking_1
 
@@ -325,6 +347,14 @@ _player_2_attacking_4:
 	; attack has finished if we get here, clean up and process inputs like normal
 	ld hl,(player_2_sprite_idle_1)
 	ld (player_2_current_sprite),hl
+	ld a,(player_2_current_attack)
+	cp 3
+	jp nz,_player_2_attacking_4_continue
+	ld a,0
+	ld (player_2_energy),a
+	; draw over old energy bar
+	call init_energy_bar_p2
+_player_2_attacking_4_continue:
 	xor a
 	ld (player_2_current_attack),a
 	ld (player_2_current_attack_frame),a
@@ -524,6 +554,7 @@ initialize_game:
 
 	; draw starting interface
 	call draw_status_panel
+	call draw_names
 	call init_health_bars
 	call init_energy_bars
 
@@ -557,29 +588,49 @@ _decrement_player_counters_3:
 	jp z,_decrement_player_counters_4
 	dec (hl)
 _decrement_player_counters_4:
-	ld hl,player_2_hit_stun
+	ld hl,player_1_energy
 	ld a,(hl)
-	or a
-	jp z,_decrement_player_counters_5
-	dec (hl)
+	cp 80
+	jp nc,_decrement_player_counters_4_continue
+	inc (hl)
+	jp _decrement_player_counters_5
+_decrement_player_counters_4_continue:
+	ld a,80
+	ld (player_1_energy),a
 _decrement_player_counters_5:
-	ld hl,player_2_attack_stun
+	ld hl,player_2_hit_stun
 	ld a,(hl)
 	or a
 	jp z,_decrement_player_counters_6
 	dec (hl)
 _decrement_player_counters_6:
-	ld hl,player_2_movement_stun
+	ld hl,player_2_attack_stun
 	ld a,(hl)
 	or a
 	jp z,_decrement_player_counters_7
-	dec a
-	ld (hl),a
+	dec (hl)
 _decrement_player_counters_7:
-	ld hl,player_2_blocking_damage_taken
+	ld hl,player_2_movement_stun
 	ld a,(hl)
 	or a
 	jp z,_decrement_player_counters_8
-	dec (hl)
+	dec a
+	ld (hl),a
 _decrement_player_counters_8:
+	ld hl,player_2_blocking_damage_taken
+	ld a,(hl)
+	or a
+	jp z,_decrement_player_counters_9
+	dec (hl)
+_decrement_player_counters_9:
+	ld hl,player_2_energy
+	ld a,(hl)
+	cp 80
+	jp nc,_decrement_player_counters_9_continue
+	inc (hl)
+	jp _decrement_player_counters_10
+_decrement_player_counters_9_continue:
+	ld a,80
+	ld (player_2_energy),a
+_decrement_player_counters_10:
 	ret

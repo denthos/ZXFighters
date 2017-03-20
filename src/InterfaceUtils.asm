@@ -27,6 +27,26 @@ draw_number_of_rounds:
 
         ret
 
+draw_names:
+        ld a,(selected_character_p1)
+        call ld_character_data_address
+        ld b,1
+        ld c,3
+        call calculate_color_cell_pixel_address
+        ex de,hl
+        ld c,10                ; length of sprite name (always 10)
+        call print_string
+
+
+        ld a,(selected_character_p2)
+        call ld_character_data_address
+        ld b,21
+        ld c,3
+        call calculate_color_cell_pixel_address
+        ex de,hl
+        ld c,10               ; length of sprite name (always 10)
+        call print_string
+
 
 ; ------------------------------------------------------------------------------
 ; Draws the health bars and sets the attribute bytes for them
@@ -210,6 +230,42 @@ _init_energy_bars_2:
         ld c,18
         call calculate_pixel_byte_address
         ld (player_1_energy_bar_address),hl
+
+        ; init address variable for player 2
+        ld b,248
+        ld c,18
+        call calculate_pixel_byte_address
+        ld (player_2_energy_bar_address),hl
+
+        ret
+
+init_energy_bar_p1:
+        ; draw empty energy bar for player 1
+        ld b,8
+        ld c,16
+        call calculate_pixel_byte_address
+        ex de, hl
+        ld b, 10
+        ld h, 8
+        call draw_bar_init
+
+        ; init address variable for player 1
+        ld b,8
+        ld c,18
+        call calculate_pixel_byte_address
+        ld (player_1_energy_bar_address),hl
+
+        ret
+
+init_energy_bar_p2:
+        ; draw empty bar for player 2
+        ld b,172
+        ld c,16
+        call calculate_pixel_byte_address
+        ex de, hl
+        ld b, 10
+        ld h, 8
+        call draw_bar_init
 
         ; init address variable for player 2
         ld b,248
