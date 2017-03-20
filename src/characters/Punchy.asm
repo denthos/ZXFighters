@@ -1366,19 +1366,42 @@ punchy_sprite_attack_1_2_attr_bytes:
     defb 0,0
 
 punchy_attack_1_execute:
-    ld b,0
-    ld c,0
-    ld d,0
-    ld e,0
-    ret
+  or a
+  jp nz,punchy_attack_2_execute_player_2
+
+punchy_attack_1_execute_player_1:
+  ld a,d
+  add 2
+  ld d,a
+  ld a,e
+  cp d
+  jp c,punchy_attack_1_execute_hit
+  jp punchy_attack_1_execute_miss
+punchy_attack_1_execute_player_2:
+  ld a,d
+  sub 1
+  ld d,a
+  ld a,e
+  cp d
+  jp nc,punchy_attack_1_execute_hit
+punchy_attack_1_execute_miss:
+  ld a,0
+  ret
+punchy_attack_1_execute_hit:
+  ld a,1
+  ld b,0
+  ld c,0
+  ld d,3
+  ld e,2
+  ret
 
 punchy_attack_2:
 punchy_attack_2_starting_active_frame:
-    defb 4
+    defb 5
 punchy_attack_2_ending_active_frame:
-    defb 18
+    defb 13
 punchy_attack_2_total_frames:
-    defb 22
+    defb 17
 punchy_sprite_attack_2_1:
     defb 3
     defb 0,25
@@ -1744,19 +1767,42 @@ punchy_sprite_attack_2_2_attr_bytes:
     defb 0,0
 
 punchy_attack_2_execute:
-    ld b,0
-    ld c,0
-    ld d,0
-    ld e,0
-    ret
+  or a
+  jp nz,punchy_attack_2_execute_player_2
+
+punchy_attack_2_execute_player_1:
+  ld a,d
+  add 2
+  ld d,a
+  ld a,e
+  cp d
+  jp c,punchy_attack_2_execute_hit
+  jp punchy_attack_2_execute_miss
+punchy_attack_2_execute_player_2:
+  ld a,d
+  sub 1
+  ld d,a
+  ld a,e
+  cp d
+  jp nc,punchy_attack_2_execute_hit
+punchy_attack_2_execute_miss:
+  ld a,0
+  ret
+punchy_attack_2_execute_hit:
+  ld a,1
+  ld b,1
+  ld c,0
+  ld d,2
+  ld e,6
+  ret
 
 punchy_attack_3:
 punchy_attack_3_starting_active_frame:
-    defb 2
+    defb 3
 punchy_attack_3_ending_active_frame:
-    defb 10
+    defb 20
 punchy_attack_3_total_frames:
-    defb 10
+    defb 25
 punchy_sprite_attack_3_1:
     defb 3
     defb 0,38
@@ -2087,14 +2133,12 @@ punchy_attack_3_execute_player_2:
   cp d
   jp nc,punchy_attack_3_execute_hit
 punchy_attack_3_execute_miss:
-  ld b,0
-  ld c,0
-  ld d,0
-  ld e,0
+  ld a,0
   ret
 punchy_attack_3_execute_hit:
-  ld b,3
-  ld c,0
-  ld d,6
-  ld e,10
+  ld a,1
+  ld b,4
+  ld c,1
+  ld d,1
+  ld e,15
   ret

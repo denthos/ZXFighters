@@ -77,6 +77,7 @@ _main_game_loop_start:
 _player_1_hit_stun:
 	ld a,0
 	ld (player_1_current_attack),a
+	ld (player_1_current_attack_frame),a
 	ld hl,(player_1_sprite_hit)
 	ld (player_1_current_sprite),hl
 	jp _player_1_done      ; if player is in hit stun, skip rest of input logic
@@ -233,6 +234,7 @@ _player_1_done:
 _player_2_hit_stun:
 	ld a,0
 	ld (player_2_current_attack),a
+	ld (player_2_current_attack_frame),a
 	ld hl,(player_2_sprite_hit)
 	ld (player_2_current_sprite),hl
 	jp _player_2_done      ; if player is in hit stun, skip rest of input logic
