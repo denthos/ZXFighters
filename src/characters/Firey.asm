@@ -673,107 +673,113 @@ firey_sprite_block:
     defb 3
     defb 3
     defb 0,26
-    defb 16,1
-    defb 0,4
     defb 32,1
-    defb 16,1
+    defb 0,4
+    defb 32,2
     defb 0,3
     defb 8,1
     defb 32,1
-    defb 24,1
+    defb 48,1
     defb 0,3
     defb 4,1
     defb 100,1
-    defb 24,1
+    defb 48,1
     defb 0,3
     defb 14,1
     defb 228,1
-    defb 28,1
+    defb 56,1
     defb 0,3
     defb 10,1
     defb 164,1
-    defb 20,1
+    defb 40,1
     defb 0,3
     defb 9,1
     defb 174,1
-    defb 20,1
+    defb 40,1
     defb 0,3
     defb 4,1
     defb 26,1
-    defb 20,1
+    defb 40,1
     defb 0,3
     defb 4,1
     defb 2,1
-    defb 18,1
+    defb 36,1
     defb 0,3
     defb 12,1
     defb 4,1
-    defb 18,1
+    defb 36,1
     defb 0,3
     defb 8,1
     defb 4,1
-    defb 17,1
+    defb 34,1
     defb 0,3
     defb 8,1
     defb 4,1
-    defb 17,1
+    defb 34,1
     defb 0,3
     defb 24,1
     defb 4,1
-    defb 17,1
+    defb 34,1
     defb 0,3
     defb 17,1
     defb 22,1
-    defb 17,1
+    defb 34,1
     defb 0,3
     defb 24,1
     defb 2,1
-    defb 16,1
-    defb 128,1
-    defb 0,2
+    defb 33,1
+    defb 0,3
     defb 8,1
     defb 2,1
-    defb 16,1
-    defb 128,1
-    defb 0,2
+    defb 33,1
+    defb 0,3
     defb 12,1
     defb 6,1
-    defb 48,1
-    defb 128,1
-    defb 0,2
+    defb 97,1
+    defb 0,3
     defb 6,1
     defb 12,1
-    defb 32,1
-    defb 128,1
-    defb 0,2
+    defb 65,1
+    defb 0,3
     defb 7,1
     defb 252,1
-    defb 33,1
-    defb 128,1
-    defb 0,2
+    defb 67,1
+    defb 0,3
     defb 28,1
     defb 7,1
-    defb 193,1
+    defb 130,1
     defb 0,3
     defb 48,1
     defb 0,1
-    defb 1,1
+    defb 2,1
     defb 0,3
     defb 224,1
     defb 0,1
-    defb 3,1
+    defb 6,1
     defb 0,3
     defb 134,1
     defb 23,1
-    defb 194,1
+    defb 132,1
     defb 0,3
     defb 154,1
     defb 24,1
-    defb 34,1
+    defb 68,1
     defb 0,3
     defb 242,1
     defb 16,1
-    defb 18,1
+    defb 36,1
+    defb 0,3
+    defb 2,1
+    defb 16,1
+    defb 36,1
+    defb 0,3
+    defb 2,1
+    defb 16,1
+    defb 36,1
+    defb 0,3
+    defb 2,1
+    defb 16,1
+    defb 22,1
     defb 0,3
     defb 2,1
     defb 16,1
@@ -785,35 +791,24 @@ firey_sprite_block:
     defb 0,3
     defb 2,1
     defb 16,1
-    defb 11,1
-    defb 0,3
-    defb 2,1
-    defb 16,1
-    defb 9,1
-    defb 0,3
-    defb 2,1
-    defb 16,1
-    defb 9,1
-    defb 0,3
-    defb 2,1
-    defb 16,1
-    defb 9,1
+    defb 18,1
     defb 0,3
     defb 4,1
     defb 32,1
-    defb 10,1
+    defb 20,1
     defb 0,3
     defb 6,1
     defb 96,1
-    defb 10,1
+    defb 20,1
     defb 0,3
     defb 3,1
     defb 192,1
-    defb 12,1
+    defb 24,1
+    defb 0,4
+    defb 1,1
+    defb 24,1
     defb 0,5
-    defb 140,1
-    defb 0,5
-    defb 8,1
+    defb 16,1
     defb 0,3
     defb 32,1
     defb 0,12
@@ -944,9 +939,9 @@ firey_attack_1:
 firey_attack_1_starting_active_frame:
     defb 2
 firey_attack_1_ending_active_frame:
-    defb 7
-firey_attack_1_total_frames:
     defb 10
+firey_attack_1_total_frames:
+    defb 13
 firey_sprite_attack_1_1:
     defb 3
     defb 3
@@ -1124,73 +1119,74 @@ firey_sprite_attack_1_2:
     defb 24,1
     defb 4,1
     defb 0,2
-    defb 8,1
+    defb 16,1
     defb 0,1
     defb 17,1
     defb 22,1
     defb 0,2
-    defb 12,1
+    defb 24,1
     defb 0,1
     defb 24,1
     defb 2,1
     defb 0,2
-    defb 28,1
+    defb 56,1
     defb 0,1
     defb 8,1
     defb 2,1
     defb 0,2
-    defb 34,1
+    defb 68,1
     defb 0,1
     defb 12,1
     defb 6,1
     defb 0,2
-    defb 98,1
+    defb 196,1
     defb 0,1
     defb 6,1
     defb 12,1
     defb 0,2
-    defb 65,1
+    defb 130,1
     defb 0,1
     defb 7,1
     defb 252,1
     defb 0,2
-    defb 65,1
+    defb 130,1
     defb 0,1
     defb 28,1
     defb 7,1
     defb 240,1
+    defb 1,1
+    defb 129,1
     defb 0,1
-    defb 192,1
-    defb 128,1
     defb 48,1
     defb 0,1
     defb 16,1
+    defb 1,2
     defb 0,1
-    defb 128,2
     defb 224,1
     defb 0,1
     defb 16,1
+    defb 1,2
     defb 0,1
-    defb 128,2
     defb 134,1
     defb 23,1
     defb 240,1
+    defb 1,2
     defb 0,1
-    defb 128,2
     defb 154,1
     defb 24,1
-    defb 0,2
-    defb 193,1
-    defb 128,1
+    defb 0,1
+    defb 1,1
+    defb 131,1
+    defb 0,1
     defb 242,1
     defb 16,1
     defb 0,2
-    defb 99,1
+    defb 198,1
     defb 0,1
     defb 2,1
     defb 16,1
     defb 0,2
-    defb 62,1
+    defb 124,1
     defb 0,1
     defb 2,1
     defb 16,1
@@ -1254,17 +1250,17 @@ firey_attack_1_execute_hit:
   ld a,1
   ld b,0
   ld c,0
-  ld d,2
+  ld d,1
   ld e,2
   ret
 
 firey_attack_2:
 firey_attack_2_starting_active_frame:
-    defb 5
+    defb 2
 firey_attack_2_ending_active_frame:
-    defb 10
+    defb 5
 firey_attack_2_total_frames:
-    defb 15
+    defb 8
 firey_sprite_attack_2_1:
     defb 4
     defb 3
@@ -1591,11 +1587,11 @@ firey_attack_2_execute_hit:
 
 firey_attack_3:
 firey_attack_3_starting_active_frame:
-    defb 3
+    defb 4
 firey_attack_3_ending_active_frame:
-    defb 10
+    defb 20
 firey_attack_3_total_frames:
-    defb 13
+    defb 22
 firey_sprite_attack_3_1:
     defb 4
     defb 0
@@ -2065,8 +2061,8 @@ firey_attack_3_execute_miss:
   ret
 firey_attack_3_execute_hit:
   ld a,1
-  ld b,4
+  ld b,0
   ld c,1
-  ld d,4
-  ld e,15
+  ld d,2
+  ld e,5
   ret
