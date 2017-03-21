@@ -2246,11 +2246,11 @@ stabby_attack_2_execute_hit:
 
 stabby_attack_3:
 stabby_attack_3_starting_active_frame:
-    defb 3
+    defb 6
 stabby_attack_3_ending_active_frame:
-    defb 6
+    defb 9
 stabby_attack_3_total_frames:
-    defb 6
+    defb 9
 stabby_sprite_attack_3_1:
     defb 2
     defb 2
@@ -2612,17 +2612,17 @@ stabby_attack_3_execute:
 
 stabby_attack_3_execute_player_1:
   ld a,e
-  sub 3
+  sub 4
   ld (player_1_current_location),a
   jp stabby_attack_3_execute_hit
 stabby_attack_3_execute_player_2:
   ld a,e
-  add 3
+  add 4
   ld (player_2_current_location),a
 stabby_attack_3_execute_hit:
   ld a,1
   ld b,0
   ld c,0
   ld d,5
-  ld e,5
+  ld e,2
   ret

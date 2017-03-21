@@ -186,6 +186,7 @@ _player_1_attacking_4_continue:
 	xor a
 	ld (player_1_current_attack),a
 	ld (player_1_current_attack_frame),a
+	ld (punchy_attack_3_data),a   ; terrible practice, due tomorrow let's goooo
 	jp _player_1_not_attacking
 
 
@@ -210,6 +211,7 @@ _player_1_blocking:
 	ld (player_1_blocking_active),a
 	ld a,5
 	ld (player_1_movement_stun),a
+	ld (player_1_attack_stun),a
 	xor a
 	ld (player_1_blocking),a
 	jp _player_1_done
@@ -362,6 +364,7 @@ _player_2_attacking_4_continue:
 	xor a
 	ld (player_2_current_attack),a
 	ld (player_2_current_attack_frame),a
+	ld (punchy_attack_3_data),a   ; terrible practice, due tomorrow let's goooo
 	jp _player_2_not_attacking
 
 
@@ -386,6 +389,7 @@ _player_2_blocking:
 	ld (player_2_blocking_active),a
 	ld a,5
 	ld (player_2_movement_stun),a
+	ld (player_2_attack_stun),a
 	xor a
 	ld (player_2_blocking),a
 	jp _player_2_done

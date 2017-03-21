@@ -1810,9 +1810,9 @@ punchy_attack_3:
 punchy_attack_3_starting_active_frame:
     defb 3
 punchy_attack_3_ending_active_frame:
-    defb 10
+    defb 7
 punchy_attack_3_total_frames:
-    defb 13
+    defb 10
 punchy_sprite_attack_3_1:
     defb 3
     defb 2
@@ -2130,6 +2130,15 @@ punchy_attack_3_execute:
   jp nz,punchy_attack_3_execute_player_2
 
 punchy_attack_3_execute_player_1:
+  ld a,(punchy_attack_3_data)
+  cp 1
+  jp nz,punchy_attack_3_no_knockback_p1
+  ld a,1
+  call move_sprite_right
+  ld a,1
+  call move_sprite_right
+  jp punchy_attack_3_execute_hit
+punchy_attack_3_no_knockback_p1:
   ld a,d
   add 2
   ld d,a
@@ -2138,6 +2147,15 @@ punchy_attack_3_execute_player_1:
   jp c,punchy_attack_3_execute_hit
   jp punchy_attack_3_execute_miss
 punchy_attack_3_execute_player_2:
+  ld a,(punchy_attack_3_data)
+  cp 1
+  jp nz,punchy_attack_3_no_knockback_p2
+  ld a,0
+  call move_sprite_right
+  ld a,0
+  call move_sprite_right
+  jp punchy_attack_3_execute_hit
+punchy_attack_3_no_knockback_p2:
   ld a,d
   sub 2
   ld d,a
@@ -2149,8 +2167,11 @@ punchy_attack_3_execute_miss:
   ret
 punchy_attack_3_execute_hit:
   ld a,1
+  ld (punchy_attack_3_data),a
   ld b,4
   ld c,1
-  ld d,4
+  ld d,5
   ld e,15
   ret
+punchy_attack_3_data:
+  defb 0
