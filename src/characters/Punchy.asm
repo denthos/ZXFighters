@@ -1057,7 +1057,7 @@ punchy_attack_1_starting_active_frame:
 punchy_attack_1_ending_active_frame:
     defb 7
 punchy_attack_1_total_frames:
-    defb 9
+    defb 10
 punchy_sprite_attack_1_1:
     defb 3
     defb 2

@@ -145,7 +145,7 @@ stabby_flip:
 stabby_sprites:
 stabby_sprite_idle_1:
     defb 3
-    defb 3
+    defb 2
     defb 0,1
     defb 30,1
     defb 0,5
@@ -347,8 +347,8 @@ stabby_sprite_idle_attr_bytes:
     defb 0,0
 
 stabby_sprite_idle_2:
-    defb 3
-    defb 3
+    defb 2
+    defb 2
     defb 0,1
     defb 1,1
     defb 224,1
@@ -1778,11 +1778,11 @@ stabby_attack_1_execute_hit:
 
 stabby_attack_2:
 stabby_attack_2_starting_active_frame:
-    defb 5
+    defb 2
 stabby_attack_2_ending_active_frame:
-    defb 10
+    defb 5
 stabby_attack_2_total_frames:
-    defb 15
+    defb 7
 stabby_sprite_attack_2_1:
     defb 2
     defb 2
@@ -2238,10 +2238,10 @@ stabby_attack_2_execute_miss:
   ret
 stabby_attack_2_execute_hit:
   ld a,1
-  ld b,1
+  ld b,0
   ld c,0
-  ld d,3
-  ld e,6
+  ld d,2
+  ld e,2
   ret
 
 stabby_attack_3:

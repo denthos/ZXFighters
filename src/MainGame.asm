@@ -486,8 +486,8 @@ _player_1_victory:
 _player_2_victory:
 	di
 	ld a, (player_2_rounds_won)
-	dec a 
-	ld (player_1_rounds_won), a
+	inc a
+	ld (player_2_rounds_won), a
 	ld b, a
 	ld a, (number_of_rounds)
 	cp b 
@@ -496,12 +496,13 @@ _player_2_victory:
 	jp main_loop_start
 
 _show_player_1_victory_screen:
-	ld a, 0 
+	xor a
 	ld (player_1_rounds_won), a 
 	ld (player_2_rounds_won), a 
 	jp _show_player_victory_screen_end
 
 _show_player_2_victory_screen:
+	xor a
 	ld (player_1_rounds_won), a 
 	ld (player_2_rounds_won), a 
 	jp _show_player_victory_screen_end
