@@ -891,8 +891,8 @@ punchy_sprite_block_attr_bytes:
 
 punchy_sprite_hit:
     defb 3
-    defb 2
-    defb 0,38
+    defb 3
+    defb 0,37
     defb 2,1
     defb 0,4
     defb 1,1
@@ -1045,7 +1045,7 @@ punchy_sprite_hit:
     defb 60,1
     defb 1,1
     defb 240,1
-    defb 0,2
+    defb 0,3
     defb 0,0
 punchy_sprite_hit_attr_bytes:
     defb 120,36
