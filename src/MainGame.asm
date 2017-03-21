@@ -575,6 +575,9 @@ _initialize_game_set_screen_color:
 	ld d,a
 	and 0x38               ; make sure background isn't black
 	jp z,_initialize_game_set_screen_color
+	ld a,d
+	cp 0x48
+	jp z,_initialize_game_set_screen_color
 	call clear_screen
 
 	; draw starting interface
