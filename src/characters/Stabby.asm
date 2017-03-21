@@ -1752,7 +1752,7 @@ stabby_attack_1_execute:
 
 stabby_attack_1_execute_player_1:
   ld a,d
-  add 2
+  add 0
   ld d,a
   ld a,e
   cp d
@@ -1760,7 +1760,7 @@ stabby_attack_1_execute_player_1:
   jp stabby_attack_1_execute_miss
 stabby_attack_1_execute_player_2:
   ld a,d
-  sub 1
+  sub 0
   ld d,a
   ld a,e
   cp d
@@ -2220,7 +2220,7 @@ stabby_attack_2_execute:
 
 stabby_attack_2_execute_player_1:
   ld a,d
-  add 2
+  add 0
   ld d,a
   ld a,e
   cp d
@@ -2228,7 +2228,7 @@ stabby_attack_2_execute_player_1:
   jp stabby_attack_2_execute_miss
 stabby_attack_2_execute_player_2:
   ld a,d
-  sub 1
+  sub 0
   ld d,a
   ld a,e
   cp d
@@ -2617,7 +2617,7 @@ stabby_attack_3_execute_player_1:
   jp stabby_attack_3_execute_hit
 stabby_attack_3_execute_player_2:
   ld a,e
-  add 4
+  sub 3
   ld (player_2_current_location),a
 stabby_attack_3_execute_hit:
   ld a,1
