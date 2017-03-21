@@ -1836,7 +1836,7 @@ neaty_attack_3_starting_active_frame:
 neaty_attack_3_ending_active_frame:
     defb 20
 neaty_attack_3_total_frames:
-    defb 25
+    defb 20
 neaty_sprite_attack_3_1:
     defb 2
     defb 0
