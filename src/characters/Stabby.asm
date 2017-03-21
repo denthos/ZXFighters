@@ -1769,6 +1769,7 @@ stabby_attack_1_execute_miss:
   ld a,0
   ret
 stabby_attack_1_execute_hit:
+    call custom_bang
   ld a,1
   ld b,0
   ld c,0
@@ -2237,6 +2238,7 @@ stabby_attack_2_execute_miss:
   ld a,0
   ret
 stabby_attack_2_execute_hit:
+  call custom_bang
   ld a,1
   ld b,0
   ld c,0
@@ -2620,6 +2622,7 @@ stabby_attack_3_execute_player_2:
   sub 3
   ld (player_2_current_location),a
 stabby_attack_3_execute_hit:
+  call five_hit_bang
   ld a,1
   ld b,0
   ld c,0
