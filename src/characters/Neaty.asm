@@ -146,153 +146,142 @@ neaty_sprites:
 neaty_sprite_idle_1:
     defb 3
     defb 3
-    defb 0,37
-    defb 2,1
-    defb 0,4
+    defb 0,30
     defb 1,1
-    defb 252,1
-    defb 0,4
-    defb 1,1
-    defb 254,1
-    defb 0,4
-    defb 3,1
-    defb 130,1
-    defb 0,4
-    defb 3,1
-    defb 26,1
-    defb 0,4
-    defb 3,1
-    defb 1,1
-    defb 0,4
-    defb 2,1
-    defb 1,1
-    defb 0,4
-    defb 2,2
-    defb 0,4
-    defb 1,1
-    defb 14,1
-    defb 0,4
-    defb 1,1
-    defb 16,1
-    defb 0,4
-    defb 15,1
-    defb 28,1
-    defb 0,4
-    defb 16,1
-    defb 3,1
-    defb 6,1
-    defb 0,3
-    defb 32,1
-    defb 0,1
-    defb 137,1
-    defb 0,3
-    defb 32,1
-    defb 0,1
-    defb 73,1
-    defb 0,3
-    defb 66,1
-    defb 0,1
-    defb 53,1
-    defb 0,3
-    defb 65,1
-    defb 84,1
-    defb 34,1
-    defb 0,3
-    defb 65,1
-    defb 6,1
-    defb 4,1
-    defb 0,3
-    defb 65,1
-    defb 7,1
-    defb 136,1
-    defb 0,3
-    defb 65,1
-    defb 4,1
-    defb 240,1
-    defb 0,3
-    defb 35,1
-    defb 14,1
-    defb 0,4
-    defb 48,1
-    defb 241,1
-    defb 0,4
-    defb 24,1
-    defb 1,1
-    defb 0,4
-    defb 15,1
-    defb 249,1
-    defb 0,4
-    defb 7,1
-    defb 254,1
-    defb 0,4
-    defb 7,1
-    defb 252,1
-    defb 0,4
-    defb 7,1
-    defb 250,1
-    defb 0,4
-    defb 15,1
-    defb 253,1
-    defb 0,4
-    defb 13,1
-    defb 254,1
+    defb 255,1
     defb 128,1
     defb 0,3
-    defb 31,1
-    defb 255,1
-    defb 0,4
-    defb 27,1
-    defb 255,1
-    defb 192,1
+    defb 3,1
+    defb 0,1
+    defb 64,1
     defb 0,3
-    defb 63,1
-    defb 223,1
-    defb 192,1
-    defb 0,3
-    defb 55,1
-    defb 143,1
+    defb 4,1
+    defb 127,1
     defb 224,1
     defb 0,3
-    defb 127,1
+    defb 5,1
+    defb 128,1
+    defb 32,1
+    defb 0,3
+    defb 7,1
+    defb 0,1
+    defb 32,1
+    defb 0,3
+    defb 6,1
     defb 7,1
     defb 224,1
     defb 0,3
-    defb 127,1
-    defb 7,1
-    defb 224,1
+    defb 6,1
+    defb 4,1
+    defb 32,1
     defb 0,3
-    defb 126,1
+    defb 4,1
     defb 3,1
     defb 224,1
     defb 0,3
-    defb 126,1
-    defb 3,1
-    defb 224,1
+    defb 4,1
+    defb 0,1
+    defb 32,1
     defb 0,3
-    defb 126,1
-    defb 3,1
-    defb 224,1
+    defb 4,1
+    defb 0,1
+    defb 32,1
     defb 0,3
-    defb 126,1
-    defb 3,1
-    defb 192,1
+    defb 4,1
+    defb 0,1
+    defb 32,1
     defb 0,3
-    defb 36,1
+    defb 2,1
+    defb 0,1
+    defb 64,1
+    defb 0,3
     defb 1,1
+    defb 255,1
+    defb 192,1
+    defb 0,3
+    defb 3,1
+    defb 255,1
+    defb 64,1
+    defb 0,3
+    defb 3,1
+    defb 255,1
+    defb 96,1
+    defb 0,3
+    defb 3,1
+    defb 254,1
+    defb 32,1
+    defb 0,3
+    defb 7,1
+    defb 254,1
+    defb 32,1
+    defb 0,3
+    defb 7,1
+    defb 252,1
+    defb 32,1
+    defb 0,3
+    defb 7,1
+    defb 254,1
     defb 48,1
     defb 0,3
-    defb 66,1
-    defb 2,1
-    defb 8,1
+    defb 7,1
+    defb 250,1
+    defb 24,1
     defb 0,3
-    defb 66,1
-    defb 2,1
-    defb 8,1
+    defb 7,1
+    defb 241,1
+    defb 14,1
     defb 0,3
-    defb 60,1
-    defb 1,1
-    defb 240,1
+    defb 7,1
+    defb 225,1
+    defb 130,1
     defb 0,3
+    defb 15,1
+    defb 224,1
+    defb 198,1
+    defb 0,3
+    defb 15,1
+    defb 192,1
+    defb 124,1
+    defb 0,3
+    defb 15,1
+    defb 192,1
+    defb 64,1
+    defb 0,3
+    defb 15,1
+    defb 128,1
+    defb 64,1
+    defb 0,3
+    defb 15,1
+    defb 128,1
+    defb 64,1
+    defb 0,3
+    defb 15,1
+    defb 156,1
+    defb 64,1
+    defb 0,3
+    defb 15,1
+    defb 20,1
+    defb 64,1
+    defb 0,3
+    defb 15,1
+    defb 20,1
+    defb 64,1
+    defb 0,3
+    defb 15,1
+    defb 20,1
+    defb 64,1
+    defb 0,3
+    defb 15,1
+    defb 20,1
+    defb 64,1
+    defb 0,3
+    defb 7,1
+    defb 20,1
+    defb 64,1
+    defb 0,4
+    defb 227,1
+    defb 128,1
+    defb 0,57
     defb 0,0
 neaty_sprite_idle_attr_bytes:
     defb 120,36
