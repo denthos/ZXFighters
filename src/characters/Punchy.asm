@@ -1396,6 +1396,7 @@ punchy_attack_1_execute_miss:
   ld a,0
   ret
 punchy_attack_1_execute_hit:
+  call custom_bang
   ld a,1
   ld b,0
   ld c,0
@@ -1799,6 +1800,7 @@ punchy_attack_2_execute_miss:
   ld a,0
   ret
 punchy_attack_2_execute_hit:
+  call custom_bang
   ld a,1
   ld b,1
   ld c,0
@@ -2166,6 +2168,7 @@ punchy_attack_3_execute_miss:
   ld a,0
   ret
 punchy_attack_3_execute_hit:
+  call five_hit_bang
   ld a,1
   ld (punchy_attack_3_data),a
   ld b,4

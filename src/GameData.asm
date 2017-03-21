@@ -247,7 +247,7 @@ selected_character_p1:
 selected_character_p2:
 	defb 1
 selected_character_max:
-	defb 3
+	defb 4
 a_down:
 	defb 0
 s_down:

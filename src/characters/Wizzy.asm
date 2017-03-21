@@ -1508,6 +1508,7 @@ wizzy_attack_1_execute_miss:
   ld a,0
   ret
 wizzy_attack_1_execute_hit:
+  call high_pitch_sound
   ld a,1
   ld b,0
   ld c,0
@@ -1957,6 +1958,7 @@ wizzy_attack_2_execute_miss:
   ld a,0
   ret
 wizzy_attack_2_execute_hit:
+  call taser_sound
   ld a,1
   ld b,0
   ld c,1
@@ -2426,6 +2428,7 @@ wizzy_attack_3_execute_miss:
   ld a,0
   ret
 wizzy_attack_3_execute_hit:
+  call five_hit_bang
   ld a,1
   ld b,3
   ld c,0
