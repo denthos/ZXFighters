@@ -1960,7 +1960,7 @@ wizzy_attack_2_execute_hit:
   ld a,1
   ld b,0
   ld c,1
-  ld d,1
+  ld d,2
   ld e,5
   ret
 wizzy_attack_3:
