@@ -367,8 +367,52 @@ draw_title_screen:
 draw_title_graphic:
 	ld hl,0x4000
 	ld ix,title_graphic_data
+	ld d,64
+_draw_title_graphic_loop_start:
+	ld b,32
+_draw_title_graphic_loop:
+	ld a,(ix+0)
+	ld (hl),a
+	inc l
+	inc ix
+	djnz _draw_title_graphic_loop
+	jp _draw_graphic_row_decrement
+_draw_graphic_row_decrement_return:
+	dec d
+	jp nz,_draw_title_graphic_loop_start
+
+_draw_title_graphic_attributes:
+	ld hl,0x5800
+	ld ix,title_graphic_data_attr_bytes
+	ld b,0
+_draw_title_graphic_attr_loop:
+	ld a,(ix+0)
+	ld (hl),a
+	inc hl
+	inc ix
+	djnz _draw_title_graphic_attr_loop
 	ret
 
+_draw_graphic_row_decrement:
+	ld a,l                 ; move to next pixel row down in cell <e> to left
+	sub 32
+	ld l,a
+	inc h
+	ld a,h                 ; check if we overflowed into y6
+	and 7
+	jr nz,_draw_graphic_row_decrement_return
+	ld a,h
+	sub 8                  ; decrement y6
+	ld h,a
+	ld a,l
+	add a,32               ; increment y3
+	ld l,a
+	and 224                ; check if we overflowed into y0
+	jr nz,_draw_graphic_row_decrement_return
+	ld a,h
+	add a,8                ; increment y6
+	ld h,a
+	jp _draw_graphic_row_decrement_return
 
 ; ------------------------------------------------------------------------------
 ; Subroutine for drawing the sprite and name of characters onto the character
