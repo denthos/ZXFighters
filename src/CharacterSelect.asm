@@ -240,6 +240,8 @@ init_player:
   jp z,stabby_init
   cp 3
   jp z,firey_init
+  cp 4
+  jp z,neaty_init
 
 init_char_1:
   ret
@@ -261,6 +263,8 @@ flip_player:
   jp z,stabby_flip
   cp 3
   jp z,firey_flip
+  cp 4
+  jp z,neaty_flip
 
 
 ; ------------------------------------------------------------------------------
@@ -283,6 +287,8 @@ ld_character_data_address:
   jp z,_ld_character_data_address_char_2
   cp 3
   jp z,_ld_character_data_address_char_3
+  cp 4
+  jp z,_ld_character_data_address_char_4
 _ld_character_data_address_char_0:
   ld ix,punchy_data
   ret
@@ -295,6 +301,9 @@ _ld_character_data_address_char_2:
 _ld_character_data_address_char_3:
   ld ix,firey_data
   ret
+_ld_character_data_address_char_4:
+  ld ix,neaty_data
+  ret
 
 ld_character_sprite_address:
   cp 0
@@ -305,6 +314,8 @@ ld_character_sprite_address:
   jp z,_ld_character_sprite_address_char_2
   cp 3
   jp z,_ld_character_sprite_address_char_3
+  cp 4
+  jp z,_ld_character_sprite_address_char_4
 _ld_character_sprite_address_char_0:
   ld ix,punchy_sprites
   ret
@@ -316,4 +327,7 @@ _ld_character_sprite_address_char_2:
   ret
 _ld_character_sprite_address_char_3:
   ld ix,firey_sprites
+  ret
+_ld_character_sprite_address_char_4:
+  ld ix,neaty_sprites
   ret

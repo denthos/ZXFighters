@@ -1,6 +1,6 @@
 neaty_data:
 neaty_name:
-    defb '  neaty  '
+    defb '  Neaty   '
 neaty_init:
         ld bc,neaty_name
         ld (hl),c
