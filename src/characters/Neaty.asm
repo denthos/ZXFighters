@@ -1834,9 +1834,9 @@ neaty_attack_3:
 neaty_attack_3_starting_active_frame:
     defb 3
 neaty_attack_3_ending_active_frame:
-    defb 7
+    defb 20
 neaty_attack_3_total_frames:
-    defb 10
+    defb 25
 neaty_sprite_attack_3_1:
     defb 2
     defb 0
@@ -2198,49 +2198,21 @@ neaty_attack_3_execute:
   jp nz,neaty_attack_3_execute_player_2
 
 neaty_attack_3_execute_player_1:
-  ld a,(neaty_attack_3_data)
-  cp 1
-  jp nz,neaty_attack_3_no_knockback_p1
   ld a,1
-  call move_sprite_right
+  call move_sprite_left
   ld a,1
-  call move_sprite_right
+  call move_sprite_left
   jp neaty_attack_3_execute_hit
-neaty_attack_3_no_knockback_p1:
-  ld a,d
-  add 2
-  ld d,a
-  ld a,e
-  cp d
-  jp c,neaty_attack_3_execute_hit
-  jp neaty_attack_3_execute_miss
 neaty_attack_3_execute_player_2:
-  ld a,(neaty_attack_3_data)
-  cp 1
-  jp nz,neaty_attack_3_no_knockback_p2
   ld a,0
-  call move_sprite_left
+  call move_sprite_right
   ld a,0
-  call move_sprite_left
+  call move_sprite_right
   jp neaty_attack_3_execute_hit
-neaty_attack_3_no_knockback_p2:
-  ld a,d
-  sub 2
-  ld d,a
-  ld a,e
-  cp d
-  jp nc,neaty_attack_3_execute_hit
-neaty_attack_3_execute_miss:
-  ld a,0
-  ret
 neaty_attack_3_execute_hit:
   call five_hit_bang
-  ld a,1
-  ld (neaty_attack_3_data),a
-  ld b,4
+  ld b,0
   ld c,1
-  ld d,5
-  ld e,15
+  ld d,0
+  ld e,25
   ret
-neaty_attack_3_data:
-  defb 0
