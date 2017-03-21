@@ -1589,9 +1589,9 @@ firey_attack_3:
 firey_attack_3_starting_active_frame:
     defb 4
 firey_attack_3_ending_active_frame:
-    defb 20
+    defb 14
 firey_attack_3_total_frames:
-    defb 22
+    defb 16
 firey_sprite_attack_3_1:
     defb 4
     defb 0
@@ -2043,7 +2043,7 @@ firey_attack_3_execute:
 
 firey_attack_3_execute_player_1:
   ld a,d
-  add 2
+  add 3
   ld d,a
   ld a,e
   cp d
@@ -2051,7 +2051,7 @@ firey_attack_3_execute_player_1:
   jp firey_attack_3_execute_miss
 firey_attack_3_execute_player_2:
   ld a,d
-  sub 2
+  sub 3
   ld d,a
   ld a,e
   cp d
@@ -2063,6 +2063,6 @@ firey_attack_3_execute_hit:
   ld a,1
   ld b,0
   ld c,1
-  ld d,2
+  ld d,3
   ld e,5
   ret
