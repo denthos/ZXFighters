@@ -2151,9 +2151,9 @@ punchy_attack_3_execute_player_2:
   cp 1
   jp nz,punchy_attack_3_no_knockback_p2
   ld a,0
-  call move_sprite_right
+  call move_sprite_left
   ld a,0
-  call move_sprite_right
+  call move_sprite_left
   jp punchy_attack_3_execute_hit
 punchy_attack_3_no_knockback_p2:
   ld a,d
