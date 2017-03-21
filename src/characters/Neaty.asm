@@ -898,8 +898,7 @@ neaty_sprite_block:
     defb 120,1
     defb 0,5
     defb 120,1
-    defb 128,1
-    defb 0,3
+    defb 0,4
     defb 1,1
     defb 48,1
     defb 0,5
