@@ -53,20 +53,23 @@ main_loop_start:
   ld a, 51
   ld de, 0x488f
   call print_char
-  ld hl, 218
-  ld de, 880
+;   ld hl, 218
+;   ld de, 880
+;   call 949
+  ld hl, 467
+  ld de, 440
   call 949
   ld a, 50
   ld de, 0x488f
   call print_char
-  ld hl, 218
-  ld de, 880
+  ld hl, 467
+  ld de, 440
   call 949
   ld a, 49
   ld de, 0x488f
   call print_char
-  ld hl, 191
-  ld de, 1976
+  ld hl, 413
+  ld de, 988
   call 949
   ld b, 1 
   ld h, 8

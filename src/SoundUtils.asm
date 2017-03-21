@@ -59,6 +59,26 @@ _custom_bang_loop_delay:
 	ret 
 
 
+custom_bang_2:
+	ld e, 50
+	ld d, 0
+	ld hl, 0 
+_custom_bang_loop_2:
+	ld b, 32
+_custom_bang_loop_play_2:
+	ld a,(hl)
+	inc hl 	
+	and 248             ; Make sure to not change the border color by anding away color bits
+        out (254),a         ; Output to the speaker 
+        inc d   	    ; increment the total counter 
+_custom_bang_loop_delay_2:
+	djnz _custom_bang_loop_delay_2
+	ld a, d 
+	cp 50 
+	jp nz, _custom_bang_loop_2
+	ret 
+
+
 
 
 ; Copied from https://chuntey.wordpress.com/category/z80-assembly/page/3/
