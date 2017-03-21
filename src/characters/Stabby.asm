@@ -2617,7 +2617,7 @@ stabby_attack_3_execute_player_1:
   jp stabby_attack_3_execute_hit
 stabby_attack_3_execute_player_2:
   ld a,e
-  add 4
+  sub 3
   ld (player_2_current_location),a
 stabby_attack_3_execute_hit:
   ld a,1

@@ -69,6 +69,7 @@ main_loop:
   include "src/InputUtils.asm"
   include "src/InterfaceUtils.asm"
 
+  include "src/characters/Firey.asm"
   include "src/characters/Punchy.asm"
   include "src/characters/Stabby.asm"
   include "src/characters/Wizzy.asm"

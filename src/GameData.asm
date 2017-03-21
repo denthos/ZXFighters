@@ -247,7 +247,7 @@ selected_character_p1:
 selected_character_p2:
 	defb 1
 selected_character_max:
-	defb 2
+	defb 3
 a_down:
 	defb 0
 s_down:
@@ -302,3 +302,5 @@ temp_sprite_flip_data_1:
 	defs 324
 temp_sprite_flip_data_2:
 	defs 324
+
+title_graphic_data:

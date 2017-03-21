@@ -313,7 +313,8 @@ _clear_sprite_p2_row_decrement:
 ; ------------------------------------------------------------------------------
 draw_title_screen:
 
-	; TODO: ADD TITLE GRAPHIC AT TOP
+	; DRAW TITLE GRAPHIC
+	call draw_title_graphic
 
 	; DRAW ARROWS AROUND P1
 	ld de,0x48e1
@@ -359,11 +360,15 @@ draw_title_screen:
 	call print_string
 
 
-
-
 ; 	ld de, 
 
 	ret
+
+draw_title_graphic:
+	ld hl,0x4000
+	ld ix,title_graphic_data
+	ret
+
 
 ; ------------------------------------------------------------------------------
 ; Subroutine for drawing the sprite and name of characters onto the character
