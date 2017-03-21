@@ -48,10 +48,30 @@ main_game_init:
   call initialize_game
 
 
-
-
 main_loop_start:
   ei
+  ld a, 51
+  ld de, 0x488f
+  call print_char
+  ld hl, 218
+  ld de, 880
+  call 949
+  ld a, 50
+  ld de, 0x488f
+  call print_char
+  ld hl, 218
+  ld de, 880
+  call 949
+  ld a, 49
+  ld de, 0x488f
+  call print_char
+  ld hl, 191
+  ld de, 1976
+  call 949
+  ld b, 1 
+  ld h, 8
+  ld de, 0x488f
+  call set_character_cell_pixels_background
 main_loop:
   halt
   jp main_loop
@@ -72,3 +92,4 @@ main_loop:
   include "src/characters/Punchy.asm"
   include "src/characters/Stabby.asm"
   include "src/characters/Wizzy.asm"
+  include "src/SoundUtils.asm"

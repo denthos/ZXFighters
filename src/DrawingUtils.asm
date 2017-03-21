@@ -429,6 +429,23 @@ _draw_bar_done_init:
         ret
 
 
+set_character_cell_pixels_background:
+        ld a, 0
+        ld c,e
+set_character_cell_pixels_background_loop:
+        ld (de),a
+        inc e
+        djnz set_character_cell_pixels_background_loop
+        dec h
+        jp z,set_character_cell_pixels_background_done
+        ld b,10
+        inc d
+        ld e,c
+        jp set_character_cell_pixels_background_loop
+set_character_cell_pixels_background_done:
+        ret
+
+
 ; ------------------------------------------------------------------------------
 ; Subroutine for updating health bar, should probably be expanded to
 ; handle special move bar too.
