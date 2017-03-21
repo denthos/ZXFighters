@@ -83,7 +83,7 @@ def formatMat(s_size, matrix, new_pixel_matrix, new_attr_matrix):
     overlap = 0
     tc = 0
     for i in range(s_size * NUM_BYTES_IN_BLOCK): #loop through number of rows, 192
-        new_pixel_matrix[i] = matrix[(8 * count) + overlap][0:s_size]
+        new_pixel_matrix[i] = matrix[(8 * count) + overlap][0:32]
         # print str(matrix[(8 * count) + overlap][0:s_size])
         tc += 1
 
@@ -101,8 +101,8 @@ def formatMat(s_size, matrix, new_pixel_matrix, new_attr_matrix):
 
     count = 0 #reset
     for i in range(s_size):
-        new_attr_matrix[i] = matrix[NUM_PIXEL_ROWS + count][0:s_size]
-        print matrix[NUM_PIXEL_ROWS + count][0:s_size]
+        new_attr_matrix[i] = matrix[NUM_PIXEL_ROWS + count][0:32]
+        print matrix[NUM_PIXEL_ROWS + count][0:32]
         count += 1
     # print(tc)
     return (new_pixel_matrix, new_attr_matrix)
@@ -221,6 +221,61 @@ def writeRegBackgroundHuff(scr_input, new_asm_file):
 
 #-----------------------------------------------------#
 
+#-----------------------------------------------------------------------------
+# Just write the data out not in huffman form 
+#-----------------------------------------------------------------------------
+def writeNoHuff(new_asm_file, new_pixel_matrix, new_attr_matrix):
+    with open(new_asm_file, 'w+') as nf:
+        counter = 0
+        total = 0
+        for i in range(len(new_pixel_matrix)):
+            for j in range(len(new_pixel_matrix[0])):
+                # print new_pixel_matrix[i][j]
+
+                # if (counter == 15):
+                #     nf.write(str(new_pixel_matrix[i][j]) + ',')
+                # counter += 1 
+                if total == 2048:
+                    continue 
+                holder = new_pixel_matrix[i][j]
+                if (counter == 0):
+                    nf.write('\t defb ' + str(holder) + ',')
+                    counter += 1
+                elif (counter == 15):
+                    nf.write(str(holder) + '\n')
+                    counter = 0
+                else:
+                    nf.write(str(holder) + ',')
+                    counter += 1
+                total += 1
+        total = 0
+        counter = 0
+        nf.write('\n' + 'attribute bytes' + '\n')
+        for i in range(len(new_attr_matrix)):
+            for j in range(len(new_attr_matrix[0])):
+                if total == 256:
+                    continue 
+                holder = new_attr_matrix[i][j] 
+                if (counter == 0):
+                    nf.write('\t defb ' + str(holder) + ',')
+                    counter += 1
+                elif (counter == 15):
+                    nf.write(str(holder) + '\n')
+                    counter = 0
+                else:
+                    nf.write(str(holder) + ',')
+                    counter += 1
+                total += 1
+
+                
+
+
+#-----------------------------------------------------#
+
+
+
+
+
 
 
 #main
@@ -244,15 +299,17 @@ if sprite: #do all the special stuff
     #format the matrix into two seperate matricies, ready for direct translation to huffman encode
     matricies = formatMat(s_size, 
         matrix, 
-        [[0 for x in range(s_size)] for y in range(s_size * NUM_BYTES_IN_BLOCK)], 
-        [[0 for x in range(s_size)] for y in range(s_size)]) 
+        [[0 for x in range(32)] for y in range(s_size * NUM_BYTES_IN_BLOCK)], 
+        [[0 for x in range(32)] for y in range(s_size)]) 
     new_pixel_matrix = matricies[0]
     new_attr_matrix = matricies[1]
     #officially write to the new file
-    writeHuffToNewFile(new_asm_file, new_pixel_matrix, new_attr_matrix)
 
-else: #regular background
-    writeRegBackgroundHuff(scr_input, new_asm_file)
+    writeNoHuff(new_asm_file, new_pixel_matrix, new_attr_matrix)
+#     writeHuffToNewFile(new_asm_file, new_pixel_matrix, new_attr_matrix)
+
+# else: #regular background
+#     writeRegBackgroundHuff(scr_input, new_asm_file)
 
 print 'Resulting asm written to ' + new_asm_file
 

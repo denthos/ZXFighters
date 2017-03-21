@@ -402,7 +402,7 @@ _move_sprite_right_2:
       cp 26                                     ; Check if already to the farthest right of the screen 
       jp z,_move_sprite_right_done_edge         ; If so then skip to the end and return 
       ld a, (player_2_current_walking_sprite)       ; Load the bit offsett to check to see where we are in the character cell 
-      cp 4; 6                                   ; Check if the bit offset is = 4 (after 4 moves to next character cell)
+      cp 6 ;4; 6                                   ; Check if the bit offset is = 4 (after 4 moves to next character cell)
       jp nz, move_right_current_player_sprite_2     ; If equal to 7 then increment player_1_current_walking_sprite 
       xor a                                     ; Clear the a register 
       ld (player_2_current_walking_sprite), a       ; Save 0 as the bit offset 
@@ -497,18 +497,24 @@ check_sprite_overlap:
 ;     call absA
       ld d, a
       ld a, (player_2_current_location)
+
 ;     call absA
       sub d 
+      add a, 6
       push af                             ; Save a (difference)(how close they are) on stack 
       ld hl, (player_1_current_sprite)    ; Load pre_calculate_offset_middle into a to load to d  
       ld a, (hl)                          ; Offset for the first one 
       ld b, a 
       ld hl, (player_2_current_sprite)
       ld a, (hl)
+
+;       ld a, 0
+
       add a, b 
       ld b, a 
       ld a, 6
       sub b 
+      add a ,6
       ld d, a                             ; Load the pre_calculate_offset_middle into d for compare with a
       pop af                              ; Get back the difference into a 
       cp d ;6                             ; Compare d with a 

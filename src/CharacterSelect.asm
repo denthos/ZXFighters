@@ -37,6 +37,29 @@ _character_select_loop_d_release:
   ld (hl),a             ; d_down = 0
 _character_select_loop_d_done:
 
+
+
+  ld a,(character_select_input_store)
+  and 0x10               ; check key G
+  jp nz, _character_select_loop_g_release 
+  ld a, 1
+  ld hl, g_down
+  ld (hl), a 
+  jp _character_select_loop_g_done
+_character_select_loop_g_release:
+  ld hl,g_down
+  ld a,(hl)
+  or a                  ; if d_down was 1 (key release), select next character
+  call nz, decrease_number_of_rounds
+  ld hl, g_down
+  ld a,0 
+  ld (hl), a 
+_character_select_loop_g_done:
+
+
+
+
+
   ; player 2
   ld bc,49150           ; read keys H,J,K,L,Enter
   in a,(c)
@@ -74,6 +97,24 @@ _character_select_loop_l_release:
   ld (hl),a             ; l_down = 0
 _character_select_loop_l_done:
 
+  ld a,(character_select_input_store)
+  and 0x10               ; check key H
+  jp nz, _character_select_loop_h_release 
+  ld a, 1
+  ld hl, h_down 
+  ld (hl), a 
+  jp _character_select_loop_h_done
+_character_select_loop_h_release:
+  ld hl,h_down
+  ld a,(hl)
+  or a                  ; if d_down was 1 (key release), select next character
+  call nz, increase_number_of_rounds
+  out (254), a
+  ld hl, h_down
+  ld a,0 
+  ld (hl), a 
+_character_select_loop_h_done:  
+
   ; check for Enter
 	ld a,(character_select_input_store)
   and 0x1               ; check key Enter
@@ -88,8 +129,10 @@ _character_select_loop_l_done:
   ; TODO: reverse sprites of player 2's selected character
   ; initialize player 2
   ld a,(selected_character_p2)
-  ld hl,player_2_sprites
-  ;call init_player
+  call flip_player
+  ld a,(selected_character_p2)
+  ld hl,player_2_name
+  call init_player
 
   ret
 
@@ -165,20 +208,40 @@ _select_prev_character_p2_end:
   jp z,select_prev_character_p2
   jp draw_title_character_p2
 
+
+increase_number_of_rounds:
+  ld a, (number_of_rounds)
+  out (254), a
+  cp 9 
+  jp z, _increase_number_rounds_end
+  inc a 
+  ld (number_of_rounds), a
+  call draw_number_of_rounds
+_increase_number_rounds_end:
+  ret
+
+decrease_number_of_rounds:
+  ld a, (number_of_rounds)
+  cp 1 
+  jp z, _decrease_number_rounds_end
+  dec a 
+  ld (number_of_rounds), a
+  call draw_number_of_rounds
+_decrease_number_rounds_end:
+  ret 
+
+
 init_player:
   cp 0
   jp z,punchy_init
   cp 1
-  jp z,init_char_1
+  jp z,wizzy_init
   cp 2
-  jp z,init_char_2
+  jp z,stabby_init
   cp 3
-  jp z,init_char_3
+  jp z,firey_init
   cp 4
-  jp z,init_char_4
-  cp 5
-  jp z,init_char_5
-  ; TODO: reverse sprites of player 2
+  jp z,neaty_init
 
 init_char_1:
   ret
@@ -189,4 +252,82 @@ init_char_3:
 init_char_4:
   ret
 init_char_5:
+  ret
+
+flip_player:
+  cp 0
+  jp z,punchy_flip
+  cp 1
+  jp z,wizzy_flip
+  cp 2
+  jp z,stabby_flip
+  cp 3
+  jp z,firey_flip
+  cp 4
+  jp z,neaty_flip
+
+
+; ------------------------------------------------------------------------------
+; This routine is basically a switch statement for determining which character
+; is selected based on the character index passed in through A, and loading
+; the address of that character's data into IX. This can't be done by storing
+; pointers to the data in memory, because IX can only be loaded with constants
+;
+; Inputs:
+;   A  = Index of the character whose data address should be loaded
+; Outputs:
+;   IX = Address of the data of the character
+; ------------------------------------------------------------------------------
+ld_character_data_address:
+  cp 0
+  jp z,_ld_character_data_address_char_0
+  cp 1
+  jp z,_ld_character_data_address_char_1
+  cp 2
+  jp z,_ld_character_data_address_char_2
+  cp 3
+  jp z,_ld_character_data_address_char_3
+  cp 4
+  jp z,_ld_character_data_address_char_4
+_ld_character_data_address_char_0:
+  ld ix,punchy_data
+  ret
+_ld_character_data_address_char_1:
+  ld ix,wizzy_data
+  ret
+_ld_character_data_address_char_2:
+  ld ix,stabby_data
+  ret
+_ld_character_data_address_char_3:
+  ld ix,firey_data
+  ret
+_ld_character_data_address_char_4:
+  ld ix,neaty_data
+  ret
+
+ld_character_sprite_address:
+  cp 0
+  jp z,_ld_character_sprite_address_char_0
+  cp 1
+  jp z,_ld_character_sprite_address_char_1
+  cp 2
+  jp z,_ld_character_sprite_address_char_2
+  cp 3
+  jp z,_ld_character_sprite_address_char_3
+  cp 4
+  jp z,_ld_character_sprite_address_char_4
+_ld_character_sprite_address_char_0:
+  ld ix,punchy_sprites
+  ret
+_ld_character_sprite_address_char_1:
+  ld ix,wizzy_sprites
+  ret
+_ld_character_sprite_address_char_2:
+  ld ix,stabby_sprites
+  ret
+_ld_character_sprite_address_char_3:
+  ld ix,firey_sprites
+  ret
+_ld_character_sprite_address_char_4:
+  ld ix,neaty_sprites
   ret

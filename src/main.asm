@@ -1,5 +1,6 @@
         org 32768	; put code at first address in 3rd memory device (sorta)
 start:
+  ld e,0
 	;;; INITIALIZATION
 
   ; set up interrupt handler to be main game loop
@@ -22,6 +23,7 @@ start:
   ldir                  ; do the 256 byte copy
   im 2                  ; set interrupt mode to 2
 
+main_start:
   ;;; DRAW TITLE SCREEN AND START CHARACTER SELECT
 
 	; set border color
@@ -42,39 +44,38 @@ start:
   call start_character_select
   ;call start_stage_select   ; if we intend to have standalone stage selection, will go here
 
-  ;;; INITIALIZE STARTING GAME DATA
+main_game_init:
+  call initialize_game
 
-  ; initialize frame counter
-  ld a,0
-  ld (frame_counter),a  ; initialize frame counter to 0
 
-  ; initialize player 1 data
-  ld a,0
-  ld (player_1_damage_taken),a
-  ld a,3
-  ld (player_1_last_location),a
-  ld (player_1_current_location),a
-  ld hl,(player_1_sprite_idle_1)
-  ld (player_1_current_sprite),hl
-
-  ; initialize player 2 data
-  ld a,0
-  ld (player_2_damage_taken),a
-  ld a,22
-  ld (player_2_last_location),a
-  ld (player_2_last_location),a
-  ld hl,(player_2_sprite_idle_1)
-  ld (player_2_current_sprite),hl
-
-  ; clear the screen
-  ld d,0x47             ; 0x47 = 0b01000111 (paper = black, ink = white)
-  call clear_screen
-  ; call draw_background
-  ;call init_status_bar
-
+main_loop_start:
   ei
+  ld a, 51
+  ld de, 0x488f
+  call print_char
+;   ld hl, 218
+;   ld de, 880
+;   call 949
+  ld hl, 467
+  ld de, 440
+  call 949
+  ld a, 50
+  ld de, 0x488f
+  call print_char
+  ld hl, 467
+  ld de, 440
+  call 949
+  ld a, 49
+  ld de, 0x488f
+  call print_char
+  ld hl, 413
+  ld de, 988
+  call 949
+  ld b, 1 
+  ld h, 8
+  ld de, 0x488f
+  call set_character_cell_pixels_background
 main_loop:
-  halt
   halt
   jp main_loop
 
@@ -89,5 +90,11 @@ main_loop:
   include "src/CharacterMove.asm"
   include "src/CharacterAttack.asm"
   include "src/InputUtils.asm"
+  include "src/InterfaceUtils.asm"
 
+  include "src/characters/Firey.asm"
+  include "src/characters/Neaty.asm"
   include "src/characters/Punchy.asm"
+  include "src/characters/Stabby.asm"
+  include "src/characters/Wizzy.asm"
+  include "src/SoundUtils.asm"

@@ -73,6 +73,7 @@ fill_byte_fast:
 ; Subroutine for drawing a sprite onto the screen
 ;
 ; Inputs:
+;   B  = 0 for player 1, 1 for player 2
 ;   C  = 0 for overwrite mode, 1 for blending mode
 ;   HL = Address of vram to write to
 ;   IX = Address of sprite pixel data
@@ -80,10 +81,17 @@ fill_byte_fast:
 ;
 ; ------------------------------------------------------------------------------
 draw_sprite:
+	ld a,b
+	or a
+	jp nz,_draw_sprite_load_offset_skip
 	ld e,(ix+0)            ; get the number of columns to cut off at rightside of sprite
+	ld e,0
+	jp _draw_sprite_load_offset_skip_2
+_draw_sprite_load_offset_skip:
+	ld e,0
+_draw_sprite_load_offset_skip_2:
 	ld d,6                 ; number of columns (not variable)
 	ld (draw_memory_store),hl
-	dec ix                 ; decrement ix so double increment at start of unpack gets us to the data
 _draw_sprite_unpack:
 	inc ix
 	inc ix
@@ -179,12 +187,13 @@ _draw_sprite_row_decrement:
 	jp _draw_sprite_row_decrement_return
 
 _draw_sprite_attributes_row_decrement:
+
+	ld a,e
+	ld d,0
+	ld e,26
+	add hl,de
+	ld e,a
 	ld d,6
-	ld c,26
-	ld a,b
-	ld b,0
-	add hl,bc
-	ld b,a
 	jp _draw_sprite_attributes_row_decrement_return
 
 
@@ -196,34 +205,38 @@ _draw_sprite_attributes_row_decrement:
 ; Outputs:
 ;
 ; ------------------------------------------------------------------------------
-clear_sprite:
-	ld b,48
-_clear_sprite_loop:
+clear_sprite_p1:
+	ld e,(ix+1)
+	ld a,6
+	sub e
+	ld c,a
+	ld d,48
+_clear_sprite_p1_loop:
+	ld b,c
 	ld a,0
+_clear_sprite_p1_loop_1:
 	ld (hl),a
 	inc l
-	ld (hl),a
+	djnz _clear_sprite_p1_loop_1
+	ld b,e
+_clear_sprite_p1_loop_2:
 	inc l
-	ld (hl),a
-	inc l
-	ld (hl),a
-	inc l
-	ld (hl),a
-	inc l
-	ld (hl),a
-	jp _clear_sprite_row_decrement
-_clear_sprite_row_decrement_return:
-	djnz _clear_sprite_loop
+	djnz _clear_sprite_p1_loop_2
+	dec l
+	jp _clear_sprite_p1_row_decrement
+_clear_sprite_p1_row_decrement_return:
+	dec d
+	jp nz,_clear_sprite_p1_loop
 	ret
 
-_clear_sprite_row_decrement:
+_clear_sprite_p1_row_decrement:
 	ld a,l                 ; move to next pixel row down in cell <e> to left
 	sub 5
 	ld l,a
 	inc h
 	ld a,h                 ; check if we overflowed into y6
 	and 7
-	jr nz,_clear_sprite_row_decrement_return
+	jr nz,_clear_sprite_p1_row_decrement_return
 	ld a,h
 	sub 8                  ; decrement y6
 	ld h,a
@@ -231,11 +244,64 @@ _clear_sprite_row_decrement:
 	add a,32               ; increment y3
 	ld l,a
 	and 224                ; check if we overflowed into y0
-	jr nz,_clear_sprite_row_decrement_return
+	jr nz,_clear_sprite_p1_row_decrement_return
 	ld a,h
 	add a,8                ; increment y6
 	ld h,a
-	jp _clear_sprite_row_decrement_return
+	jp _clear_sprite_p1_row_decrement_return
+
+; ------------------------------------------------------------------------------
+; Subroutine for clearing a sprite sized block of the screen
+;
+; Inputs:
+;   HL = Address of vram to start clearing
+; Outputs:
+;
+; ------------------------------------------------------------------------------
+clear_sprite_p2:
+	ld e,(ix+1)
+	ld a,6
+	sub e
+	ld c,a
+	ld d,48
+_clear_sprite_p2_loop:
+	ld b,e
+	ld a,0
+_clear_sprite_p2_loop_1:
+	inc l
+	djnz _clear_sprite_p2_loop_1
+	ld b,c
+_clear_sprite_p2_loop_2:
+	ld (hl),a
+	inc l
+	djnz _clear_sprite_p2_loop_2
+	dec l
+	jp _clear_sprite_p2_row_decrement
+_clear_sprite_p2_row_decrement_return:
+	dec d
+	jp nz,_clear_sprite_p2_loop
+	ret
+
+_clear_sprite_p2_row_decrement:
+	ld a,l                 ; move to next pixel row down in cell <e> to left
+	sub 5
+	ld l,a
+	inc h
+	ld a,h                 ; check if we overflowed into y6
+	and 7
+	jr nz,_clear_sprite_p2_row_decrement_return
+	ld a,h
+	sub 8                  ; decrement y6
+	ld h,a
+	ld a,l
+	add a,32               ; increment y3
+	ld l,a
+	and 224                ; check if we overflowed into y0
+	jr nz,_clear_sprite_p2_row_decrement_return
+	ld a,h
+	add a,8                ; increment y6
+	ld h,a
+	jp _clear_sprite_p2_row_decrement_return
 
 ; -----------------------------------------------------------------------
 ; Subroutine for drawing the base of the title screen
@@ -247,7 +313,8 @@ _clear_sprite_row_decrement:
 ; ------------------------------------------------------------------------------
 draw_title_screen:
 
-	; TODO: ADD TITLE GRAPHIC AT TOP
+	; DRAW TITLE GRAPHIC
+	call draw_title_graphic
 
 	; DRAW ARROWS AROUND P1
 	ld de,0x48e1
@@ -275,12 +342,77 @@ draw_title_screen:
 	ld c,29
 	call print_string
 
+	call draw_number_of_rounds
+
+	ld de, 0x48cc 				; 12, 14
+	ld ix, first_to_label
+	ld c, 9
+	call print_string
+
+	ld de,0x50c4 				; 4, 22 
+	ld ix,round_select_instructions
+	ld c,24
+	call print_string
+
 	ld de,0x50e6
 	ld ix,character_select_instructions_2
 	ld c,20
 	call print_string
 
+
+; 	ld de, 
+
 	ret
+
+draw_title_graphic:
+	ld hl,0x4000
+	ld ix,title_graphic_data
+	ld d,64
+_draw_title_graphic_loop_start:
+	ld b,32
+_draw_title_graphic_loop:
+	ld a,(ix+0)
+	ld (hl),a
+	inc l
+	inc ix
+	djnz _draw_title_graphic_loop
+	jp _draw_graphic_row_decrement
+_draw_graphic_row_decrement_return:
+	dec d
+	jp nz,_draw_title_graphic_loop_start
+
+_draw_title_graphic_attributes:
+	ld hl,0x5800
+	ld ix,title_graphic_data_attr_bytes
+	ld b,0
+_draw_title_graphic_attr_loop:
+	ld a,(ix+0)
+	ld (hl),a
+	inc hl
+	inc ix
+	djnz _draw_title_graphic_attr_loop
+	ret
+
+_draw_graphic_row_decrement:
+	ld a,l                 ; move to next pixel row down in cell <e> to left
+	sub 32
+	ld l,a
+	inc h
+	ld a,h                 ; check if we overflowed into y6
+	and 7
+	jr nz,_draw_graphic_row_decrement_return
+	ld a,h
+	sub 8                  ; decrement y6
+	ld h,a
+	ld a,l
+	add a,32               ; increment y3
+	ld l,a
+	and 224                ; check if we overflowed into y0
+	jr nz,_draw_graphic_row_decrement_return
+	ld a,h
+	add a,8                ; increment y6
+	ld h,a
+	jp _draw_graphic_row_decrement_return
 
 ; ------------------------------------------------------------------------------
 ; Subroutine for drawing the sprite and name of characters onto the character
@@ -318,42 +450,6 @@ draw_title_character_p2:
 
 
 ; ------------------------------------------------------------------------------
-; This routine is basically a switch statement for determining which character
-; is selected based on the character index passed in through A, and loading
-; the address of that character's data into IX. This can't be done by storing
-; pointers to the data in memory, because IX can only be loaded with constants
-;
-; Inputs:
-;   A  = Index of the character whose data address should be loaded
-; Outputs:
-;   IX = Address of the data of the character
-; ------------------------------------------------------------------------------
-ld_character_data_address:
-	cp 0
-	jp z,_ld_character_data_address_char_0
-	cp 1
-	jp z,_ld_character_data_address_char_1
-_ld_character_data_address_char_0:
-	ld ix,punchy_data
-	ret
-_ld_character_data_address_char_1:
-	ld ix,punchy_data
-	ret
-
-ld_character_sprite_address:
-	cp 0
-	jp z,_ld_character_sprite_address_char_0
-	cp 1
-	jp z,_ld_character_sprite_address_char_1
-_ld_character_sprite_address_char_0:
-	ld ix,punchy_sprites
-	ret
-_ld_character_sprite_address_char_1:
-	ld ix,punchy_sprites
-	ret
-
-
-; ------------------------------------------------------------------------------
 ; Subroutine for drawing a solid bar on screen, only takes care of pixels, not
 ; attributes. Only tested when drawing within a single row of color cells.
 ;
@@ -361,13 +457,12 @@ _ld_character_sprite_address_char_1:
 ;       B = length of bar in color cells
 ;       H = height of bar
 ;       DE = address of top-left pixel byte of bar
-;
 ; Outputs: N/A
 ;
 ; Uses: A, B, C, DE, H
 ; ------------------------------------------------------------------------------
 draw_bar_init:
-        ld a,255
+        ld a, 255
         ld c,e
 _draw_bar_loop_init:
         ld (de),a
@@ -382,84 +477,21 @@ _draw_bar_loop_init:
 _draw_bar_done_init:
         ret
 
-; ------------------------------------------------------------------------------
-; Subroutine for updating health bar for both players. TODO: could be optimized
-; by only updating the pixels that have changed. Currently updates entire health
-; bar.
-;
-; Inputs: N/A
-;
-; Outputs: N/A
-;
-; Uses: A, B, C, D, E, H, L
-; ------------------------------------------------------------------------------
-update_health:
-        ld a,(player_1_damage_taken)
-        ld c,a
-        ld e,0                                  ; flag for player one
-        ld h,01010000B                          ; upper byte of start address
-        ld a,(player_one_last_update_address)   ; lower byte of start address
-        ld l,a
-        call individual_health
 
-        ld a,(player_2_damage_taken)
-        ld c,a
-        ld e,1                                  ; flag for player two
-        ld h,01010000B                          ; upper byte of start address
-        ld a,(player_two_last_update_address)   ; lower byte of start address
-        ld l,a
-        call individual_health
-        ret
-
-; ------------------------------------------------------------------------------
-; Helper subroutine for updating health bar, handles preprocessing for loading in
-; player info.
-;
-; Inputs:
-;       C = damage taken
-;       E = player select 0=p1 1=p2
-;       HL = address to start
-;
-; Outputs: N/A
-;
-; Uses: A, B, C, D, E, H, L
-; ------------------------------------------------------------------------------
-individual_health:
-        push hl                                 ; save address on stack
-        ld d,8                                  ; dividing by 8 to find # of color cells
-        call cdivd                              ; a holds remainder, c holds result of C/D
-        ld d,a                                  ; clear d now, in case no remainder
-        ld b,c                                  ; ld b for call to draw_bar, in case no remainder
-        or a                                    ; check if there was a remainder (if Z flag is set for reg A after call to cdivd then no need for these two lines)
-        jp z,_no_remainder
-
-        ld d,c                                  ; store result
-        dec a                                   ; lookup table (LT) starts at 0         (4)
-
-        ld c,a                                  ; ld remainder into c                   (4)
-        xor a                                   ; clear a                               (4)
-        ld b,a                                  ; ld 0's into b, BC = remainder         (4)
-
-        cp e                                    ; check which player we are updating
-        jp nz,_player_two_remainder
-
-        ld hl,player_one_remainder_stuff        ; updating player one
-        jp _remainder_stuff_loaded
-
-_player_two_remainder:
-        ld hl,player_two_remainder_stuff        ; ld address of remainder lookup table  (20)
-
-_remainder_stuff_loaded:
-        add hl,bc                               ; add offset (remainder) into LT address(11)
-        ld b,d                                  ; ld bar length into b
-        ld d,(hl)                               ; ld remainder value into d             (7)
-
-_no_remainder:
-        ld a,e                                  ; set player flag
-        ld e,8                                  ; height of bar in pixel lines
-        pop hl
-        call draw_bar
-;         ld (player_2_damage_taken), a       ; TODO: reset damage taken value in memory
+set_character_cell_pixels_background:
+        ld a, 0
+        ld c,e
+set_character_cell_pixels_background_loop:
+        ld (de),a
+        inc e
+        djnz set_character_cell_pixels_background_loop
+        dec h
+        jp z,set_character_cell_pixels_background_done
+        ld b,10
+        inc d
+        ld e,c
+        jp set_character_cell_pixels_background_loop
+set_character_cell_pixels_background_done:
         ret
 
 
@@ -522,23 +554,6 @@ _draw_bar_done:
         pop bc
         ret
 
-; Start character movement routines
-
-
-
-; ------------------------------------------------------------------------------
-; Routine for halting eight times lol
-; ------------------------------------------------------------------------------
-halt_8:
-	halt
-	halt
-	halt
-	halt
-	halt
-	halt
-	halt
-	halt
-	ret
 
 ; ------------------------------------------------------------------------------
 ; This sets all pixel bytes to 0x0, and all attribute bytes to the desired
@@ -571,64 +586,163 @@ _flip_sprite_draw_loop:
         inc e
         djnz _flip_sprite_draw_loop
         ret
+; ix - source addr - modified
+flip_sprite_init:
+        inc ix
+        inc ix
+        ld (sprite_flip_original_addr),ix       ; store original address
+        xor a                                   ; decompress needs a=0
+        ld hl, temp_sprite_flip_data_1
+        call decompress_sprite                  ; decompress sprite pixel data (leaves both addrs inc by one, should be able to call again to decomp attribs)
+        call decompress_sprite                  ; decompress sprite attrib data
 
-; TODO: make sure l,e dont overflow when increased
-; need:
-;       sprite address                   hl
-;       sprite destination               de
-;       sprite width                     b
-;       sprite height(?)                 c
+        ld b,6                                  ; sprite width
+        ld c,48                                 ; sprite height
+        ld de,temp_sprite_flip_data_2           ; sprite destination
+        ld hl,temp_sprite_flip_data_1           ; sprite source
+        call flip_sprite                        ; flip sprite ;)
+        ld b,6
+        ld c,6
+        call flip_attribs
+
+        ld b,32                                 ; for pixel data, 288-256
+        ld c,2                                  ; 288/256
+        ld de,(sprite_flip_original_addr)       ; dest addr
+        ld hl,temp_sprite_flip_data_2           ; source addr
+        call compress_sprite                    ; compress pixel data
+        ld b,36
+        ld c,1
+        inc de
+        inc hl
+        call compress_sprite                    ; compress attrib data
+        ret;
+
+
+flip_attribs:
+        ld ixl,b                                ; store width
+_flip_attribs_begining:
+        ld a,e                                  ; load lower byte of dest addr
+        add a,b                                 ; add width to it (storing to dest starting from right side)
+        jp nc,_flip_attribs_begining_no_carry   ; check if there is a carry
+        inc d                                   ; carry was set, so need to inc d
+_flip_attribs_begining_no_carry:
+        ld e,a                                  ; load e with new lower addr byte
+_flip_attribs_loop:
+        dec de                                  ; adding width overshoots addr by one, need to start with dec
+        ld a,(hl)                               ; ld first byte of sprite
+        ld (de),a                               ; write byte back
+        inc hl                                  ; inc addr of source
+        djnz _flip_attribs_loop                 ; done with curr row of bytes?
+        ld b,ixl                                ; reset width
+        ld a,e                                  ; need to move to next row
+        add a,b
+        jp nc,_flip_attribs_begining_no_carry2  ; check if there is a carry
+        inc d                                   ; carry was set, so need to inc d
+_flip_attribs_begining_no_carry2:
+        ld e,a                                  ; load e with new lower addr byte
+        dec c                                   ; dec height counter
+        jp nz,_flip_attribs_begining            ; jp to beginning to if not 0
+        ret
+
+
+; ------------------------------------------------------------------------------------
+; Subroutine for flipping uncompressed sprite
+;
+;
+; Inputs:
+;       A = n/a
+;       B = sprite width
+;       C = sprite height
+;       DE = destination addr - will be in
+;       HL = source addr - will be inc
+;
+; Outputs: N/A
+;
+; Uses: A, B, C, D, E, H, L, exx
+; -------------------------------------------------------------------------------------
 flip_sprite:
-        ld ixl,b
-        ld ixh,e
+        ld ixl,b                                ; store width
 _flip_sprite_begining:
-        ld a,e
-        add a,b
-        ld e,a
-;         dec e
+        ld a,e                                  ; load lower byte of dest addr
+        add a,b                                 ; add width to it (storing to dest starting from right side)
+        jp nc,_flip_sprite_begining_no_carry    ; check if there is a carry
+        inc d                                   ; carry was set, so need to inc d
+_flip_sprite_begining_no_carry:
+        ld e,a                                  ; load e with new lower addr byte
 _flip_sprite_loop:
-        dec e
-        ld a,(hl)
+        dec de                                  ; adding width overshoots addr by one, need to start with dec
+        ld a,(hl)                               ; ld first byte of sprite
         call _flip_a
-        ld (de),a
-        inc l
-        djnz _flip_sprite_loop
-        ld b,ixl
-;         inc l
-        ld a,e
+        ld (de),a                               ; write byte back
+        inc hl                                  ; inc addr of source
+        djnz _flip_sprite_loop                  ; done with curr row of bytes?
+        ld b,ixl                                ; reset width
+        ld a,e                                  ; need to move to next row
         add a,b
-        ld e,a
-        dec c
-        xor a
-        cp c
-        jp nz,_flip_sprite_begining
+        jp nc,_flip_sprite_begining_no_carry2   ; check if there is a carry
+        inc d                                   ; carry was set, so need to inc d
+_flip_sprite_begining_no_carry2:
+        ld e,a                                  ; load e with new lower addr byte
+        dec c                                   ; dec height counter
+        jp nz,_flip_sprite_begining             ; jp to beginning to if not 0
         ret
 
 _flip_a:
         exx                     ; 4
-        ld b,8                  ; 8
-        ld c,a                  ; 4
-        xor a                   ; 4
+        ld b,8                  ; 8             ; 8 bits per byte ;)
+        ld c,a                  ; 4             ; ld byte to c
+        xor a                   ; 4             ; clear a
+        rra
+        xor a
 _flip_a_loop:
-        rl c                    ; 8
-        rra                     ; 4
-        djnz _flip_a_loop       ; 8(b=0), 13(b!=0)
-        exx
+        rl c                    ; 8             ; rotate byte left, left bit goes into carry
+        rra                     ; 4             ; rotate A right, carry bit is pushed in
+        djnz _flip_a_loop       ; 8(b=0),13(b!=0) ; need to do this 8 times
+        exx                                     ; done flipping sprite, switch registers back
         ret
 
-; need: //assumes that there will never be a sprite (288B) that has 255 of the same consecutive bytes
-;       source addr             hl
-;       dest addr               de
-;       num bytes               b,c
+; hl - addr to write to
+; ix - source addr
+; a - needs 0
+decompress_sprite:
+        ld d,(ix+0)                             ; load sprite byte
+        inc ix                                  ; move to next addr
+        ld b,(ix+0)                              ; load num times
+        cp b                                    ; check if is 0
+        jr z,_decompress_sprite_zero            ; if b is 0 weve reached the end
+        call fill_byte_fast
+        inc ix
+        jp decompress_sprite
+_decompress_sprite_zero:
+        inc ix
+        ret
+
+
+; ------------------------------------------------------------------------------------
+; Subroutine for compressing sprite, assumes that there will never be a sprite (288B)
+; that has 255 of the same consecutive bytes
+;
+; *****disables interrupts*******
+;
+; Inputs:
+;       A = n/a
+;       B = num bytes (0-255)
+;       C = num bytes overflow (ie. 288 bytes will be c=(288/256), b=(288-256))
+;       DE = destination addr
+;       HL = source addr
+;
+; Outputs: N/A
+;
+; Uses: A, B, C, D, E, H, L, exx
+; -------------------------------------------------------------------------------------
 compress_sprite:
-        di
-        ld a,(hl)
+        ld a,(hl)                               ; load first byte
 
         exx
         ld b,a                                  ; initialize oldByte, otherwise a random byte gets written to dest
         ld c,1                                  ; initialize counter
         exx
-        dec b
+        dec b                                   ; dec num bytes left
 
 _compress_sprite_loop:
         inc hl
@@ -655,31 +769,34 @@ _compress_sprite_loop:
         inc de                                  ; move to next dest addr
 
 _compress_sprite_end_exx_stuff:
-        djnz _compress_sprite_loop
-        dec c
-        jp nz,_compress_sprite_loop
-        exx
-        ld a,b
-        exx
-        ld (de),a
-        exx
-        ld a,c
-        exx
-        inc de
-        ld (de),a
+        djnz _compress_sprite_loop              ; check if there are bytes left
+        dec c                                   ; dec msb counter
         xor a
+        cp c
+        jp nz,_compress_sprite_loop             ; keep processing bytes
+
+        exx                                     ; need to store last byte
+        ld a,b                                  ; move last byte to a
+        exx
+
+        ld (de),a                               ; write last byte
+
+        exx
+        ld a,c                                  ; move last counter
+        exx
+
+        inc de                                  ; move to next addr
+        ld (de),a                               ; write last counter
+        xor a                                   ; clear a to write 0,0 terminator
         inc de
         ld (de),a
         inc de
         ld (de),a
-        ei
         ret
 
 _compress_sprite_same:
         inc c                                   ; increase counter
         exx
         jp _compress_sprite_end_exx_stuff
-	
-	
 	
 	
