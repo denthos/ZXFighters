@@ -235,7 +235,7 @@ def writeNoHuff(new_asm_file, new_pixel_matrix, new_attr_matrix):
                 # if (counter == 15):
                 #     nf.write(str(new_pixel_matrix[i][j]) + ',')
                 # counter += 1 
-                if total == 1536:
+                if total == 2048:
                     continue 
                 holder = new_pixel_matrix[i][j]
                 if (counter == 0):
@@ -253,7 +253,7 @@ def writeNoHuff(new_asm_file, new_pixel_matrix, new_attr_matrix):
         nf.write('\n' + 'attribute bytes' + '\n')
         for i in range(len(new_attr_matrix)):
             for j in range(len(new_attr_matrix[0])):
-                if total == 192:
+                if total == 256:
                     continue 
                 holder = new_attr_matrix[i][j] 
                 if (counter == 0):

@@ -2043,7 +2043,7 @@ firey_attack_3_execute:
 
 firey_attack_3_execute_player_1:
   ld a,d
-  add 3
+  add 4
   ld d,a
   ld a,e
   cp d

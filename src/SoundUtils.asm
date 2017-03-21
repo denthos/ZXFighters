@@ -5,7 +5,7 @@ _taser_sound_loop:
 	ld a,(hl)
 	inc hl 	
 	and 248             
-	out (256), a 
+	out (254), a 
 	djnz _taser_sound_loop
 	ret 
 
